@@ -16,13 +16,34 @@ export const useChatContext = () => {
 };
 
 export const ChatProvider = ({ children }) => {
-  const [conversations, setConversations] = useState(mockConversations);
+  const [conversations, setConversations] = useState([]);
   const [activeConversationId, setActiveConversationId] = useState(null);
   const [selectedModel, setSelectedModel] = useState(models[0]);
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const activeConversation = conversations.find(c => c.id === activeConversationId);
+
+  // Load conversations from backend on mount
+  useEffect(() => {
+    const loadConversations = async () => {
+      try {
+        const response = await axios.get(`${API}/conversations`);
+        const convs = response.data.map(conv => ({
+          ...conv,
+          createdAt: new Date(conv.created_at),
+          messages: conv.messages.map(msg => ({
+            ...msg,
+            timestamp: new Date(msg.timestamp)
+          }))
+        }));
+        setConversations(convs);
+      } catch (error) {
+        console.error('Failed to load conversations:', error);
+      }
+    };
+    loadConversations();
+  }, []);
 
   const createNewConversation = useCallback(() => {
     setActiveConversationId(null);
@@ -32,10 +53,15 @@ export const ChatProvider = ({ children }) => {
     setActiveConversationId(id);
   }, []);
 
-  const deleteConversation = useCallback((id) => {
-    setConversations(prev => prev.filter(c => c.id !== id));
-    if (activeConversationId === id) {
-      setActiveConversationId(null);
+  const deleteConversation = useCallback(async (id) => {
+    try {
+      await axios.delete(`${API}/conversations/${id}`);
+      setConversations(prev => prev.filter(c => c.id !== id));
+      if (activeConversationId === id) {
+        setActiveConversationId(null);
+      }
+    } catch (error) {
+      console.error('Failed to delete conversation:', error);
     }
   }, [activeConversationId]);
 
@@ -50,10 +76,12 @@ export const ChatProvider = ({ children }) => {
     };
 
     let conversationId = activeConversationId;
+    let isNewConversation = false;
 
     if (!conversationId) {
-      // Create new conversation
+      // Create new conversation locally first for immediate UI feedback
       conversationId = `conv-${Date.now()}`;
+      isNewConversation = true;
       const newConversation = {
         id: conversationId,
         title: content.slice(0, 30) + (content.length > 30 ? '...' : ''),
@@ -63,7 +91,7 @@ export const ChatProvider = ({ children }) => {
       setConversations(prev => [newConversation, ...prev]);
       setActiveConversationId(conversationId);
     } else {
-      // Add to existing conversation
+      // Add user message to existing conversation
       setConversations(prev => prev.map(c => 
         c.id === conversationId 
           ? { ...c, messages: [...c.messages, userMessage] }
@@ -71,24 +99,59 @@ export const ChatProvider = ({ children }) => {
       ));
     }
 
-    // Simulate AI response
+    // Call backend API
     setIsLoading(true);
     
-    // Mock delay for AI response
-    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1500));
+    try {
+      const response = await axios.post(`${API}/chat`, {
+        message: content.trim(),
+        conversation_id: isNewConversation ? null : conversationId,
+        session_id: conversationId
+      });
 
-    const aiMessage = {
-      id: `msg-${Date.now()}-ai`,
-      role: 'assistant',
-      content: generateMockResponse(content),
-      timestamp: new Date()
-    };
+      const aiMessage = {
+        id: response.data.message_id,
+        role: 'assistant',
+        content: response.data.response,
+        timestamp: new Date()
+      };
 
-    setConversations(prev => prev.map(c => 
-      c.id === conversationId 
-        ? { ...c, messages: [...c.messages, aiMessage] }
-        : c
-    ));
+      // Update conversation with the real conversation ID from backend
+      const realConversationId = response.data.conversation_id;
+      
+      setConversations(prev => prev.map(c => {
+        if (c.id === conversationId) {
+          return { 
+            ...c, 
+            id: realConversationId,
+            messages: [...c.messages, aiMessage] 
+          };
+        }
+        return c;
+      }));
+
+      // Update active conversation ID if it changed
+      if (conversationId !== realConversationId) {
+        setActiveConversationId(realConversationId);
+      }
+
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      
+      // Add error message
+      const errorMessage = {
+        id: `msg-${Date.now()}-error`,
+        role: 'assistant',
+        content: `Sorry, I encountered an error: ${error.response?.data?.detail || error.message || 'Unknown error'}. Please try again.`,
+        timestamp: new Date()
+      };
+
+      setConversations(prev => prev.map(c => 
+        c.id === conversationId 
+          ? { ...c, messages: [...c.messages, errorMessage] }
+          : c
+      ));
+    }
 
     setIsLoading(false);
   }, [activeConversationId]);
