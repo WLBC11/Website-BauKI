@@ -10,7 +10,7 @@
 }
 
 .App-header {
-    background-color: #0f0f10;
+    background-color: #212121;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -31,4 +31,55 @@
     to {
         transform: rotate(360deg);
     }
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3f3f3f;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #5f5f5f;
+}
+
+/* Animations */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+.animate-bounce {
+    animation: bounce 0.6s infinite;
+}
+
+/* Remove default outline for custom focus states */
+textarea:focus {
+    outline: none;
+}
+
+/* Code block scrollbar */
+pre::-webkit-scrollbar {
+    height: 6px;
+}
+
+pre::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background: #3f3f3f;
+    border-radius: 3px;
 }
