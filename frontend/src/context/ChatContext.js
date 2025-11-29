@@ -1,5 +1,9 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
-import { mockConversations, models } from '../data/mockData';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { models } from '../data/mockData';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const ChatContext = createContext();
 
