@@ -182,14 +182,3 @@ export const ChatProvider = ({ children }) => {
     </ChatContext.Provider>
   );
 };
-
-// Mock response generator
-function generateMockResponse(userMessage) {
-  const responses = [
-    `That's a great question! Let me help you with that.\n\nBased on your query about "${userMessage.slice(0, 50)}...", here are some key points:\n\n1. **Understanding the basics** - It's important to start with foundational concepts\n2. **Practical application** - Theory alone isn't enough\n3. **Continuous learning** - Technology evolves rapidly\n\nWould you like me to elaborate on any of these points?`,
-    `I'd be happy to help you with that!\n\nHere's a comprehensive answer:\n\n\`\`\`javascript\n// Example code\nconst solution = () => {\n  console.log('Hello, World!');\n  return 'Success';\n};\n\`\`\`\n\nThis approach is commonly used because it provides:\n- Clean syntax\n- Easy maintenance\n- Better readability\n\nLet me know if you need more details!`,
-    `Excellent question! Here's what you need to know:\n\n## Overview\nThis topic involves several important concepts that work together.\n\n## Key Concepts\n- **Concept 1**: Foundation of the approach\n- **Concept 2**: Building blocks for implementation\n- **Concept 3**: Best practices to follow\n\n## Example\n\`\`\`python\ndef example_function():\n    return "This is how it works"\n\`\`\`\n\nIs there anything specific you'd like me to clarify?`
-  ];
-
-  return responses[Math.floor(Math.random() * responses.length)];
-}
