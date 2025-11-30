@@ -93,11 +93,14 @@ const Sidebar = () => {
         {/* App Name */}
         <div className="p-3">
           <div className="flex items-center justify-between">
-            <div className="text-white font-semibold text-lg">Baumate</div>
+            <div className="text-white font-semibold">
+              <span className="text-lg">BauKI</span>
+              <span className="text-xs text-gray-400 ml-1">by WLBC</span>
+            </div>
             <div className="h-7 w-7 rounded-full bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1">
               <img 
                 src="/baumate-logo.png" 
-                alt="Baumate" 
+                alt="BauKI" 
                 className="h-full w-full object-contain"
                 style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
               />
