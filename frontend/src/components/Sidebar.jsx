@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useChatContext } from '../context/ChatContext';
-import { Plus, MessageSquare, Trash2, Menu, Settings, LogOut, ChevronDown, Search, PanelLeftClose } from 'lucide-react';
+import { Plus, MessageSquare, Trash2, Menu, Settings, LogOut, Search, PanelLeftClose } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import { Button } from './ui/button';
 import {
@@ -19,10 +19,7 @@ const Sidebar = () => {
     selectConversation,
     deleteConversation,
     sidebarOpen,
-    toggleSidebar,
-    selectedModel,
-    setSelectedModel,
-    models
+    toggleSidebar
   } = useChatContext();
 
   const [hoveredId, setHoveredId] = useState(null);
