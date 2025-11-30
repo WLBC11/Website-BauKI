@@ -126,11 +126,11 @@ const ChatMessage = ({ message }) => {
                 U
               </div>
             ) : (
-              <div className="h-8 w-8 rounded-full bg-[#2f2f2f] flex items-center justify-center overflow-hidden">
+              <div className="h-8 w-8 rounded-full bg-[#2f2f2f] flex items-center justify-center overflow-hidden p-1">
                 <img 
                   src="https://customer-assets.emergentagent.com/job_ai-chat-clone-77/artifacts/qplempyx_BauKI-Logo-Transparent.png" 
                   alt="Baumate" 
-                  className="h-6 w-6 object-contain brightness-0 invert"
+                  className="h-full w-full object-contain brightness-0 invert"
                 />
               </div>
             )}
