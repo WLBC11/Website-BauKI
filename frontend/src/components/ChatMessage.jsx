@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
 import { Copy, Check, ThumbsUp, ThumbsDown, RotateCcw } from 'lucide-react';
 import { Button } from './ui/button';
+import { useAuth } from '../context/AuthContext';
 
 const ChatMessage = ({ message }) => {
   const [copied, setCopied] = useState(false);
+  const { user } = useAuth();
   const isUser = message.role === 'user';
+
+  // Get user initial
+  const getUserInitial = () => {
+    if (user?.name) return user.name[0].toUpperCase();
+    if (user?.email) return user.email[0].toUpperCase();
+    return 'G'; // Guest
+  };
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(message.content);
