@@ -175,7 +175,7 @@ const Sidebar = () => {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
           <input
             type="text"
-            placeholder="Search chats..."
+            placeholder="Chats durchsuchen..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-[#2f2f2f] text-gray-200 text-sm rounded-lg pl-10 pr-4 py-2 border-none outline-none focus:ring-1 focus:ring-[#4f4f4f] placeholder-gray-500"
@@ -185,13 +185,13 @@ const Sidebar = () => {
 
       {/* Conversations List */}
       <ScrollArea className="flex-1 px-1">
-        <ConversationGroup title="Today" items={groupedConversations.today} />
-        <ConversationGroup title="Yesterday" items={groupedConversations.yesterday} />
-        <ConversationGroup title="Previous 7 Days" items={groupedConversations.lastWeek} />
-        <ConversationGroup title="Older" items={groupedConversations.older} />
+        <ConversationGroup title="Heute" items={groupedConversations.today} />
+        <ConversationGroup title="Gestern" items={groupedConversations.yesterday} />
+        <ConversationGroup title="Letzte 7 Tage" items={groupedConversations.lastWeek} />
+        <ConversationGroup title="Älter" items={groupedConversations.older} />
         {filteredConversations.length === 0 && (
           <div className="px-4 py-8 text-center text-gray-500 text-sm">
-            {searchQuery ? 'No chats found' : 'No conversations yet'}
+            {searchQuery ? 'Keine Chats gefunden' : 'Noch keine Unterhaltungen'}
           </div>
         )}
       </ScrollArea>
@@ -207,18 +207,18 @@ const Sidebar = () => {
               <div className="h-8 w-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-medium">
                 U
               </div>
-              <span className="text-sm">User</span>
+              <span className="text-sm">Benutzer</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-[230px] bg-[#2f2f2f] border-[#3f3f3f]" align="start" side="top">
             <DropdownMenuItem className="text-gray-200 cursor-pointer">
               <Settings className="h-4 w-4 mr-2" />
-              Settings
+              Einstellungen
             </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-[#3f3f3f]" />
             <DropdownMenuItem className="text-gray-200 cursor-pointer">
               <LogOut className="h-4 w-4 mr-2" />
-              Log out
+              Abmelden
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
