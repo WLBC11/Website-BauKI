@@ -116,7 +116,7 @@ const ChatMessage = ({ message }) => {
             )}
             <div className={`text-gray-200 leading-relaxed ${!isUser ? 'mt-1' : ''}`}>
               {isUser ? (
-                <p className="whitespace-pre-wrap break-words">{message.content}</p>
+                <p className="whitespace-pre-wrap break-words text-base">{message.content}</p>
               ) : (
                 <div className="markdown-body prose prose-invert prose-sm max-w-none 
                   prose-headings:text-gray-100 prose-headings:font-semibold prose-headings:mt-6 prose-headings:mb-3
