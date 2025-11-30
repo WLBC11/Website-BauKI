@@ -15,25 +15,6 @@ const ChatArea = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [activeConversation?.messages, isLoading]);
 
-  const suggestions = [
-    {
-      title: 'Hilf mir beim Schreiben',
-      subtitle: 'eines Textes oder kreativen Stücks'
-    },
-    {
-      title: 'Programmieren',
-      subtitle: 'ein Python-Skript oder debuggen'
-    },
-    {
-      title: 'Ratschläge geben',
-      subtitle: 'zu einer persönlichen Angelegenheit'
-    },
-    {
-      title: 'Zusammenfassen',
-      subtitle: 'eines langen Artikels oder Dokuments'
-    }
-  ];
-
   // Empty state - new conversation
   if (!activeConversation) {
     return (
