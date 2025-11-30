@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { useChatContext } from '../context/ChatContext';
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
@@ -6,9 +6,29 @@ import { ScrollArea } from './ui/scroll-area';
 import { Menu } from 'lucide-react';
 import { Button } from './ui/button';
 
+const GREETINGS = [
+  "Wie kann ich dir helfen?",
+  "Was steht heute an?",
+  "Wobei kann ich dich unterstützen?",
+  "Hast du Fragen zu einem Bauprojekt?",
+  "Lass uns etwas Neues planen!",
+  "Wie kann ich dir heute behilflich sein?",
+  "Was möchtest du wissen?",
+  "Bereit für deine Fragen!"
+];
+
 const ChatArea = () => {
   const { activeConversation, isLoading, sidebarOpen, toggleSidebar } = useChatContext();
   const messagesEndRef = useRef(null);
+  
+  // Random greeting logic: stable across renders until conversation changes (which resets view)
+  // We use useMemo with an empty dependency array to generate it once per mount of the "Empty State" view
+  // effectively. Or we can just pick one. Since ChatArea doesn't unmount, we need a trigger.
+  // Actually, when activeConversation is null, we want a random one.
+  const randomGreeting = useMemo(() => {
+    return GREETINGS[Math.floor(Math.random() * GREETINGS.length)];
+  }, [activeConversation]); // Re-roll when conversation state changes (e.g. back to null)
+
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -18,7 +38,7 @@ const ChatArea = () => {
   // Empty state - new conversation
   if (!activeConversation) {
     return (
-      <div className="flex flex-col h-full bg-[#7A746B]">
+      <div className="flex flex-col h-full bg-[#212121]">
         {/* Header with menu button when sidebar closed */}
         {!sidebarOpen && (
           <div className="absolute top-0 left-0 z-10 p-3">
@@ -35,7 +55,9 @@ const ChatArea = () => {
         
         {/* Centered content */}
         <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <h1 className="text-3xl font-semibold text-white mb-10">Wie kann ich dir helfen?</h1>
+          <h1 className="text-3xl font-semibold text-white mb-10 text-center animate-in fade-in zoom-in duration-500">
+            {randomGreeting}
+          </h1>
         </div>
         
         {/* Input at bottom */}
@@ -100,7 +122,7 @@ const ChatArea = () => {
       </ScrollArea>
 
       {/* Input area - fixed at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#7A746B] via-[#7A746B] to-transparent pt-6">
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#212121] via-[#212121] to-transparent pt-6">
         <ChatInput />
       </div>
     </div>
