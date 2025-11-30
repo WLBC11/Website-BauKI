@@ -130,7 +130,8 @@ const ChatMessage = ({ message }) => {
                 <img 
                   src="/baumate-logo.png" 
                   alt="Baumate" 
-                  className="h-full w-full object-contain invert brightness-200"
+                  className="h-full w-full object-contain"
+                  style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
                 />
               </div>
             )}
