@@ -68,7 +68,7 @@ const ChatInput = () => {
 
         {/* Disclaimer */}
         <p className="text-center text-xs text-gray-500 mt-3">
-          KI kann Fehler machen. Überprüfe wichtige Informationen.
+          Baumate kann Fehler machen. Überprüfe wichtige Informationen.
         </p>
       </div>
     </div>
