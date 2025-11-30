@@ -73,7 +73,17 @@ const Sidebar = () => {
 
       {/* App Name */}
       <div className="p-3">
-        <div className="text-white font-semibold text-lg">Baumate</div>
+        <div className="flex items-center justify-between">
+          <div className="text-white font-semibold text-lg">Baumate</div>
+          <div className="h-7 w-7 rounded-full bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1">
+            <img 
+              src="/baumate-logo.png" 
+              alt="Baumate" 
+              className="h-full w-full object-contain"
+              style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Search */}
