@@ -166,58 +166,8 @@ const ChatMessage = ({ message }) => {
       </div>
     </div>
   );
-};
 
 export default ChatMessage;
-
-  // Simple markdown-like rendering
-  const renderContent = (content) => {
-    // Split by code blocks
-    const parts = content.split(/(```[\s\S]*?```)/g);
-
-    return parts.map((part, index) => {
-      if (part.startsWith('```')) {
-        // Code block
-        const match = part.match(/```(\w+)?\n?([\s\S]*?)```/);
-        const language = match?.[1] || '';
-        const code = match?.[2] || part.slice(3, -3);
-        return (
-          <div key={index} className="my-4 rounded-lg overflow-hidden bg-[#1e1e1e]">
-            <div className="flex items-center justify-between px-4 py-2 bg-[#2d2d2d] text-xs text-gray-400">
-              <span>{language || 'code'}</span>
-              <button
-                onClick={() => navigator.clipboard.writeText(code)}
-                className="flex items-center gap-1 hover:text-white transition-colors"
-              >
-                <Copy className="h-3 w-3" />
-                Code kopieren
-              </button>
-            </div>
-            <pre className="p-4 overflow-x-auto text-sm">
-              <code className="text-gray-300">{code}</code>
-            </pre>
-          </div>
-        );
-      } else {
-        // Regular text with inline formatting
-        return (
-          <div key={index} className="whitespace-pre-wrap">
-            {renderInlineFormatting(part)}
-          </div>
-        );
-      }
-    });
-  };
-
-  const renderInlineFormatting = (text) => {
-    // Split by inline code
-    const parts = text.split(/(`[^`]+`)/g);
-
-    return parts.map((part, index) => {
-      if (part.startsWith('`') && part.endsWith('`')) {
-        return (
-          <code key={index} className="bg-[#3f3f3f] px-1.5 py-0.5 rounded text-sm text-pink-400">
-            {part.slice(1, -1)}
           </code>
         );
       }
