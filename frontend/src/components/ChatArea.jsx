@@ -18,7 +18,7 @@ const ChatArea = () => {
   // Empty state - new conversation
   if (!activeConversation) {
     return (
-      <div className="flex flex-col h-full bg-[#212121]">
+      <div className="flex flex-col h-full bg-[#7A746B]">
         {/* Header with menu button when sidebar closed */}
         {!sidebarOpen && (
           <div className="absolute top-0 left-0 z-10 p-3">
@@ -100,7 +100,7 @@ const ChatArea = () => {
       </ScrollArea>
 
       {/* Input area - fixed at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#212121] via-[#212121] to-transparent pt-6">
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#7A746B] via-[#7A746B] to-transparent pt-6">
         <ChatInput />
       </div>
     </div>

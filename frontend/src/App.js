@@ -9,7 +9,7 @@ function App() {
   return (
     <AuthProvider>
       <ChatProvider>
-        <div className="flex h-screen bg-[#212121] overflow-hidden">
+        <div className="flex h-screen bg-[#7A746B] overflow-hidden">
           <Sidebar />
           <main className="flex-1 relative">
             <ChatArea />

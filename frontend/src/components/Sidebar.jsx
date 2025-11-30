@@ -64,7 +64,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="flex flex-col h-full w-[260px] bg-[#171717] border-r border-[#2f2f2f]">
+      <div className="flex flex-col h-full w-[260px] bg-[#5A554E] border-r border-[#2f2f2f]">
         {/* Header */}
         <div className="flex items-center justify-between p-3 border-b border-[#2f2f2f]">
           <Button
