@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { models } from '../data/mockData';
+import { useAuth } from './AuthContext';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -16,17 +17,23 @@ export const useChatContext = () => {
 };
 
 export const ChatProvider = ({ children }) => {
+  const { isAuthenticated, token } = useAuth();
   const [conversations, setConversations] = useState([]);
   const [activeConversationId, setActiveConversationId] = useState(null);
+  const [currentGuestConversation, setCurrentGuestConversation] = useState(null);
   const [selectedModel, setSelectedModel] = useState(models[0]);
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const activeConversation = conversations.find(c => c.id === activeConversationId);
+  const activeConversation = currentGuestConversation || conversations.find(c => c.id === activeConversationId);
 
-  // Load conversations from backend on mount
+  // Load conversations from backend when authenticated
   useEffect(() => {
     const loadConversations = async () => {
+      if (!isAuthenticated) {
+        setConversations([]);
+        return;
+      }
       try {
         const response = await axios.get(`${API}/conversations`);
         const convs = response.data.map(conv => ({
@@ -43,17 +50,29 @@ export const ChatProvider = ({ children }) => {
       }
     };
     loadConversations();
-  }, []);
+  }, [isAuthenticated, token]);
+
+  // Reset guest conversation when user logs in
+  useEffect(() => {
+    if (isAuthenticated && currentGuestConversation) {
+      // Optionally claim the guest conversation
+      setCurrentGuestConversation(null);
+      setActiveConversationId(null);
+    }
+  }, [isAuthenticated]);
 
   const createNewConversation = useCallback(() => {
     setActiveConversationId(null);
+    setCurrentGuestConversation(null);
   }, []);
 
   const selectConversation = useCallback((id) => {
     setActiveConversationId(id);
+    setCurrentGuestConversation(null);
   }, []);
 
   const deleteConversation = useCallback(async (id) => {
+    if (!isAuthenticated) return;
     try {
       await axios.delete(`${API}/conversations/${id}`);
       setConversations(prev => prev.filter(c => c.id !== id));
@@ -63,7 +82,7 @@ export const ChatProvider = ({ children }) => {
     } catch (error) {
       console.error('Failed to delete conversation:', error);
     }
-  }, [activeConversationId]);
+  }, [activeConversationId, isAuthenticated]);
 
   const sendMessage = useCallback(async (content) => {
     if (!content.trim()) return;
@@ -78,7 +97,7 @@ export const ChatProvider = ({ children }) => {
     let conversationId = activeConversationId;
     let isNewConversation = false;
 
-    if (!conversationId) {
+    if (!conversationId && !currentGuestConversation) {
       // Create new conversation locally first for immediate UI feedback
       conversationId = `conv-${Date.now()}`;
       isNewConversation = true;
@@ -88,8 +107,20 @@ export const ChatProvider = ({ children }) => {
         messages: [userMessage],
         createdAt: new Date()
       };
-      setConversations(prev => [newConversation, ...prev]);
-      setActiveConversationId(conversationId);
+      
+      if (isAuthenticated) {
+        setConversations(prev => [newConversation, ...prev]);
+        setActiveConversationId(conversationId);
+      } else {
+        setCurrentGuestConversation(newConversation);
+      }
+    } else if (currentGuestConversation) {
+      // Guest mode - update local conversation
+      conversationId = currentGuestConversation.id;
+      setCurrentGuestConversation(prev => ({
+        ...prev,
+        messages: [...prev.messages, userMessage]
+      }));
     } else {
       // Add user message to existing conversation
       setConversations(prev => prev.map(c => 
@@ -119,20 +150,39 @@ export const ChatProvider = ({ children }) => {
       // Update conversation with the real conversation ID from backend
       const realConversationId = response.data.conversation_id;
       
-      setConversations(prev => prev.map(c => {
-        if (c.id === conversationId) {
-          return { 
-            ...c, 
+      if (!isAuthenticated || currentGuestConversation) {
+        // Guest mode
+        setCurrentGuestConversation(prev => {
+          if (!prev) {
+            return {
+              id: realConversationId,
+              title: content.slice(0, 30) + (content.length > 30 ? '...' : ''),
+              messages: [userMessage, aiMessage],
+              createdAt: new Date()
+            };
+          }
+          return {
+            ...prev,
             id: realConversationId,
-            messages: [...c.messages, aiMessage] 
+            messages: [...prev.messages, aiMessage]
           };
-        }
-        return c;
-      }));
+        });
+      } else {
+        setConversations(prev => prev.map(c => {
+          if (c.id === conversationId) {
+            return { 
+              ...c, 
+              id: realConversationId,
+              messages: [...c.messages, aiMessage] 
+            };
+          }
+          return c;
+        }));
 
-      // Update active conversation ID if it changed
-      if (conversationId !== realConversationId) {
-        setActiveConversationId(realConversationId);
+        // Update active conversation ID if it changed
+        if (conversationId !== realConversationId) {
+          setActiveConversationId(realConversationId);
+        }
       }
 
     } catch (error) {
@@ -142,19 +192,26 @@ export const ChatProvider = ({ children }) => {
       const errorMessage = {
         id: `msg-${Date.now()}-error`,
         role: 'assistant',
-        content: `Sorry, I encountered an error: ${error.response?.data?.detail || error.message || 'Unknown error'}. Please try again.`,
+        content: `Entschuldigung, ein Fehler ist aufgetreten: ${error.response?.data?.detail || error.message || 'Unbekannter Fehler'}. Bitte versuche es erneut.`,
         timestamp: new Date()
       };
 
-      setConversations(prev => prev.map(c => 
-        c.id === conversationId 
-          ? { ...c, messages: [...c.messages, errorMessage] }
-          : c
-      ));
+      if (!isAuthenticated || currentGuestConversation) {
+        setCurrentGuestConversation(prev => prev ? {
+          ...prev,
+          messages: [...prev.messages, errorMessage]
+        } : null);
+      } else {
+        setConversations(prev => prev.map(c => 
+          c.id === conversationId 
+            ? { ...c, messages: [...c.messages, errorMessage] }
+            : c
+        ));
+      }
     }
 
     setIsLoading(false);
-  }, [activeConversationId]);
+  }, [activeConversationId, currentGuestConversation, isAuthenticated]);
 
   const toggleSidebar = useCallback(() => {
     setSidebarOpen(prev => !prev);
@@ -164,6 +221,7 @@ export const ChatProvider = ({ children }) => {
     conversations,
     activeConversation,
     activeConversationId,
+    currentGuestConversation,
     selectedModel,
     setSelectedModel,
     isLoading,
