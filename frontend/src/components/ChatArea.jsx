@@ -74,11 +74,12 @@ const ChatArea = () => {
               <div className="max-w-3xl mx-auto px-4">
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="h-8 w-8 rounded-full bg-[#2f2f2f] flex items-center justify-center overflow-hidden p-1">
+                    <div className="h-8 w-8 rounded-full bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1">
                       <img 
-                        src="https://customer-assets.emergentagent.com/job_ai-chat-clone-77/artifacts/qplempyx_BauKI-Logo-Transparent.png" 
+                        src="/baumate-logo.png" 
                         alt="Baumate" 
-                        className="h-full w-full object-contain brightness-0 invert"
+                        className="h-full w-full object-contain"
+                        style={{ filter: 'brightness(0) invert(1)' }}
                       />
                     </div>
                   </div>
