@@ -23,6 +23,8 @@ const ChatInput = () => {
       setMessage('');
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto';
+        // Keep focus on textarea after sending
+        textareaRef.current.focus();
       }
     }
   };
@@ -40,7 +42,7 @@ const ChatInput = () => {
         <form onSubmit={handleSubmit}>
           <div className="relative bg-[#2f2f2f] rounded-2xl border border-[#3f3f3f] focus-within:border-[#5f5f5f] transition-colors">
             {/* Input area */}
-            <div className="flex items-end p-3">
+            <div className="flex items-center p-3">
               <textarea
                 ref={textareaRef}
                 value={message}
@@ -48,13 +50,13 @@ const ChatInput = () => {
                 onKeyDown={handleKeyDown}
                 placeholder="Nachricht eingeben..."
                 rows={1}
-                className="flex-1 bg-transparent text-white text-base resize-none outline-none placeholder-gray-500 max-h-[200px] leading-6"
+                className="flex-1 bg-transparent text-white text-base resize-none outline-none placeholder-gray-500 max-h-[200px] leading-10 min-h-[40px]"
                 disabled={isLoading}
               />
               <Button
                 type="submit"
                 disabled={!message.trim() || isLoading}
-                className={`h-10 w-10 rounded-lg flex items-center justify-center transition-colors ml-2
+                className={`h-10 w-10 rounded-lg flex items-center justify-center transition-colors ml-2 flex-shrink-0
                   ${message.trim() && !isLoading
                     ? 'bg-white text-black hover:bg-gray-200'
                     : 'bg-[#3f3f3f] text-gray-500 cursor-not-allowed'
