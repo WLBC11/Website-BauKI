@@ -14,7 +14,8 @@ const GREETINGS = [
   "Lass uns etwas Neues planen!",
   "Wie kann ich dir heute behilflich sein?",
   "Was möchtest du wissen?",
-  "Bereit für deine Fragen!"
+  "Bereit für deine Fragen!",
+  "Welches Bauvorhaben gehen wir heute an?"
 ];
 
 const ChatArea = () => {
