@@ -36,14 +36,14 @@ const CodeBlock = ({ node, inline, className, children, ...props }) => {
             {copied ? 'Kopiert!' : 'Code kopieren'}
           </button>
         </div>
-        <code className="block p-4 overflow-x-auto text-sm text-gray-300 font-mono bg-black/50" {...props}>
+        <code className="block p-4 overflow-x-auto text-base text-gray-300 font-mono bg-black/50" {...props}>
           {children}
         </code>
       </div>
     );
   }
   return (
-    <code className="text-pink-400 bg-[#3f3f3f] px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
+    <code className="text-pink-400 bg-[#3f3f3f] px-1.5 py-0.5 rounded text-base font-mono" {...props}>
       {children}
     </code>
   );
