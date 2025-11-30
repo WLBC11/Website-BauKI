@@ -74,17 +74,16 @@ const ChatArea = () => {
               <div className="max-w-3xl mx-auto px-4">
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <div className="h-8 w-8 rounded-full bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1.5">
+                    <div className="h-10 w-10 rounded-full bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1.5">
                       <img 
                         src="/baumate-logo.png" 
-                        alt="Baumate" 
+                        alt="BauKI" 
                         className="h-full w-full object-contain"
                         style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
                       />
                     </div>
                   </div>
-                  <div className="flex-1">
-                    <div className="font-semibold text-gray-200 mb-2">Baumate</div>
+                  <div className="flex-1 mt-2">
                     <div className="flex items-center gap-1">
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
