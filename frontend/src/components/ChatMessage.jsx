@@ -32,7 +32,7 @@ const ChatMessage = ({ message }) => {
                 className="flex items-center gap-1 hover:text-white transition-colors"
               >
                 <Copy className="h-3 w-3" />
-                Copy code
+                Code kopieren
               </button>
             </div>
             <pre className="p-4 overflow-x-auto text-sm">
