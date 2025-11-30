@@ -264,7 +264,7 @@ async def get_status_checks():
 
 # Chat endpoints
 @api_router.post("/chat", response_model=ChatResponse)
-async def send_chat_message(request: ChatRequest):
+async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends(get_current_user)):
     """Send a message to N8N webhook and get a response"""
     try:
         # Generate or use existing conversation/session ID
@@ -356,20 +356,26 @@ async def send_chat_message(request: ChatRequest):
         # Check if conversation exists
         existing_conv = await db.conversations.find_one({"id": conversation_id})
         
+        # Get user_id if authenticated
+        user_id = user["id"] if user else None
+        
         if existing_conv:
             # Update existing conversation
-            await db.conversations.update_one(
-                {"id": conversation_id},
-                {
-                    "$push": {"messages": {"$each": [user_msg, assistant_msg]}},
-                    "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
-                }
-            )
+            update_data = {
+                "$push": {"messages": {"$each": [user_msg, assistant_msg]}},
+                "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+            }
+            # If user is now logged in, associate the conversation with them
+            if user_id and not existing_conv.get("user_id"):
+                update_data["$set"]["user_id"] = user_id
+            
+            await db.conversations.update_one({"id": conversation_id}, update_data)
         else:
             # Create new conversation with AI-generated title
             generated_title = await generate_chat_title(request.message)
             new_conv = {
                 "id": conversation_id,
+                "user_id": user_id,  # None for guests, user_id for logged in users
                 "title": generated_title,
                 "messages": [user_msg, assistant_msg],
                 "created_at": datetime.now(timezone.utc).isoformat(),
@@ -394,9 +400,12 @@ async def send_chat_message(request: ChatRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @api_router.get("/conversations")
-async def get_conversations():
-    """Get all conversations"""
-    conversations = await db.conversations.find({}, {"_id": 0}).sort("updated_at", -1).to_list(100)
+async def get_conversations(user: dict = Depends(require_auth)):
+    """Get all conversations for the logged-in user"""
+    conversations = await db.conversations.find(
+        {"user_id": user["id"]}, 
+        {"_id": 0}
+    ).sort("updated_at", -1).to_list(25)
     return conversations
 
 @api_router.get("/conversations/{conversation_id}")
