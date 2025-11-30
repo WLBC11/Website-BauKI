@@ -132,41 +132,24 @@ const Sidebar = () => {
         >
           <PanelLeftClose className="h-5 w-5" />
         </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={createNewConversation}
-          className="text-gray-400 hover:text-white hover:bg-[#2f2f2f] rounded-lg"
-        >
-          <Plus className="h-5 w-5" />
-        </Button>
+        <div className="relative group">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={createNewConversation}
+            className="text-gray-400 hover:text-white hover:bg-[#2f2f2f] rounded-lg"
+          >
+            <Plus className="h-5 w-5" />
+          </Button>
+          <div className="absolute right-0 top-full mt-1 px-2 py-1 bg-[#3f3f3f] text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50">
+            Neuer Chat
+          </div>
+        </div>
       </div>
 
-      {/* Model Selector */}
+      {/* App Name */}
       <div className="p-3">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="w-full justify-between text-white hover:bg-[#2f2f2f] font-medium text-base"
-            >
-              <span>{selectedModel.name}</span>
-              <ChevronDown className="h-4 w-4 text-gray-400" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-[230px] bg-[#2f2f2f] border-[#3f3f3f]" align="start">
-            {models.map(model => (
-              <DropdownMenuItem
-                key={model.id}
-                onClick={() => setSelectedModel(model)}
-                className={`flex flex-col items-start py-3 cursor-pointer ${selectedModel.id === model.id ? 'bg-[#3f3f3f]' : ''}`}
-              >
-                <span className="text-white font-medium">{model.name}</span>
-                <span className="text-xs text-gray-400">{model.description}</span>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="text-white font-semibold text-lg">Baumate</div>
       </div>
 
       {/* Search */}
