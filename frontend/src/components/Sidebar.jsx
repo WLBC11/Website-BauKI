@@ -27,40 +27,7 @@ const Sidebar = () => {
 
   const filteredConversations = conversations.filter(conv =>
     conv.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Group conversations by date
-  const groupConversations = (convs) => {
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    const lastWeek = new Date(today);
-    lastWeek.setDate(lastWeek.getDate() - 7);
-
-    const groups = {
-      today: [],
-      yesterday: [],
-      lastWeek: [],
-      older: []
-    };
-
-    convs.forEach(conv => {
-      const convDate = new Date(conv.createdAt);
-      if (convDate.toDateString() === today.toDateString()) {
-        groups.today.push(conv);
-      } else if (convDate.toDateString() === yesterday.toDateString()) {
-        groups.yesterday.push(conv);
-      } else if (convDate > lastWeek) {
-        groups.lastWeek.push(conv);
-      } else {
-        groups.older.push(conv);
-      }
-    });
-
-    return groups;
-  };
-
-  const groupedConversations = groupConversations(filteredConversations);
+  ).slice(0, 25); // Nur die letzten 25 Chats
 
   if (!sidebarOpen) {
     return (
@@ -76,46 +43,6 @@ const Sidebar = () => {
       </div>
     );
   }
-
-  const ConversationGroup = ({ title, items }) => {
-    if (items.length === 0) return null;
-    return (
-      <div className="mb-4">
-        <h3 className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">
-          {title}
-        </h3>
-        {items.map(conv => (
-          <div
-            key={conv.id}
-            className={`group relative flex items-center gap-3 px-3 py-2 mx-2 rounded-lg cursor-pointer transition-colors duration-150
-              ${activeConversationId === conv.id
-                ? 'bg-[#2f2f2f]'
-                : 'hover:bg-[#2f2f2f]/50'
-              }`}
-            onClick={() => selectConversation(conv.id)}
-            onMouseEnter={() => setHoveredId(conv.id)}
-            onMouseLeave={() => setHoveredId(null)}
-          >
-            <MessageSquare className="h-4 w-4 text-gray-400 flex-shrink-0" />
-            <span className="flex-1 truncate text-sm text-gray-200">
-              {conv.title}
-            </span>
-            {(hoveredId === conv.id || activeConversationId === conv.id) && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteConversation(conv.id);
-                }}
-                className="opacity-0 group-hover:opacity-100 p-1 hover:bg-[#3f3f3f] rounded transition-opacity"
-              >
-                <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-400" />
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
-    );
-  };
 
   return (
     <div className="flex flex-col h-full w-[260px] bg-[#171717] border-r border-[#2f2f2f]">
