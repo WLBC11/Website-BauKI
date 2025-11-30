@@ -10,6 +10,7 @@ from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
 import httpx
+from emergentintegrations.llm.chat import LlmChat, UserMessage
 
 
 ROOT_DIR = Path(__file__).parent
@@ -23,11 +24,38 @@ db = client[os.environ['DB_NAME']]
 # N8N Webhook URL
 N8N_WEBHOOK_URL = os.environ.get('N8N_WEBHOOK_URL', 'https://n8n.srv1066219.hstgr.cloud/webhook/websitetest')
 
+# Emergent LLM Key for title generation
+EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY', '')
+
 # Create the main app without a prefix
 app = FastAPI()
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
+
+
+async def generate_chat_title(message: str) -> str:
+    """Generate a short descriptive title for a chat based on the first message"""
+    try:
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"title-{uuid.uuid4()}",
+            system_message="Du bist ein Assistent, der kurze Chat-Titel erstellt. Antworte NUR mit einem kurzen Titel (2-5 Wörter), der das Thema der Nachricht beschreibt. Keine Anführungszeichen, keine Erklärungen."
+        ).with_model("openai", "gpt-4o-mini")
+        
+        user_message = UserMessage(text=f"Erstelle einen kurzen Titel für diese Nachricht: {message[:200]}")
+        title = await chat.send_message(user_message)
+        
+        # Clean up the title
+        title = title.strip().strip('"').strip("'")
+        if len(title) > 50:
+            title = title[:47] + "..."
+        
+        return title
+    except Exception as e:
+        logger.error(f"Error generating title: {e}")
+        # Fallback: use first 30 chars of message
+        return message[:30] + ("..." if len(message) > 30 else "")
 
 
 # Define Models
