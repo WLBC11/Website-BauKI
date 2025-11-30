@@ -55,19 +55,6 @@ const ChatArea = () => {
         {/* Centered content */}
         <div className="flex-1 flex flex-col items-center justify-center px-4">
           <h1 className="text-3xl font-semibold text-white mb-10">Wie kann ich dir helfen?</h1>
-          
-          {/* Suggestion cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8 max-w-3xl w-full">
-            {suggestions.map((suggestion, index) => (
-              <button
-                key={index}
-                className="flex flex-col items-start p-4 bg-[#2f2f2f] hover:bg-[#3f3f3f] rounded-xl text-left transition-colors border border-transparent hover:border-[#4f4f4f]"
-              >
-                <div className="text-sm font-medium text-white">{suggestion.title}</div>
-                <div className="text-xs text-gray-500 mt-1">{suggestion.subtitle}</div>
-              </button>
-            ))}
-          </div>
         </div>
         
         {/* Input at bottom */}
