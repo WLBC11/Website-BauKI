@@ -25,13 +25,13 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # N8N Webhook URL
-N8N_WEBHOOK_URL = os.environ.get('N8N_WEBHOOK_URL', 'https://n8n.srv1066219.hstgr.cloud/webhook/websitetest')
+N8N_WEBHOOK_URL = os.environ['N8N_WEBHOOK_URL']
 
 # Emergent LLM Key for title generation
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY', '')
 
 # JWT Settings
-JWT_SECRET = os.environ.get('JWT_SECRET', 'baumate-secret-key-change-in-production')
+JWT_SECRET = os.environ['JWT_SECRET']
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRATION_HOURS = 24 * 7  # 7 days
 
