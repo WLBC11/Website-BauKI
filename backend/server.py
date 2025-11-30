@@ -409,20 +409,43 @@ async def get_conversations(user: dict = Depends(require_auth)):
     return conversations
 
 @api_router.get("/conversations/{conversation_id}")
-async def get_conversation(conversation_id: str):
+async def get_conversation(conversation_id: str, user: Optional[dict] = Depends(get_current_user)):
     """Get a specific conversation"""
     conversation = await db.conversations.find_one({"id": conversation_id}, {"_id": 0})
     if not conversation:
         raise HTTPException(status_code=404, detail="Conversation not found")
+    # Check if user has access (either their conversation or guest conversation)
+    if conversation.get("user_id") and (not user or conversation["user_id"] != user["id"]):
+        raise HTTPException(status_code=403, detail="Zugriff verweigert")
     return conversation
 
 @api_router.delete("/conversations/{conversation_id}")
-async def delete_conversation(conversation_id: str):
+async def delete_conversation(conversation_id: str, user: dict = Depends(require_auth)):
     """Delete a conversation"""
-    result = await db.conversations.delete_one({"id": conversation_id})
-    if result.deleted_count == 0:
+    # Only allow deleting own conversations
+    conversation = await db.conversations.find_one({"id": conversation_id})
+    if not conversation:
         raise HTTPException(status_code=404, detail="Conversation not found")
+    if conversation.get("user_id") != user["id"]:
+        raise HTTPException(status_code=403, detail="Zugriff verweigert")
+    
+    await db.conversations.delete_one({"id": conversation_id})
     return {"message": "Conversation deleted"}
+
+@api_router.post("/conversations/claim")
+async def claim_conversation(conversation_id: str, user: dict = Depends(require_auth)):
+    """Claim a guest conversation for the logged-in user"""
+    conversation = await db.conversations.find_one({"id": conversation_id})
+    if not conversation:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    if conversation.get("user_id"):
+        raise HTTPException(status_code=400, detail="Diese Unterhaltung gehört bereits einem Benutzer")
+    
+    await db.conversations.update_one(
+        {"id": conversation_id},
+        {"$set": {"user_id": user["id"]}}
+    )
+    return {"message": "Conversation claimed successfully"}
 
 # Include the router in the main app
 app.include_router(api_router)
