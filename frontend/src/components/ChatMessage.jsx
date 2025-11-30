@@ -138,7 +138,7 @@ const ChatMessage = ({ message }) => {
           {/* Message Content */}
           <div className="flex-1 min-w-0">
             <div className="font-semibold text-gray-200 mb-1">
-              {isUser ? 'You' : 'ChatGPT'}
+              {isUser ? 'Du' : 'KI-Assistent'}
             </div>
             <div className="text-gray-200 leading-relaxed">
               {renderContent(message.content)}
