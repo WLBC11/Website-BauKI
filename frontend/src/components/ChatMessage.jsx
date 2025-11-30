@@ -135,10 +135,10 @@ const ChatMessage = ({ message }) => {
                 {getUserInitial()}
               </div>
             ) : (
-              <div className="h-8 w-8 rounded-full bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1.5">
+              <div className="h-10 w-10 rounded-full bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1.5">
                 <img 
                   src="/baumate-logo.png" 
-                  alt="Baumate" 
+                  alt="BauKI" 
                   className="h-full w-full object-contain"
                   style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
                 />
@@ -148,10 +148,10 @@ const ChatMessage = ({ message }) => {
 
           {/* Message Content */}
           <div className="flex-1 min-w-0">
-            <div className="font-semibold text-gray-200 mb-1">
-              {isUser ? 'Du' : 'Baumate'}
-            </div>
-            <div className="text-gray-200 leading-relaxed">
+            {isUser && (
+              <div className="font-semibold text-gray-200 mb-1">Du</div>
+            )}
+            <div className={`text-gray-200 leading-relaxed ${!isUser ? 'mt-1' : ''}`}>
               {renderContent(message.content)}
             </div>
 
