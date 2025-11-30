@@ -70,7 +70,7 @@ const ChatInput = () => {
 
         {/* Disclaimer */}
         <p className="text-center text-xs text-gray-500 mt-3">
-          Baumate kann Fehler machen. Überprüfe wichtige Informationen.
+          Die BauKI kann Fehler machen. Bitte überprüfen Sie wichtige Informationen.
         </p>
       </div>
     </div>
