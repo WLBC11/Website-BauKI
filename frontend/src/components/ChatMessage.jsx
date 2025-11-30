@@ -122,6 +122,7 @@ const ChatMessage = ({ message }) => {
                   prose-headings:text-gray-100 prose-headings:font-semibold prose-headings:mt-6 prose-headings:mb-3
                   prose-p:text-gray-300 prose-p:my-3 prose-p:leading-7
                   prose-strong:text-white prose-strong:font-bold
+                  prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg
                   prose-ul:my-4 prose-ul:list-disc prose-ul:pl-6
                   prose-ol:my-4 prose-ol:list-decimal prose-ol:pl-6
                   prose-li:text-gray-300 prose-li:my-1
