@@ -131,8 +131,8 @@ const ChatMessage = ({ message }) => {
           {/* Avatar */}
           <div className="flex-shrink-0">
             {isUser ? (
-              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-medium">
-                U
+              <div className="h-8 w-8 rounded-full bg-[#3b82f6] flex items-center justify-center text-white text-sm font-medium">
+                {getUserInitial()}
               </div>
             ) : (
               <div className="h-8 w-8 rounded-full bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1.5">
