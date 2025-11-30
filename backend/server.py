@@ -171,6 +171,68 @@ class ChatResponse(BaseModel):
     conversation_id: str
     message_id: str
 
+# Auth Routes
+@api_router.post("/auth/register", response_model=TokenResponse)
+async def register(data: UserRegister):
+    """Register a new user"""
+    # Check if email already exists
+    existing_user = await db.users.find_one({"email": data.email.lower()})
+    if existing_user:
+        raise HTTPException(status_code=400, detail="E-Mail bereits registriert")
+    
+    # Create user
+    user_id = str(uuid.uuid4())
+    user = {
+        "id": user_id,
+        "email": data.email.lower(),
+        "password_hash": hash_password(data.password),
+        "name": data.name or data.email.split("@")[0],
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.users.insert_one(user)
+    
+    # Create token
+    access_token = create_access_token(user_id)
+    
+    return TokenResponse(
+        access_token=access_token,
+        user=UserResponse(
+            id=user_id,
+            email=user["email"],
+            name=user["name"],
+            created_at=datetime.fromisoformat(user["created_at"])
+        )
+    )
+
+@api_router.post("/auth/login", response_model=TokenResponse)
+async def login(data: UserLogin):
+    """Login user"""
+    user = await db.users.find_one({"email": data.email.lower()})
+    if not user or not verify_password(data.password, user["password_hash"]):
+        raise HTTPException(status_code=401, detail="Ungültige E-Mail oder Passwort")
+    
+    access_token = create_access_token(user["id"])
+    
+    return TokenResponse(
+        access_token=access_token,
+        user=UserResponse(
+            id=user["id"],
+            email=user["email"],
+            name=user.get("name"),
+            created_at=datetime.fromisoformat(user["created_at"]) if isinstance(user["created_at"], str) else user["created_at"]
+        )
+    )
+
+@api_router.get("/auth/me", response_model=UserResponse)
+async def get_me(user: dict = Depends(require_auth)):
+    """Get current user info"""
+    return UserResponse(
+        id=user["id"],
+        email=user["email"],
+        name=user.get("name"),
+        created_at=datetime.fromisoformat(user["created_at"]) if isinstance(user["created_at"], str) else user["created_at"]
+    )
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
