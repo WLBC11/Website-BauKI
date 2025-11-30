@@ -228,10 +228,11 @@ async def send_chat_message(request: ChatRequest):
                 }
             )
         else:
-            # Create new conversation
+            # Create new conversation with AI-generated title
+            generated_title = await generate_chat_title(request.message)
             new_conv = {
                 "id": conversation_id,
-                "title": request.message[:50] + ("..." if len(request.message) > 50 else ""),
+                "title": generated_title,
                 "messages": [user_msg, assistant_msg],
                 "created_at": datetime.now(timezone.utc).isoformat(),
                 "updated_at": datetime.now(timezone.utc).isoformat()
