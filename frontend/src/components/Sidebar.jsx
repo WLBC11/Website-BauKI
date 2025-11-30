@@ -207,7 +207,7 @@ const Sidebar = () => {
                   variant="ghost"
                   className="w-full justify-start gap-3 text-gray-200 hover:bg-[#2f2f2f] py-3"
                 >
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-medium">
+                  <div className="h-8 w-8 rounded-full bg-[#3b82f6] flex items-center justify-center text-white text-sm font-medium">
                     {user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
                   </div>
                   <span className="text-sm truncate">{user?.name || user?.email}</span>
