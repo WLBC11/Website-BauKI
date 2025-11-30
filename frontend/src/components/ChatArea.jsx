@@ -3,7 +3,7 @@ import { useChatContext } from '../context/ChatContext';
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
 import { ScrollArea } from './ui/scroll-area';
-import { Sparkles, Lightbulb, Code, PenLine, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { Button } from './ui/button';
 
 const ChatArea = () => {
@@ -17,24 +17,20 @@ const ChatArea = () => {
 
   const suggestions = [
     {
-      icon: <PenLine className="h-5 w-5" />,
-      title: 'Help me write',
-      subtitle: 'an essay or creative piece'
+      title: 'Hilf mir beim Schreiben',
+      subtitle: 'eines Textes oder kreativen Stücks'
     },
     {
-      icon: <Code className="h-5 w-5" />,
-      title: 'Code',
-      subtitle: 'a Python script or debug'
+      title: 'Programmieren',
+      subtitle: 'ein Python-Skript oder debuggen'
     },
     {
-      icon: <Lightbulb className="h-5 w-5" />,
-      title: 'Get advice',
-      subtitle: 'on a personal matter'
+      title: 'Ratschläge geben',
+      subtitle: 'zu einer persönlichen Angelegenheit'
     },
     {
-      icon: <Sparkles className="h-5 w-5" />,
-      title: 'Summarize',
-      subtitle: 'a long article or document'
+      title: 'Zusammenfassen',
+      subtitle: 'eines langen Artikels oder Dokuments'
     }
   ];
 
@@ -58,20 +54,17 @@ const ChatArea = () => {
         
         {/* Centered content */}
         <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <h1 className="text-3xl font-semibold text-white mb-10">What can I help with?</h1>
+          <h1 className="text-3xl font-semibold text-white mb-10">Wie kann ich dir helfen?</h1>
           
           {/* Suggestion cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8 max-w-3xl w-full">
             {suggestions.map((suggestion, index) => (
               <button
                 key={index}
-                className="flex flex-col items-start gap-2 p-4 bg-[#2f2f2f] hover:bg-[#3f3f3f] rounded-xl text-left transition-colors border border-transparent hover:border-[#4f4f4f]"
+                className="flex flex-col items-start p-4 bg-[#2f2f2f] hover:bg-[#3f3f3f] rounded-xl text-left transition-colors border border-transparent hover:border-[#4f4f4f]"
               >
-                <div className="text-gray-400">{suggestion.icon}</div>
-                <div>
-                  <div className="text-sm font-medium text-white">{suggestion.title}</div>
-                  <div className="text-xs text-gray-500">{suggestion.subtitle}</div>
-                </div>
+                <div className="text-sm font-medium text-white">{suggestion.title}</div>
+                <div className="text-xs text-gray-500 mt-1">{suggestion.subtitle}</div>
               </button>
             ))}
           </div>
