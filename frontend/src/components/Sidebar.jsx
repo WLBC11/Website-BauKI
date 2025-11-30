@@ -92,15 +92,45 @@ const Sidebar = () => {
 
       {/* Conversations List */}
       <ScrollArea className="flex-1 px-1">
-        <ConversationGroup title="Heute" items={groupedConversations.today} />
-        <ConversationGroup title="Gestern" items={groupedConversations.yesterday} />
-        <ConversationGroup title="Letzte 7 Tage" items={groupedConversations.lastWeek} />
-        <ConversationGroup title="Älter" items={groupedConversations.older} />
-        {filteredConversations.length === 0 && (
-          <div className="px-4 py-8 text-center text-gray-500 text-sm">
-            {searchQuery ? 'Keine Chats gefunden' : 'Noch keine Unterhaltungen'}
-          </div>
-        )}
+        <div className="mb-4">
+          <h3 className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Chats
+          </h3>
+          {filteredConversations.map(conv => (
+            <div
+              key={conv.id}
+              className={`group relative flex items-center gap-3 px-3 py-2 mx-2 rounded-lg cursor-pointer transition-colors duration-150
+                ${activeConversationId === conv.id
+                  ? 'bg-[#2f2f2f]'
+                  : 'hover:bg-[#2f2f2f]/50'
+                }`}
+              onClick={() => selectConversation(conv.id)}
+              onMouseEnter={() => setHoveredId(conv.id)}
+              onMouseLeave={() => setHoveredId(null)}
+            >
+              <MessageSquare className="h-4 w-4 text-gray-400 flex-shrink-0" />
+              <span className="flex-1 truncate text-sm text-gray-200">
+                {conv.title}
+              </span>
+              {(hoveredId === conv.id || activeConversationId === conv.id) && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteConversation(conv.id);
+                  }}
+                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-[#3f3f3f] rounded transition-opacity"
+                >
+                  <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-400" />
+                </button>
+              )}
+            </div>
+          ))}
+          {filteredConversations.length === 0 && (
+            <div className="px-4 py-8 text-center text-gray-500 text-sm">
+              {searchQuery ? 'Keine Chats gefunden' : 'Noch keine Unterhaltungen'}
+            </div>
+          )}
+        </div>
       </ScrollArea>
 
       {/* User Section */}
