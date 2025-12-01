@@ -22,6 +22,7 @@ export const ChatProvider = ({ children }) => {
   const [activeConversationId, setActiveConversationId] = useState(null);
   const [currentGuestConversation, setCurrentGuestConversation] = useState(null);
   const [selectedModel, setSelectedModel] = useState(models[0]);
+  const [activeDatabases, setActiveDatabases] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -137,7 +138,8 @@ export const ChatProvider = ({ children }) => {
       const response = await axios.post(`${API}/chat`, {
         message: content.trim(),
         conversation_id: isNewConversation ? null : conversationId,
-        session_id: conversationId
+        session_id: conversationId,
+        databases: activeDatabases
       });
 
       const aiMessage = {
@@ -231,7 +233,9 @@ export const ChatProvider = ({ children }) => {
     deleteConversation,
     sendMessage,
     toggleSidebar,
-    models
+    models,
+    activeDatabases,
+    setActiveDatabases
   };
 
   return (

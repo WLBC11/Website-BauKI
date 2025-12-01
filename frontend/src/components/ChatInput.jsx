@@ -1,12 +1,29 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChatContext } from '../context/ChatContext';
-import { Send } from 'lucide-react';
+import { Send, Database, X } from 'lucide-react';
 import { Button } from './ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from './ui/dropdown-menu';
+import { Badge } from './ui/badge';
+
+const AVAILABLE_DATABASES = [
+  "Brandschutz", 
+  "Straßenbau", 
+  "TGA", 
+  "Energieberatung", 
+  "Beton"
+];
 
 const ChatInput = () => {
   const [message, setMessage] = useState('');
   const textareaRef = useRef(null);
-  const { sendMessage, isLoading } = useChatContext();
+  const { sendMessage, isLoading, activeDatabases, setActiveDatabases } = useChatContext();
 
   // Auto-resize textarea
   useEffect(() => {
@@ -36,13 +53,72 @@ const ChatInput = () => {
     }
   };
 
+  const toggleDatabase = (db) => {
+    setActiveDatabases(prev => 
+      prev.includes(db) 
+        ? prev.filter(d => d !== db)
+        : [...prev, db]
+    );
+  };
+
+  const removeDatabase = (db) => {
+    setActiveDatabases(prev => prev.filter(d => d !== db));
+  };
+
   return (
     <div className="px-4 pb-4 pt-2">
       <div className="max-w-3xl mx-auto">
+        
+        {/* Active Database Tags */}
+        {activeDatabases.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-2 animate-in fade-in slide-in-from-bottom-2">
+            {activeDatabases.map(db => (
+              <Badge 
+                key={db} 
+                variant="secondary"
+                className="bg-[#3f3f3f] hover:bg-[#4f4f4f] text-gray-200 cursor-pointer pl-2 pr-1 py-1 flex items-center gap-1 transition-colors border border-transparent hover:border-gray-500"
+                onClick={() => removeDatabase(db)}
+              >
+                {db}
+                <X className="h-3 w-3 text-gray-400 hover:text-white" />
+              </Badge>
+            ))}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className="relative bg-[#2f2f2f] rounded-2xl border border-[#3f3f3f] focus-within:border-[#5f5f5f] transition-colors">
             {/* Input area */}
-            <div className="flex items-center p-3">
+            <div className="flex items-center p-3 gap-2">
+              
+              {/* Database Selector Button */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className={`h-10 w-10 rounded-lg flex-shrink-0 ${activeDatabases.length > 0 ? 'text-blue-400 bg-blue-400/10' : 'text-gray-400 hover:text-white hover:bg-[#3f3f3f]'}`}
+                    type="button"
+                  >
+                    <Database className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-56 bg-[#2f2f2f] border-[#3f3f3f] text-gray-200">
+                  <DropdownMenuLabel>Themen wählen</DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-[#3f3f3f]" />
+                  {AVAILABLE_DATABASES.map(db => (
+                    <DropdownMenuCheckboxItem
+                      key={db}
+                      checked={activeDatabases.includes(db)}
+                      onCheckedChange={() => toggleDatabase(db)}
+                      className="focus:bg-[#3f3f3f] focus:text-white cursor-pointer"
+                    >
+                      {db}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               <textarea
                 ref={textareaRef}
                 value={message}
