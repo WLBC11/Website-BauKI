@@ -221,3 +221,5 @@ agent_communication:
     message: "Backend testing completed. CRITICAL ISSUE: N8N webhook not registered/active. Backend code is working correctly - the issue is external N8N configuration. All other endpoints working properly. N8N webhook needs to be activated or workflow toggled off/on to register the webhook properly."
   - agent: "testing"
     message: "Frontend testing completed successfully. ✅ Chat interface fully functional: BauKI homepage loads correctly, chat input works, messages sent/received properly, Markdown rendering with code blocks working perfectly. Python Hello World script request generated proper response with syntax-highlighted code block. Frontend-backend integration working without issues. All core chat functionality verified and working."
+  - agent: "main"
+    message: "Added Database Selection feature for testing. Feature includes Database icon button in chat input area, dropdown menu with database options (Brandschutz, Straßenbau, TGA, Energieberatung, Beton), tag display functionality, and backend integration. Ready for comprehensive testing."
