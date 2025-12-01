@@ -101,8 +101,8 @@ const ChatInput = () => {
                     type="button"
                   >
                     <div className="relative flex items-center justify-center">
-                      <Book className="h-6 w-6" strokeWidth={1.5} />
-                      <Section className="h-3 w-3 absolute" strokeWidth={2.5} />
+                      <Book className="h-7 w-7" strokeWidth={1.5} />
+                      <Section className="h-3 w-3 absolute right-1.5 top-1.5" strokeWidth={2.5} />
                     </div>
                   </Button>
                 </DropdownMenuTrigger>
