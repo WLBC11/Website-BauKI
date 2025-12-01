@@ -212,8 +212,7 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus:
-    - "Database Selection feature"
+  current_focus: []
   stuck_tasks:
     - "Chat API with N8N webhook integration"
   test_all: false
