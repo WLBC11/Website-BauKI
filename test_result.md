@@ -210,7 +210,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Chat API with N8N webhook integration"
+    - "Database Selection feature"
   stuck_tasks:
     - "Chat API with N8N webhook integration"
   test_all: false
