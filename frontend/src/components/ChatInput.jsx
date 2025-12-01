@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChatContext } from '../context/ChatContext';
-import { Send, BookText, X } from 'lucide-react';
+import { Send, Book, Section, X } from 'lucide-react';
 import { Button } from './ui/button';
 import {
   DropdownMenu,
@@ -100,7 +100,10 @@ const ChatInput = () => {
                     className={`h-10 w-10 rounded-lg flex-shrink-0 ${activeDatabases.length > 0 ? 'text-blue-400 bg-blue-400/10' : 'text-gray-400 hover:text-white hover:bg-[#3f3f3f]'}`}
                     type="button"
                   >
-                    <BookText className="h-5 w-5" />
+                    <div className="relative flex items-center justify-center">
+                      <Book className="h-5 w-5" strokeWidth={1.5} />
+                      <Section className="h-2.5 w-2.5 absolute" strokeWidth={2.5} />
+                    </div>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-56 bg-[#2f2f2f] border-[#3f3f3f] text-gray-200">
