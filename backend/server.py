@@ -165,6 +165,7 @@ class ChatRequest(BaseModel):
     message: str
     conversation_id: Optional[str] = None
     session_id: Optional[str] = None
+    databases: Optional[List[str]] = []
 
 class ChatResponse(BaseModel):
     response: str
@@ -275,7 +276,8 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
         payload = {
             "message": request.message,
             "sessionId": session_id,
-            "conversationId": conversation_id
+            "conversationId": conversation_id,
+            "databases": request.databases
         }
         
         logger.info(f"Sending message to N8N webhook: {request.message[:50]}...")
