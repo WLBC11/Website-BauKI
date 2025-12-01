@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChatContext } from '../context/ChatContext';
-import { Send, Book, Section, X } from 'lucide-react';
+import { Send, X } from 'lucide-react';
 import { Button } from './ui/button';
 import {
   DropdownMenu,
@@ -97,13 +97,14 @@ const ChatInput = () => {
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className={`h-10 w-10 rounded-lg flex-shrink-0 ${activeDatabases.length > 0 ? 'text-blue-400 bg-blue-400/10' : 'text-gray-400 hover:text-white hover:bg-[#3f3f3f]'}`}
+                    className={`h-10 w-10 rounded-lg flex-shrink-0 ${activeDatabases.length > 0 ? 'bg-blue-400/10' : 'hover:bg-[#3f3f3f]'}`}
                     type="button"
                   >
-                    <div className="relative flex items-center justify-center">
-                      <Book className="h-7 w-7" strokeWidth={1.5} />
-                      <Section className="h-3 w-3 absolute right-1.5 top-1.5" strokeWidth={2.5} />
-                    </div>
+                    <img 
+                      src="/law-book.png" 
+                      alt="Databases" 
+                      className={`h-7 w-7 object-contain transition-opacity ${activeDatabases.length > 0 ? 'opacity-100' : 'opacity-60 hover:opacity-100'} invert`}
+                    />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-56 bg-[#2f2f2f] border-[#3f3f3f] text-gray-200">
