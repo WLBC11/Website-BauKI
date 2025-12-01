@@ -103,7 +103,7 @@ const ChatInput = () => {
                     <img 
                       src="/law-book.png" 
                       alt="Databases" 
-                      className={`h-7 w-7 object-contain transition-opacity ${activeDatabases.length > 0 ? 'opacity-100' : 'opacity-60 hover:opacity-100'} invert`}
+                      className={`h-8 w-8 object-contain transition-all duration-200 hover:scale-110 ${activeDatabases.length > 0 ? 'opacity-100' : 'opacity-70 hover:opacity-100'} invert mix-blend-screen`}
                     />
                   </Button>
                 </DropdownMenuTrigger>
