@@ -190,6 +190,18 @@ frontend:
         agent: "testing"
         comment: "✅ Frontend-Backend integration working correctly. Chat messages successfully sent to backend API at /api/chat endpoint, responses received and displayed properly. No API errors encountered during testing."
 
+  - task: "Database Selection feature"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/components/ChatInput.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Database Selection feature implemented with Database icon button, dropdown menu with options (Brandschutz, Straßenbau, TGA, Energieberatung, Beton), tag display above input field, and backend integration. Needs comprehensive testing."
+
 metadata:
   created_by: "testing_agent"
   version: "1.0"
