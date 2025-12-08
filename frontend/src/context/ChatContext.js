@@ -148,7 +148,8 @@ export const ChatProvider = ({ children }) => {
         id: response.data.message_id,
         role: 'assistant',
         content: response.data.response,
-        timestamp: new Date()
+        timestamp: new Date(),
+        shouldAnimate: true
       };
 
       // Update conversation with the real conversation ID from backend
