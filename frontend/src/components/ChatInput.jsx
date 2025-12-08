@@ -47,7 +47,7 @@ const ChatInput = () => {
       sendMessage(message);
       setMessage('');
       if (textareaRef.current) {
-        textareaRef.current.style.height = 'auto';
+        textareaRef.current.style.height = '52px';
         // Keep focus on textarea after sending
         textareaRef.current.focus();
       }
