@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChatContext } from '../context/ChatContext';
-import { Send, X } from 'lucide-react';
+import { Send, X, Square } from 'lucide-react';
 import { Button } from './ui/button';
 import {
   DropdownMenu,
@@ -23,7 +23,7 @@ const AVAILABLE_DATABASES = [
 const ChatInput = () => {
   const [message, setMessage] = useState('');
   const textareaRef = useRef(null);
-  const { sendMessage, isLoading, activeDatabases, setActiveDatabases } = useChatContext();
+  const { sendMessage, isLoading, activeDatabases, setActiveDatabases, stopGeneration, isTyping } = useChatContext();
 
   // Auto-resize textarea
   useEffect(() => {
@@ -35,6 +35,12 @@ const ChatInput = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    if (isLoading || isTyping) {
+        stopGeneration();
+        return;
+    }
+
     if (message.trim() && !isLoading) {
       sendMessage(message);
       setMessage('');
@@ -135,14 +141,20 @@ const ChatInput = () => {
               />
               <Button
                 type="submit"
-                disabled={!message.trim() || isLoading}
+                disabled={(!message.trim() && !isLoading && !isTyping)}
                 className={`h-10 w-10 rounded-lg flex items-center justify-center transition-colors ml-2 flex-shrink-0
-                  ${message.trim() && !isLoading
-                    ? 'bg-white text-black hover:bg-gray-200'
-                    : 'bg-[#3f3f3f] text-gray-500 cursor-not-allowed'
+                  ${isLoading || isTyping 
+                    ? 'bg-white text-black hover:bg-gray-200' 
+                    : message.trim() 
+                        ? 'bg-white text-black hover:bg-gray-200'
+                        : 'bg-[#3f3f3f] text-gray-500 cursor-not-allowed'
                   }`}
               >
-                <Send className="h-5 w-5" />
+                {isLoading || isTyping ? (
+                    <Square className="h-4 w-4 fill-black" />
+                ) : (
+                    <Send className="h-5 w-5" />
+                )}
               </Button>
             </div>
           </div>
