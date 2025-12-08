@@ -170,6 +170,7 @@ const Sidebar = () => {
                   onClick={() => selectConversation(conv.id)}
                   onMouseEnter={() => setHoveredId(conv.id)}
                   onMouseLeave={() => setHoveredId(null)}
+                  title={conv.title}
                 >
                   <MessageSquare className="h-4 w-4 text-gray-400 flex-shrink-0" />
                   <span className="flex-1 truncate text-sm text-gray-200">
