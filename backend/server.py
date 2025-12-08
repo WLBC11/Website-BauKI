@@ -279,7 +279,8 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
             "message": request.message,
             "sessionId": session_id,
             "conversationId": conversation_id,
-            "databases": request.databases
+            "databases": request.databases,
+            "bundesland": request.bundesland
         }
         
         logger.info(f"Sending message to N8N webhook: {request.message[:50]}...")
