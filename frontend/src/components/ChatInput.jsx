@@ -97,7 +97,7 @@ const ChatInput = () => {
         <form onSubmit={handleSubmit}>
           <div className="relative bg-[#2f2f2f] rounded-2xl border border-[#3f3f3f] focus-within:border-[#5f5f5f] transition-colors">
             {/* Input area */}
-            <div className="flex items-center p-3 gap-2">
+            <div className="flex items-start p-3 gap-2">
               
               {/* Database Selector Button */}
               <DropdownMenu>
