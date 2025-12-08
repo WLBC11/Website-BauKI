@@ -286,6 +286,8 @@ export const ChatProvider = ({ children }) => {
     models,
     activeDatabases,
     setActiveDatabases,
+    selectedBundesland,
+    setSelectedBundesland,
     stopGeneration,
     isTyping,
     setIsTyping
