@@ -23,7 +23,6 @@ export const ChatProvider = ({ children }) => {
   const [currentGuestConversation, setCurrentGuestConversation] = useState(null);
   const [selectedModel, setSelectedModel] = useState(models[0]);
   const [activeDatabases, setActiveDatabases] = useState([]);
-  const [selectedBundesland, setSelectedBundesland] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
