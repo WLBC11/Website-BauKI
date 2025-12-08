@@ -290,16 +290,16 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
             json=payload,
             headers={"Content-Type": "application/json"}
         )
-            
-            logger.info(f"N8N response status: {response.status_code}")
-            logger.info(f"N8N response body: {response.text[:500]}")
-            
-            if response.status_code != 200:
-                logger.error(f"N8N webhook error: {response.text}")
-                raise HTTPException(
-                    status_code=502,
-                    detail=f"N8N webhook returned error: {response.status_code}"
-                )
+        
+        logger.info(f"N8N response status: {response.status_code}")
+        logger.info(f"N8N response body: {response.text[:500]}")
+        
+        if response.status_code != 200:
+            logger.error(f"N8N webhook error: {response.text}")
+            raise HTTPException(
+                status_code=502,
+                detail=f"N8N webhook returned error: {response.status_code}"
+            )
             
             # Parse response - handle different possible formats
             try:
