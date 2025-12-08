@@ -206,7 +206,8 @@ async def register(data: UserRegister):
             id=user_id,
             email=user["email"],
             name=user["name"],
-            created_at=datetime.fromisoformat(user["created_at"])
+            created_at=datetime.fromisoformat(user["created_at"]),
+            bundesland=None
         )
     )
 
