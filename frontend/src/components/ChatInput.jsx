@@ -44,7 +44,7 @@ const BUNDESLAENDER = [
 const ChatInput = () => {
   const [message, setMessage] = useState('');
   const textareaRef = useRef(null);
-  const { sendMessage, isLoading, activeDatabases, setActiveDatabases, selectedBundesland, setSelectedBundesland, stopGeneration, isTyping } = useChatContext();
+  const { sendMessage, isLoading, activeDatabases, setActiveDatabases, stopGeneration, isTyping } = useChatContext();
 
   // Auto-resize textarea
   useEffect(() => {
