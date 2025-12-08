@@ -152,7 +152,7 @@ const ChatInput = () => {
                 <Button
                   type="submit"
                   disabled={(!message.trim() && !isLoading && !isTyping)}
-                  className={`h-8 w-8 rounded-lg flex items-center justify-center transition-colors flex-shrink-0
+                  className={`h-8 w-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0
                     ${isLoading || isTyping 
                       ? 'bg-white text-black hover:bg-gray-200' 
                       : message.trim() 
