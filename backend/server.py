@@ -300,44 +300,44 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
                 status_code=502,
                 detail=f"N8N webhook returned error: {response.status_code}"
             )
+        
+        # Parse response - handle different possible formats
+        try:
+            response_data = response.json()
             
-            # Parse response - handle different possible formats
-            try:
-                response_data = response.json()
-                
-                # Try different response formats
-                if isinstance(response_data, str):
-                    ai_response = response_data
-                elif isinstance(response_data, dict):
+            # Try different response formats
+            if isinstance(response_data, str):
+                ai_response = response_data
+            elif isinstance(response_data, dict):
+                ai_response = (
+                    response_data.get('response') or 
+                    response_data.get('output') or 
+                    response_data.get('message') or 
+                    response_data.get('text') or
+                    response_data.get('answer') or
+                    str(response_data)
+                )
+            elif isinstance(response_data, list) and len(response_data) > 0:
+                first_item = response_data[0]
+                if isinstance(first_item, str):
+                    ai_response = first_item
+                elif isinstance(first_item, dict):
                     ai_response = (
-                        response_data.get('response') or 
-                        response_data.get('output') or 
-                        response_data.get('message') or 
-                        response_data.get('text') or
-                        response_data.get('answer') or
-                        str(response_data)
+                        first_item.get('response') or 
+                        first_item.get('output') or 
+                        first_item.get('message') or 
+                        first_item.get('text') or
+                        first_item.get('answer') or
+                        str(first_item)
                     )
-                elif isinstance(response_data, list) and len(response_data) > 0:
-                    first_item = response_data[0]
-                    if isinstance(first_item, str):
-                        ai_response = first_item
-                    elif isinstance(first_item, dict):
-                        ai_response = (
-                            first_item.get('response') or 
-                            first_item.get('output') or 
-                            first_item.get('message') or 
-                            first_item.get('text') or
-                            first_item.get('answer') or
-                            str(first_item)
-                        )
-                    else:
-                        ai_response = str(first_item)
                 else:
-                    ai_response = str(response_data)
-                    
-            except Exception as json_err:
-                # If not JSON, use plain text
-                ai_response = response.text
+                    ai_response = str(first_item)
+            else:
+                ai_response = str(response_data)
+                
+        except Exception as json_err:
+            # If not JSON, use plain text
+            ai_response = response.text
         
         message_id = str(uuid.uuid4())
         
