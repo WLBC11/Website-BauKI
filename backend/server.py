@@ -63,6 +63,7 @@ class UserResponse(BaseModel):
     email: str
     name: Optional[str] = None
     created_at: datetime
+    bundesland: Optional[str] = None
 
 class TokenResponse(BaseModel):
     access_token: str
