@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useChatContext } from '../context/ChatContext';
 import { useAuth } from '../context/AuthContext';
-import { Plus, MessageSquare, Trash2, Menu, Settings, LogOut, Search, PanelLeftClose, User, LogIn } from 'lucide-react';
+import { Plus, MessageSquare, Trash2, Menu, Settings, LogOut, Search, PanelLeftClose, User, LogIn, ChevronDown } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import { Button } from './ui/button';
 import {
@@ -10,8 +10,30 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuLabel,
 } from './ui/dropdown-menu';
 import AuthModal from './AuthModal';
+
+const BUNDESLAENDER = [
+  "Baden-Württemberg",
+  "Bayern",
+  "Berlin",
+  "Brandenburg",
+  "Bremen",
+  "Hamburg",
+  "Hessen",
+  "Mecklenburg-Vorpommern",
+  "Niedersachsen",
+  "Nordrhein-Westfalen",
+  "Rheinland-Pfalz",
+  "Saarland",
+  "Sachsen",
+  "Sachsen-Anhalt",
+  "Schleswig-Holstein",
+  "Thüringen"
+];
 
 const Sidebar = () => {
   const {
