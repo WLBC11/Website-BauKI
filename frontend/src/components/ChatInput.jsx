@@ -181,6 +181,35 @@ const ChatInput = () => {
                       ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
+
+                  {/* Bundesland Selector Button */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className={`h-8 w-8 rounded-full flex-shrink-0 transition-colors ${selectedBundesland ? 'bg-[#4f4f4f] hover:bg-[#5f5f5f]' : 'bg-[#3f3f3f] hover:bg-[#4f4f4f]'}`}
+                        type="button"
+                      >
+                        <MapPin className={`h-5 w-5 transition-all duration-200 ${selectedBundesland ? 'text-blue-400' : 'text-gray-400'}`} />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-56 bg-[#2f2f2f] border-[#3f3f3f] text-gray-200 max-h-[300px] overflow-y-auto">
+                      <DropdownMenuLabel>Landesbauordnung</DropdownMenuLabel>
+                      <DropdownMenuSeparator className="bg-[#3f3f3f]" />
+                      <DropdownMenuRadioGroup value={selectedBundesland || ""} onValueChange={setSelectedBundesland}>
+                        {BUNDESLAENDER.map(land => (
+                          <DropdownMenuRadioItem
+                            key={land}
+                            value={land}
+                            className="focus:bg-[#3f3f3f] focus:text-white cursor-pointer"
+                          >
+                            {land}
+                          </DropdownMenuRadioItem>
+                        ))}
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
 
                 {/* Send Button */}
