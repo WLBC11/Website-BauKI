@@ -167,7 +167,6 @@ class ChatRequest(BaseModel):
     conversation_id: Optional[str] = None
     session_id: Optional[str] = None
     databases: Optional[List[str]] = []
-    bundesland: Optional[str] = None
 
 class ChatResponse(BaseModel):
     response: str
