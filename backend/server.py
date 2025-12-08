@@ -284,12 +284,12 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
         logger.info(f"Sending message to N8N webhook: {request.message[:50]}...")
         
         # Call N8N webhook
-        async with httpx.AsyncClient(timeout=60.0) as http_client:
-            response = await http_client.post(
-                N8N_WEBHOOK_URL,
-                json=payload,
-                headers={"Content-Type": "application/json"}
-            )
+        # Use global client
+        response = await http_client.post(
+            N8N_WEBHOOK_URL,
+            json=payload,
+            headers={"Content-Type": "application/json"}
+        )
             
             logger.info(f"N8N response status: {response.status_code}")
             logger.info(f"N8N response body: {response.text[:500]}")
@@ -471,6 +471,16 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+http_client = None
+
+@app.on_event("startup")
+async def startup_event():
+    global http_client
+    http_client = httpx.AsyncClient(timeout=60.0)
+
 @app.on_event("shutdown")
-async def shutdown_db_client():
+async def shutdown_event():
+    global http_client
+    if http_client:
+        await http_client.aclose()
     client.close()

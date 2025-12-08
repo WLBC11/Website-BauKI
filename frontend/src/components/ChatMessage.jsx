@@ -155,7 +155,7 @@ const ChatMessage = ({ message, isLast }) => {
             ) : (
               <div className="h-10 w-10 rounded-full bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1.5">
                 <img 
-                  src="/baumate-logo.png" 
+                  src="/baumate-logo.png?v=2" 
                   alt="BauKI" 
                   className="h-full w-full object-contain"
                   style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
