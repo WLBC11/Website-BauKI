@@ -205,6 +205,18 @@ frontend:
         agent: "testing"
         comment: "✅ Database Selection feature working correctly. Database icon button exists and opens dropdown menu with all expected options (Brandschutz, Straßenbau, TGA, Energieberatung, Beton). Database selection works, tags display above input field, message sending successful with API integration. Minor: Database payload shows empty array in request, tag removal needs refinement, but core functionality works perfectly."
 
+  - task: "Typewriter/Streaming effect"
+    implemented: true
+    working: true
+    file: "frontend/src/components/ChatMessage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Typewriter/Streaming effect working perfectly. Loading indicator (bouncing dots) appears correctly when message is sent. AI responses display with typewriter effect - text grows gradually from 43 to 80+ characters. Typing cursor visible during animation. Copy button appears after typing completes and functions correctly. All requirements met: loading indicator ✓, streaming text ✓, cursor effect ✓, copy button timing ✓."
+
 metadata:
   created_by: "testing_agent"
   version: "1.0"
