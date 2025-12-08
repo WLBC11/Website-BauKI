@@ -130,6 +130,40 @@ const Sidebar = () => {
           </div>
         </div>
 
+        {/* Bundesland Selector - only when authenticated */}
+        {isAuthenticated && (
+          <div className="px-3 pb-3">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-between bg-[#2f2f2f] border-[#3f3f3f] text-gray-200 hover:bg-[#3f3f3f] hover:text-white"
+                >
+                  <span className="text-sm truncate">
+                    {user?.bundesland || "Bundesland wählen"}
+                  </span>
+                  <ChevronDown className="h-4 w-4 ml-2 flex-shrink-0" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[230px] bg-[#2f2f2f] border-[#3f3f3f] text-gray-200 max-h-[300px] overflow-y-auto">
+                <DropdownMenuLabel>Landesbauordnung</DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-[#3f3f3f]" />
+                <DropdownMenuRadioGroup value={user?.bundesland || ""} onValueChange={updateBundesland}>
+                  {BUNDESLAENDER.map(land => (
+                    <DropdownMenuRadioItem
+                      key={land}
+                      value={land}
+                      className="focus:bg-[#3f3f3f] focus:text-white cursor-pointer"
+                    >
+                      {land}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
+
         {/* Auth Info for Guests */}
         {!isAuthenticated && (
           <div className="px-3 pb-3">
