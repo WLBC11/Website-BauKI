@@ -97,68 +97,76 @@ const ChatInput = () => {
         <form onSubmit={handleSubmit}>
           <div className="relative bg-[#2f2f2f] rounded-2xl border border-[#3f3f3f] focus-within:border-[#5f5f5f] transition-colors">
             {/* Input area */}
-            <div className="flex items-start p-3 gap-2">
+            <div className="flex flex-col">
+              <div className="flex items-start px-4 pt-3 pb-2 gap-2">
+                <textarea
+                  ref={textareaRef}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Nachricht eingeben..."
+                  rows={1}
+                  className="flex-1 bg-transparent text-white text-base resize-none outline-none placeholder-gray-500 max-h-[200px] overflow-y-auto py-1"
+                  style={{ lineHeight: '1.5' }}
+                  disabled={isLoading}
+                />
+              </div>
               
-              {/* Database Selector Button */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className={`h-10 w-10 rounded-lg flex-shrink-0 ${activeDatabases.length > 0 ? 'bg-blue-400/10' : 'hover:bg-[#3f3f3f]'}`}
-                    type="button"
-                  >
-                    <img 
-                      src="/law-book.png" 
-                      alt="Databases" 
-                      className={`h-8 w-8 object-contain transition-all duration-200 hover:scale-110 ${activeDatabases.length > 0 ? 'opacity-100' : 'opacity-70 hover:opacity-100'} invert mix-blend-screen`}
-                    />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-56 bg-[#2f2f2f] border-[#3f3f3f] text-gray-200">
-                  <DropdownMenuLabel>Themen wählen</DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-[#3f3f3f]" />
-                  {AVAILABLE_DATABASES.map(db => (
-                    <DropdownMenuCheckboxItem
-                      key={db}
-                      checked={activeDatabases.includes(db)}
-                      onCheckedChange={() => toggleDatabase(db)}
-                      className="focus:bg-[#3f3f3f] focus:text-white cursor-pointer"
-                    >
-                      {db}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {/* Bottom toolbar */}
+              <div className="flex items-center justify-between px-3 pb-3 pt-1">
+                <div className="flex items-center gap-1">
+                  {/* Database Selector Button */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className={`h-8 w-8 rounded-lg flex-shrink-0 ${activeDatabases.length > 0 ? 'bg-blue-400/10' : 'hover:bg-[#3f3f3f]'}`}
+                        type="button"
+                      >
+                        <img 
+                          src="/law-book.png" 
+                          alt="Databases" 
+                          className={`h-6 w-6 object-contain transition-all duration-200 hover:scale-110 ${activeDatabases.length > 0 ? 'opacity-100' : 'opacity-70 hover:opacity-100'} invert mix-blend-screen`}
+                        />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-56 bg-[#2f2f2f] border-[#3f3f3f] text-gray-200">
+                      <DropdownMenuLabel>Themen wählen</DropdownMenuLabel>
+                      <DropdownMenuSeparator className="bg-[#3f3f3f]" />
+                      {AVAILABLE_DATABASES.map(db => (
+                        <DropdownMenuCheckboxItem
+                          key={db}
+                          checked={activeDatabases.includes(db)}
+                          onCheckedChange={() => toggleDatabase(db)}
+                          className="focus:bg-[#3f3f3f] focus:text-white cursor-pointer"
+                        >
+                          {db}
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
 
-              <textarea
-                ref={textareaRef}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Nachricht eingeben..."
-                rows={1}
-                className="flex-1 bg-transparent text-white text-base resize-none outline-none placeholder-gray-500 max-h-[200px] overflow-y-auto py-3"
-                style={{ lineHeight: '1.5' }}
-                disabled={isLoading}
-              />
-              <Button
-                type="submit"
-                disabled={(!message.trim() && !isLoading && !isTyping)}
-                className={`h-10 w-10 rounded-lg flex items-center justify-center transition-colors ml-2 flex-shrink-0
-                  ${isLoading || isTyping 
-                    ? 'bg-white text-black hover:bg-gray-200' 
-                    : message.trim() 
-                        ? 'bg-white text-black hover:bg-gray-200'
-                        : 'bg-[#3f3f3f] text-gray-500 cursor-not-allowed'
-                  }`}
-              >
-                {isLoading || isTyping ? (
-                    <Square className="h-4 w-4 fill-black" />
-                ) : (
-                    <Send className="h-5 w-5" />
-                )}
-              </Button>
+                {/* Send Button */}
+                <Button
+                  type="submit"
+                  disabled={(!message.trim() && !isLoading && !isTyping)}
+                  className={`h-8 w-8 rounded-lg flex items-center justify-center transition-colors flex-shrink-0
+                    ${isLoading || isTyping 
+                      ? 'bg-white text-black hover:bg-gray-200' 
+                      : message.trim() 
+                          ? 'bg-white text-black hover:bg-gray-200'
+                          : 'bg-[#3f3f3f] text-gray-500 cursor-not-allowed'
+                    }`}
+                >
+                  {isLoading || isTyping ? (
+                      <Square className="h-4 w-4 fill-black" />
+                  ) : (
+                      <Send className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
         </form>
