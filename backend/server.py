@@ -238,8 +238,21 @@ async def get_me(user: dict = Depends(require_auth)):
         id=user["id"],
         email=user["email"],
         name=user.get("name"),
-        created_at=datetime.fromisoformat(user["created_at"]) if isinstance(user["created_at"], str) else user["created_at"]
+        created_at=datetime.fromisoformat(user["created_at"]) if isinstance(user["created_at"], str) else user["created_at"],
+        bundesland=user.get("bundesland")
     )
+
+class UpdateBundeslandRequest(BaseModel):
+    bundesland: Optional[str] = None
+
+@api_router.patch("/auth/bundesland")
+async def update_bundesland(data: UpdateBundeslandRequest, user: dict = Depends(require_auth)):
+    """Update user's bundesland preference"""
+    await db.users.update_one(
+        {"id": user["id"]},
+        {"$set": {"bundesland": data.bundesland}}
+    )
+    return {"success": True, "bundesland": data.bundesland}
 
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
