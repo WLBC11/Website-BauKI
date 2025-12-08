@@ -70,7 +70,7 @@ const TdBlock = ({ children }) => (
   </td>
 );
 
-const ChatMessage = ({ message }) => {
+const ChatMessage = ({ message, isLast }) => {
   const [copied, setCopied] = useState(false);
   const { user } = useAuth();
   const { isTyping, setIsTyping } = useChatContext();
@@ -96,7 +96,8 @@ const ChatMessage = ({ message }) => {
 
     if (displayedContent === message.content) {
         // If we finished naturally, tell context we are done
-        if (isTyping) {
+        // Only if WE are the last message (prevent old messages from stopping typing)
+        if (isTyping && isLast) {
             setIsTyping(false);
         }
         return;
@@ -113,6 +114,7 @@ const ChatMessage = ({ message }) => {
 
         if (current.length >= message.content.length) {
           clearInterval(interval);
+          if (isLast) setIsTyping(false); // Ensure we turn it off here too
           return current;
         }
         

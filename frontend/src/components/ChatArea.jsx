@@ -87,8 +87,12 @@ const ChatArea = () => {
       {/* Messages area */}
       <ScrollArea className="flex-1">
         <div className="pb-32">
-          {activeConversation.messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
+          {activeConversation.messages.map((message, index) => (
+            <ChatMessage 
+              key={message.id} 
+              message={message} 
+              isLast={index === activeConversation.messages.length - 1}
+            />
           ))}
 
           {/* Loading indicator */}
