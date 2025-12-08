@@ -292,13 +292,16 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
         conversation_id = request.conversation_id or str(uuid.uuid4())
         session_id = request.session_id or conversation_id
         
+        # Get bundesland from user account (not from request)
+        user_bundesland = user.get("bundesland") if user else None
+        
         # Prepare payload for N8N webhook
         payload = {
             "message": request.message,
             "sessionId": session_id,
             "conversationId": conversation_id,
             "databases": request.databases,
-            "bundesland": request.bundesland
+            "bundesland": user_bundesland
         }
         
         logger.info(f"Sending message to N8N webhook: {request.message[:50]}...")
