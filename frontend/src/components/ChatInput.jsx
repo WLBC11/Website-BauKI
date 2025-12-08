@@ -28,8 +28,10 @@ const ChatInput = () => {
   // Auto-resize textarea
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 200) + 'px';
+      textareaRef.current.style.height = '52px'; // Reset to minimum height
+      const scrollHeight = textareaRef.current.scrollHeight;
+      // Max height of 200px (approx 8 lines)
+      textareaRef.current.style.height = Math.min(scrollHeight, 200) + 'px';
     }
   }, [message]);
 
