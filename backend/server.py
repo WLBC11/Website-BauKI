@@ -171,6 +171,7 @@ class ChatResponse(BaseModel):
     response: str
     conversation_id: str
     message_id: str
+    title: Optional[str] = None
 
 # Auth Routes
 @api_router.post("/auth/register", response_model=TokenResponse)
@@ -372,6 +373,7 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
                 update_data["$set"]["user_id"] = user_id
             
             await db.conversations.update_one({"id": conversation_id}, update_data)
+            response_title = existing_conv.get("title")
         else:
             # Create new conversation with AI-generated title
             generated_title = await generate_chat_title(request.message)
@@ -384,11 +386,13 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
                 "updated_at": datetime.now(timezone.utc).isoformat()
             }
             await db.conversations.insert_one(new_conv)
+            response_title = generated_title
         
         return ChatResponse(
             response=ai_response,
             conversation_id=conversation_id,
-            message_id=message_id
+            message_id=message_id,
+            title=response_title
         )
         
     except httpx.TimeoutException:
