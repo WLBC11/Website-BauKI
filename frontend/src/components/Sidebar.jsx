@@ -46,7 +46,7 @@ const Sidebar = () => {
     toggleSidebar
   } = useChatContext();
 
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, updateBundesland } = useAuth();
 
   const [hoveredId, setHoveredId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
