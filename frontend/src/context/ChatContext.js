@@ -84,14 +84,7 @@ export const ChatProvider = ({ children }) => {
     if (abortControllerRef.current) {
         abortControllerRef.current.abort();
     }
-    
-    // Load bundesland and databases from selected conversation
-    const conversation = conversations.find(c => c.id === id);
-    if (conversation) {
-      setSelectedBundesland(conversation.bundesland || null);
-      setActiveDatabases(conversation.databases || []);
-    }
-  }, [conversations]);
+  }, []);
 
   const deleteConversation = useCallback(async (id) => {
     if (!isAuthenticated) return;
