@@ -31,12 +31,14 @@ export const ChatProvider = ({ children }) => {
   // Load conversations from backend when authenticated
   useEffect(() => {
     const loadConversations = async () => {
-      if (!isAuthenticated) {
+      if (!isAuthenticated || !token) {
         setConversations([]);
         return;
       }
       try {
-        const response = await axios.get(`${API}/conversations`);
+        const response = await axios.get(`${API}/conversations`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
         const convs = response.data.map(conv => ({
           ...conv,
           createdAt: new Date(conv.created_at),
@@ -151,6 +153,7 @@ export const ChatProvider = ({ children }) => {
 
       // Update conversation with the real conversation ID from backend
       const realConversationId = response.data.conversation_id;
+      const realTitle = response.data.title;
       
       if (!isAuthenticated || currentGuestConversation) {
         // Guest mode
@@ -158,7 +161,7 @@ export const ChatProvider = ({ children }) => {
           if (!prev) {
             return {
               id: realConversationId,
-              title: content.slice(0, 30) + (content.length > 30 ? '...' : ''),
+              title: realTitle || content.slice(0, 30) + (content.length > 30 ? '...' : ''),
               messages: [userMessage, aiMessage],
               createdAt: new Date()
             };
@@ -166,6 +169,7 @@ export const ChatProvider = ({ children }) => {
           return {
             ...prev,
             id: realConversationId,
+            title: realTitle || prev.title,
             messages: [...prev.messages, aiMessage]
           };
         });
@@ -175,6 +179,7 @@ export const ChatProvider = ({ children }) => {
             return { 
               ...c, 
               id: realConversationId,
+              title: realTitle || c.title,
               messages: [...c.messages, aiMessage] 
             };
           }
