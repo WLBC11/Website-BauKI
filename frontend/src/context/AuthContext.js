@@ -71,6 +71,16 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   }, []);
 
+  const updateBundesland = useCallback(async (bundesland) => {
+    if (!token) return;
+    try {
+      await axios.patch(`${API}/auth/bundesland`, { bundesland });
+      setUser(prev => ({ ...prev, bundesland }));
+    } catch (error) {
+      console.error('Failed to update bundesland:', error);
+    }
+  }, [token]);
+
   const value = {
     user,
     token,
@@ -78,7 +88,8 @@ export const AuthProvider = ({ children }) => {
     isLoading,
     login,
     register,
-    logout
+    logout,
+    updateBundesland
   };
 
   return (
