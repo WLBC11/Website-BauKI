@@ -138,7 +138,8 @@ const ChatInput = () => {
                 onKeyDown={handleKeyDown}
                 placeholder="Nachricht eingeben..."
                 rows={1}
-                className="flex-1 bg-transparent text-white text-base resize-none outline-none placeholder-gray-500 max-h-[200px] leading-10 min-h-[40px]"
+                className="flex-1 bg-transparent text-white text-base resize-none outline-none placeholder-gray-500 max-h-[200px] overflow-y-auto py-3"
+                style={{ lineHeight: '1.5' }}
                 disabled={isLoading}
               />
               <Button
