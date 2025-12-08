@@ -121,13 +121,13 @@ const ChatInput = () => {
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className={`h-8 w-8 rounded-lg flex-shrink-0 ${activeDatabases.length > 0 ? 'bg-blue-400/10' : 'hover:bg-[#3f3f3f]'}`}
+                        className={`h-8 w-8 rounded-full flex-shrink-0 transition-colors ${activeDatabases.length > 0 ? 'bg-[#4f4f4f] hover:bg-[#5f5f5f]' : 'bg-[#3f3f3f] hover:bg-[#4f4f4f]'}`}
                         type="button"
                       >
                         <img 
                           src="/law-book.png" 
                           alt="Databases" 
-                          className={`h-6 w-6 object-contain transition-all duration-200 hover:scale-110 ${activeDatabases.length > 0 ? 'opacity-100' : 'opacity-70 hover:opacity-100'} invert mix-blend-screen`}
+                          className={`h-5 w-5 object-contain transition-all duration-200 ${activeDatabases.length > 0 ? 'opacity-100' : 'opacity-70 hover:opacity-100'} invert mix-blend-screen`}
                         />
                       </Button>
                     </DropdownMenuTrigger>
