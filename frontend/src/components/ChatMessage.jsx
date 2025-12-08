@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Copy, Check } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuth } from '../context/AuthContext';
+import { useChatContext } from '../context/ChatContext';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -72,6 +73,7 @@ const TdBlock = ({ children }) => (
 const ChatMessage = ({ message }) => {
   const [copied, setCopied] = useState(false);
   const { user } = useAuth();
+  const { isTyping, setIsTyping } = useChatContext();
   const isUser = message.role === 'user';
   
   // Streaming effect state
@@ -85,13 +87,30 @@ const ChatMessage = ({ message }) => {
       setDisplayedContent(message.content);
       return;
     }
+    
+    // If global typing state is false but we haven't finished, snap to end
+    if (!isTyping && displayedContent.length < message.content.length) {
+         setDisplayedContent(message.content);
+         return;
+    }
 
-    if (displayedContent === message.content) return;
+    if (displayedContent === message.content) {
+        // If we finished naturally, tell context we are done
+        if (isTyping) {
+            setIsTyping(false);
+        }
+        return;
+    }
 
     // Use a faster interval for better feel (10ms)
     // Add multiple characters at once for long messages to speed up
     const interval = setInterval(() => {
       setDisplayedContent(current => {
+        if (!isTyping) { // Double check inside interval
+            clearInterval(interval);
+            return message.content;
+        }
+
         if (current.length >= message.content.length) {
           clearInterval(interval);
           return current;
@@ -106,7 +125,7 @@ const ChatMessage = ({ message }) => {
     }, 15);
 
     return () => clearInterval(interval);
-  }, [message.content, message.shouldAnimate]); // Intentionally removed displayedContent to avoid re-run on every char
+  }, [message.content, message.shouldAnimate, isTyping]); // Intentionally removed displayedContent to avoid re-run on every char
 
   // Get user initial
   const getUserInitial = () => {
@@ -176,7 +195,7 @@ const ChatMessage = ({ message }) => {
                     {displayedContent}
                   </ReactMarkdown>
                   {/* Cursor effect for active typing */}
-                  {message.shouldAnimate && displayedContent.length < message.content.length && (
+                  {message.shouldAnimate && displayedContent.length < message.content.length && isTyping && (
                     <span className="inline-block w-2 h-4 bg-gray-400 ml-1 animate-pulse align-middle" />
                   )}
                 </div>
