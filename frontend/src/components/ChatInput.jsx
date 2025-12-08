@@ -118,19 +118,6 @@ const ChatInput = () => {
               {/* Bottom toolbar */}
               <div className="flex items-center justify-between px-3 pb-3 pt-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  {/* Bundesland Badge */}
-                  {selectedBundesland && (
-                    <Badge 
-                      variant="secondary"
-                      className="bg-[#3f3f3f] hover:bg-[#4f4f4f] text-gray-200 cursor-pointer pl-2 pr-1 py-1 flex items-center gap-1 transition-colors border border-blue-500"
-                      onClick={() => setSelectedBundesland(null)}
-                    >
-                      <MapPin className="h-3 w-3 text-blue-400" />
-                      {selectedBundesland}
-                      <X className="h-3 w-3 text-gray-400 hover:text-white" />
-                    </Badge>
-                  )}
-                  
                   {/* Database Tags */}
                   {activeDatabases.map(db => (
                     <Badge 
@@ -173,35 +160,6 @@ const ChatInput = () => {
                           {db}
                         </DropdownMenuCheckboxItem>
                       ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-
-                  {/* Bundesland Selector Button */}
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className={`h-8 w-8 rounded-full flex-shrink-0 transition-colors ${selectedBundesland ? 'bg-[#4f4f4f] hover:bg-[#5f5f5f]' : 'bg-[#3f3f3f] hover:bg-[#4f4f4f]'}`}
-                        type="button"
-                      >
-                        <MapPin className={`h-5 w-5 transition-all duration-200 ${selectedBundesland ? 'text-blue-400' : 'text-gray-400'}`} />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-56 bg-[#2f2f2f] border-[#3f3f3f] text-gray-200 max-h-[300px] overflow-y-auto">
-                      <DropdownMenuLabel>Landesbauordnung</DropdownMenuLabel>
-                      <DropdownMenuSeparator className="bg-[#3f3f3f]" />
-                      <DropdownMenuRadioGroup value={selectedBundesland || ""} onValueChange={setSelectedBundesland}>
-                        {BUNDESLAENDER.map(land => (
-                          <DropdownMenuRadioItem
-                            key={land}
-                            value={land}
-                            className="focus:bg-[#3f3f3f] focus:text-white cursor-pointer"
-                          >
-                            {land}
-                          </DropdownMenuRadioItem>
-                        ))}
-                      </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
