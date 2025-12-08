@@ -173,7 +173,8 @@ export const ChatProvider = ({ children }) => {
         message: content.trim(),
         conversation_id: isNewConversation ? null : conversationId,
         session_id: conversationId,
-        databases: activeDatabases
+        databases: activeDatabases,
+        bundesland: selectedBundesland
       }, {
         signal: abortControllerRef.current.signal
       });
