@@ -226,7 +226,8 @@ async def login(data: UserLogin):
             id=user["id"],
             email=user["email"],
             name=user.get("name"),
-            created_at=datetime.fromisoformat(user["created_at"]) if isinstance(user["created_at"], str) else user["created_at"]
+            created_at=datetime.fromisoformat(user["created_at"]) if isinstance(user["created_at"], str) else user["created_at"],
+            bundesland=user.get("bundesland")
         )
     )
 
