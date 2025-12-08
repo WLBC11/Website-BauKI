@@ -117,7 +117,33 @@ const ChatInput = () => {
               
               {/* Bottom toolbar */}
               <div className="flex items-center justify-between px-3 pb-3 pt-1">
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  {/* Bundesland Badge */}
+                  {selectedBundesland && (
+                    <Badge 
+                      variant="secondary"
+                      className="bg-[#3f3f3f] hover:bg-[#4f4f4f] text-gray-200 cursor-pointer pl-2 pr-1 py-1 flex items-center gap-1 transition-colors border border-blue-500"
+                      onClick={() => setSelectedBundesland(null)}
+                    >
+                      <MapPin className="h-3 w-3 text-blue-400" />
+                      {selectedBundesland}
+                      <X className="h-3 w-3 text-gray-400 hover:text-white" />
+                    </Badge>
+                  )}
+                  
+                  {/* Database Tags */}
+                  {activeDatabases.map(db => (
+                    <Badge 
+                      key={db} 
+                      variant="secondary"
+                      className="bg-[#3f3f3f] hover:bg-[#4f4f4f] text-gray-200 cursor-pointer pl-2 pr-1 py-1 flex items-center gap-1 transition-colors border border-transparent hover:border-gray-500"
+                      onClick={() => removeDatabase(db)}
+                    >
+                      {db}
+                      <X className="h-3 w-3 text-gray-400 hover:text-white" />
+                    </Badge>
+                  ))}
+                  
                   {/* Database Selector Button */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
