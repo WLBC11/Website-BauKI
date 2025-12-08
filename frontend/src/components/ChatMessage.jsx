@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Copy, Check } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuth } from '../context/AuthContext';
@@ -73,6 +73,40 @@ const ChatMessage = ({ message }) => {
   const [copied, setCopied] = useState(false);
   const { user } = useAuth();
   const isUser = message.role === 'user';
+  
+  // Streaming effect state
+  const [displayedContent, setDisplayedContent] = useState(
+    message.shouldAnimate ? '' : message.content
+  );
+
+  // Typewriter effect logic
+  useEffect(() => {
+    if (!message.shouldAnimate) {
+      setDisplayedContent(message.content);
+      return;
+    }
+
+    if (displayedContent === message.content) return;
+
+    // Use a faster interval for better feel (10ms)
+    // Add multiple characters at once for long messages to speed up
+    const interval = setInterval(() => {
+      setDisplayedContent(current => {
+        if (current.length >= message.content.length) {
+          clearInterval(interval);
+          return current;
+        }
+        
+        // Calculate chunk size based on remaining length to keep it responsive
+        const remaining = message.content.length - current.length;
+        const chunkSize = Math.max(1, Math.min(5, Math.ceil(remaining / 50)));
+        
+        return message.content.slice(0, current.length + chunkSize);
+      });
+    }, 15);
+
+    return () => clearInterval(interval);
+  }, [message.content, message.shouldAnimate]); // Intentionally removed displayedContent to avoid re-run on every char
 
   // Get user initial
   const getUserInitial = () => {
@@ -139,15 +173,19 @@ const ChatMessage = ({ message }) => {
                       td: TdBlock
                     }}
                   >
-                    {message.content}
+                    {displayedContent}
                   </ReactMarkdown>
+                  {/* Cursor effect for active typing */}
+                  {message.shouldAnimate && displayedContent.length < message.content.length && (
+                    <span className="inline-block w-2 h-4 bg-gray-400 ml-1 animate-pulse align-middle" />
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Action buttons for AI messages */}
-            {!isUser && (
-              <div className="flex items-center gap-1 mt-3">
+            {/* Action buttons for AI messages - only show when finished typing */}
+            {!isUser && (!message.shouldAnimate || displayedContent.length === message.content.length) && (
+              <div className="flex items-center gap-1 mt-3 animate-in fade-in duration-500">
                 <Button
                   variant="ghost"
                   size="icon"
