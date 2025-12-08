@@ -116,22 +116,22 @@ async def generate_chat_title(message: str) -> str:
         chat = LlmChat(
             api_key=EMERGENT_LLM_KEY,
             session_id=f"title-{uuid.uuid4()}",
-            system_message="Du bist ein Assistent, der sehr kurze Chat-Titel erstellt. Antworte NUR mit einem prägnanten Titel (maximal 2-4 Wörter), der das Thema der Nachricht beschreibt. Keine Anführungszeichen, keine Erklärungen, keine langen Sätze."
+            system_message="Du bist ein Assistent, der extrem kurze Chat-Titel erstellt. Antworte NUR mit 1-3 kurzen Wörtern, die das Thema beschreiben. Maximale Länge: 20 Zeichen. Keine Anführungszeichen, keine Erklärungen."
         ).with_model("openai", "gpt-4o-mini")
         
-        user_message = UserMessage(text=f"Erstelle einen sehr kurzen Titel für diese Nachricht: {message[:200]}")
+        user_message = UserMessage(text=f"Erstelle einen extrem kurzen Titel (max. 20 Zeichen) für: {message[:200]}")
         title = await chat.send_message(user_message)
         
         # Clean up the title
         title = title.strip().strip('"').strip("'")
-        if len(title) > 35:
-            title = title[:32] + "..."
+        if len(title) > 25:
+            title = title[:22] + "..."
         
         return title
     except Exception as e:
         logger.error(f"Error generating title: {e}")
-        # Fallback: use first 25 chars of message
-        return message[:25] + ("..." if len(message) > 25 else "")
+        # Fallback: use first 20 chars of message
+        return message[:20] + ("..." if len(message) > 20 else "")
 
 
 # Define Models
