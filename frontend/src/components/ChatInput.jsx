@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChatContext } from '../context/ChatContext';
-import { Send, X, Square } from 'lucide-react';
+import { Send, X, Square, MapPin } from 'lucide-react';
 import { Button } from './ui/button';
 import {
   DropdownMenu,
@@ -9,6 +9,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
 } from './ui/dropdown-menu';
 import { Badge } from './ui/badge';
 
@@ -20,10 +22,29 @@ const AVAILABLE_DATABASES = [
   "Beton"
 ];
 
+const BUNDESLAENDER = [
+  "Baden-Württemberg",
+  "Bayern",
+  "Berlin",
+  "Brandenburg",
+  "Bremen",
+  "Hamburg",
+  "Hessen",
+  "Mecklenburg-Vorpommern",
+  "Niedersachsen",
+  "Nordrhein-Westfalen",
+  "Rheinland-Pfalz",
+  "Saarland",
+  "Sachsen",
+  "Sachsen-Anhalt",
+  "Schleswig-Holstein",
+  "Thüringen"
+];
+
 const ChatInput = () => {
   const [message, setMessage] = useState('');
   const textareaRef = useRef(null);
-  const { sendMessage, isLoading, activeDatabases, setActiveDatabases, stopGeneration, isTyping } = useChatContext();
+  const { sendMessage, isLoading, activeDatabases, setActiveDatabases, selectedBundesland, setSelectedBundesland, stopGeneration, isTyping } = useChatContext();
 
   // Auto-resize textarea
   useEffect(() => {
