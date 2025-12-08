@@ -160,6 +160,8 @@ class Conversation(BaseModel):
     messages: List[Message] = []
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    bundesland: Optional[str] = None
+    databases: Optional[List[str]] = []
 
 class ChatRequest(BaseModel):
     message: str
