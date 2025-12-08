@@ -386,11 +386,7 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
             # Update existing conversation
             update_data = {
                 "$push": {"messages": {"$each": [user_msg, assistant_msg]}},
-                "$set": {
-                    "updated_at": datetime.now(timezone.utc).isoformat(),
-                    "bundesland": request.bundesland,
-                    "databases": request.databases
-                }
+                "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
             }
             # If user is now logged in, associate the conversation with them
             if user_id and not existing_conv.get("user_id"):
@@ -407,9 +403,7 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
                 "title": generated_title,
                 "messages": [user_msg, assistant_msg],
                 "created_at": datetime.now(timezone.utc).isoformat(),
-                "updated_at": datetime.now(timezone.utc).isoformat(),
-                "bundesland": request.bundesland,
-                "databases": request.databases
+                "updated_at": datetime.now(timezone.utc).isoformat()
             }
             await db.conversations.insert_one(new_conv)
             response_title = generated_title
