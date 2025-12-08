@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { models } from '../data/mockData';
 import { useAuth } from './AuthContext';
 import axios from 'axios';
@@ -25,6 +25,10 @@ export const ChatProvider = ({ children }) => {
   const [activeDatabases, setActiveDatabases] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isTyping, setIsTyping] = useState(false);
+
+  // Use refs for request cancellation
+  const abortControllerRef = useRef(null);
 
   const activeConversation = currentGuestConversation || conversations.find(c => c.id === activeConversationId);
 
@@ -67,11 +71,19 @@ export const ChatProvider = ({ children }) => {
   const createNewConversation = useCallback(() => {
     setActiveConversationId(null);
     setCurrentGuestConversation(null);
+    setIsTyping(false);
+    if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+    }
   }, []);
 
   const selectConversation = useCallback((id) => {
     setActiveConversationId(id);
     setCurrentGuestConversation(null);
+    setIsTyping(false);
+    if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+    }
   }, []);
 
   const deleteConversation = useCallback(async (id) => {
@@ -86,6 +98,22 @@ export const ChatProvider = ({ children }) => {
       console.error('Failed to delete conversation:', error);
     }
   }, [activeConversationId, isAuthenticated]);
+
+  const stopGeneration = useCallback(() => {
+    if (isLoading) {
+      // Cancel network request
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = null;
+      }
+      setIsLoading(false);
+    }
+    
+    if (isTyping) {
+      // Stop typing animation
+      setIsTyping(false);
+    }
+  }, [isLoading, isTyping]);
 
   const sendMessage = useCallback(async (content) => {
     if (!content.trim()) return;
@@ -136,12 +164,17 @@ export const ChatProvider = ({ children }) => {
     // Call backend API
     setIsLoading(true);
     
+    // Create new abort controller
+    abortControllerRef.current = new AbortController();
+    
     try {
       const response = await axios.post(`${API}/chat`, {
         message: content.trim(),
         conversation_id: isNewConversation ? null : conversationId,
         session_id: conversationId,
         databases: activeDatabases
+      }, {
+        signal: abortControllerRef.current.signal
       });
 
       const aiMessage = {
@@ -151,6 +184,9 @@ export const ChatProvider = ({ children }) => {
         timestamp: new Date(),
         shouldAnimate: true
       };
+
+      // Set typing state for animation
+      setIsTyping(true);
 
       // Update conversation with the real conversation ID from backend
       const realConversationId = response.data.conversation_id;
@@ -194,32 +230,39 @@ export const ChatProvider = ({ children }) => {
       }
 
     } catch (error) {
-      console.error('Failed to send message:', error);
-      
-      // Add error message
-      const errorMessage = {
-        id: `msg-${Date.now()}-error`,
-        role: 'assistant',
-        content: `Entschuldigung, ein Fehler ist aufgetreten: ${error.response?.data?.detail || error.message || 'Unbekannter Fehler'}. Bitte versuche es erneut.`,
-        timestamp: new Date()
-      };
-
-      if (!isAuthenticated || currentGuestConversation) {
-        setCurrentGuestConversation(prev => prev ? {
-          ...prev,
-          messages: [...prev.messages, errorMessage]
-        } : null);
+      if (axios.isCancel(error)) {
+        console.log('Request canceled', error.message);
+        // Do not show error message for cancellations
       } else {
-        setConversations(prev => prev.map(c => 
-          c.id === conversationId 
-            ? { ...c, messages: [...c.messages, errorMessage] }
-            : c
-        ));
+        console.error('Failed to send message:', error);
+        
+        // Add error message
+        const errorMessage = {
+          id: `msg-${Date.now()}-error`,
+          role: 'assistant',
+          content: `Entschuldigung, ein Fehler ist aufgetreten: ${error.response?.data?.detail || error.message || 'Unbekannter Fehler'}. Bitte versuche es erneut.`,
+          timestamp: new Date()
+        };
+
+        if (!isAuthenticated || currentGuestConversation) {
+          setCurrentGuestConversation(prev => prev ? {
+            ...prev,
+            messages: [...prev.messages, errorMessage]
+          } : null);
+        } else {
+          setConversations(prev => prev.map(c => 
+            c.id === conversationId 
+              ? { ...c, messages: [...c.messages, errorMessage] }
+              : c
+          ));
+        }
       }
+    } finally {
+        setIsLoading(false);
+        abortControllerRef.current = null;
     }
 
-    setIsLoading(false);
-  }, [activeConversationId, currentGuestConversation, isAuthenticated]);
+  }, [activeConversationId, currentGuestConversation, isAuthenticated, activeDatabases]);
 
   const toggleSidebar = useCallback(() => {
     setSidebarOpen(prev => !prev);
@@ -241,7 +284,10 @@ export const ChatProvider = ({ children }) => {
     toggleSidebar,
     models,
     activeDatabases,
-    setActiveDatabases
+    setActiveDatabases,
+    stopGeneration,
+    isTyping,
+    setIsTyping
   };
 
   return (
