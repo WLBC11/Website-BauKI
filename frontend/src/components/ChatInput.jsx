@@ -26,7 +26,7 @@ const AVAILABLE_DATABASES = [
 const ChatInput = () => {
   const [message, setMessage] = useState('');
   const textareaRef = useRef(null);
-  const { sendMessage, isLoading, activeDatabases, setActiveDatabases, stopGeneration, isTyping } = useChatContext();
+  const { sendMessage, isLoading, stopGeneration, isTyping } = useChatContext();
 
   // Auto-resize textarea
   useEffect(() => {
