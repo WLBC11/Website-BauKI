@@ -170,8 +170,7 @@ export const ChatProvider = ({ children }) => {
       const response = await axios.post(`${API}/chat`, {
         message: content.trim(),
         conversation_id: isNewConversation ? null : conversationId,
-        session_id: conversationId,
-        databases: activeDatabases
+        session_id: conversationId
       }, {
         signal: abortControllerRef.current.signal
       });
