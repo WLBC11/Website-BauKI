@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useChatContext } from '../context/ChatContext';
 import { useAuth } from '../context/AuthContext';
-import { Plus, MessageSquare, Trash2, Menu, Settings, LogOut, Search, PanelLeftClose, User, LogIn, ChevronDown } from 'lucide-react';
+import { Plus, MessageSquare, Trash2, Menu, PanelLeftClose, User, LogOut, Search, ChevronDown } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import { Button } from './ui/button';
 import {
@@ -10,9 +10,9 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuLabel,
 } from './ui/dropdown-menu';
 import AuthModal from './AuthModal';
 
@@ -48,14 +48,14 @@ const Sidebar = () => {
 
   const { user, isAuthenticated, logout, updateBundesland } = useAuth();
 
-  const [hoveredId, setHoveredId] = useState(null);
+  // Removed hoveredId state in favor of CSS group-hover for better performance and reliability
   const [searchQuery, setSearchQuery] = useState('');
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
 
   const filteredConversations = conversations.filter(conv =>
     conv.title.toLowerCase().includes(searchQuery.toLowerCase())
-  ).slice(0, 25); // Nur die letzten 25 Chats
+  ).slice(0, 25);
 
   const openAuthModal = (mode) => {
     setAuthMode(mode);
@@ -217,7 +217,6 @@ const Sidebar = () => {
               </h3>
               {filteredConversations.map(conv => {
                 const isActive = activeConversationId === conv.id;
-                const isHovered = hoveredId === conv.id;
                 
                 return (
                   <div
@@ -225,14 +224,6 @@ const Sidebar = () => {
                     className={`group relative mx-2 rounded-lg cursor-pointer transition-colors duration-150 z-0
                       ${isActive ? 'bg-[#2f2f2f]' : 'hover:bg-[#2f2f2f]/50'}`}
                     onClick={() => selectConversation(conv.id)}
-                    onMouseEnter={() => {
-                      console.log('Mouse entered chat:', conv.id);
-                      setHoveredId(conv.id);
-                    }}
-                    onMouseLeave={() => {
-                      console.log('Mouse left chat');
-                      setHoveredId(null);
-                    }}
                     title={conv.title}
                   >
                     <div className="flex items-center py-2 pl-3" style={{ paddingRight: '135px' }}>
@@ -244,19 +235,17 @@ const Sidebar = () => {
                       </div>
                     </div>
                     
-                    {/* Delete button - at custom 88px position */}
-                    {isHovered && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          deleteConversation(conv.id);
-                        }}
-                        className="absolute top-1/2 -translate-y-1/2 p-1 hover:bg-[#3f3f3f] rounded transition-all duration-200 z-20"
-                        style={{ right: '88px' }}
-                      >
-                        <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-400" />
-                      </button>
-                    )}
+                    {/* Delete button - always rendered but hidden until hover via CSS */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteConversation(conv.id);
+                      }}
+                      className="absolute top-1/2 -translate-y-1/2 p-1 hover:bg-[#3f3f3f] rounded transition-all duration-200 z-20 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto"
+                      style={{ right: '88px' }}
+                    >
+                      <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-400" />
+                    </button>
                   </div>
                 );
               })}
