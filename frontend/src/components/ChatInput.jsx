@@ -64,18 +64,6 @@ const ChatInput = () => {
     }
   };
 
-  const toggleDatabase = (db) => {
-    setActiveDatabases(prev => 
-      prev.includes(db) 
-        ? prev.filter(d => d !== db)
-        : [...prev, db]
-    );
-  };
-
-  const removeDatabase = (db) => {
-    setActiveDatabases(prev => prev.filter(d => d !== db));
-  };
-
   return (
     <div className="px-4 pb-4 pt-2">
       <div className="max-w-3xl mx-auto">
