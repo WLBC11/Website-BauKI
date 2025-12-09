@@ -239,18 +239,18 @@ const Sidebar = () => {
                     </div>
                     
                     {/* Delete button - at custom 88px position */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteConversation(conv.id);
-                      }}
-                      className={`absolute top-1/2 -translate-y-1/2 p-1 hover:bg-[#3f3f3f] rounded transition-all duration-200 z-20 ${
-                        isHovered ? 'opacity-100 visible' : 'opacity-0 invisible'
-                      }`}
-                      style={{ right: '88px' }}
-                    >
-                      <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-400" />
-                    </button>
+                    {isHovered && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteConversation(conv.id);
+                        }}
+                        className="absolute top-1/2 -translate-y-1/2 p-1 hover:bg-[#3f3f3f] rounded transition-all duration-200 z-20"
+                        style={{ right: '88px' }}
+                      >
+                        <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-400" />
+                      </button>
+                    )}
                   </div>
                 );
               })}
