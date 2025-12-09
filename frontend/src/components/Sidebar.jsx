@@ -215,43 +215,50 @@ const Sidebar = () => {
               <h3 className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Chats
               </h3>
-              {filteredConversations.map(conv => (
-                <div
-                  key={conv.id}
-                  className={`group relative flex items-center gap-3 px-3 py-2 mx-2 rounded-lg cursor-pointer transition-colors duration-150
-                    ${activeConversationId === conv.id
-                      ? 'bg-[#2f2f2f]'
-                      : 'hover:bg-[#2f2f2f]/50'
-                    }`}
-                  onClick={() => selectConversation(conv.id)}
-                  onMouseEnter={() => setHoveredId(conv.id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                  title={conv.title}
-                >
-                  <MessageSquare className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                  <div className="flex-1 overflow-hidden relative">
-                    <span className={`block truncate text-sm text-gray-200 transition-all duration-200 ${hoveredId === conv.id ? 'pr-8' : ''}`}>
-                      {conv.title}
-                    </span>
-                    {/* Gradient fade when hovering to make space for delete button */}
-                    {hoveredId === conv.id && (
-                      <div className="absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-[#2f2f2f] to-transparent pointer-events-none" />
-                    )}
-                  </div>
-                  {/* Delete button with absolute positioning */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteConversation(conv.id);
-                    }}
-                    className={`absolute right-2 p-1 hover:bg-[#3f3f3f] rounded transition-opacity duration-200 ${
-                      hoveredId === conv.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                    }`}
+              {filteredConversations.map(conv => {
+                const isActive = activeConversationId === conv.id;
+                const isHovered = hoveredId === conv.id;
+                
+                return (
+                  <div
+                    key={conv.id}
+                    className={`group relative flex items-center gap-3 py-2 mx-2 rounded-lg cursor-pointer transition-colors duration-150
+                      ${isActive ? 'bg-[#2f2f2f]' : 'hover:bg-[#2f2f2f]/50'}`}
+                    onClick={() => selectConversation(conv.id)}
+                    onMouseEnter={() => setHoveredId(conv.id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                    title={conv.title}
                   >
-                    <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-400" />
-                  </button>
-                </div>
-              ))}
+                    <MessageSquare className="h-4 w-4 text-gray-400 flex-shrink-0 ml-3" />
+                    <div className="flex-1 overflow-hidden relative min-w-0" style={{ paddingRight: isHovered ? '36px' : '12px' }}>
+                      <span className="block truncate text-sm text-gray-200">
+                        {conv.title}
+                      </span>
+                      {/* Gradient fade overlay when hovering */}
+                      {isHovered && (
+                        <div 
+                          className="absolute right-0 top-0 bottom-0 w-12 pointer-events-none z-10"
+                          style={{
+                            background: `linear-gradient(to left, ${isActive ? '#2f2f2f' : 'rgba(47, 47, 47, 0.5)'} 0%, transparent 100%)`
+                          }}
+                        />
+                      )}
+                    </div>
+                    {/* Delete button - always at the same position */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteConversation(conv.id);
+                      }}
+                      className={`absolute right-2 p-1 hover:bg-[#3f3f3f] rounded transition-all duration-200 z-20 ${
+                        isHovered ? 'opacity-100 visible' : 'opacity-0 invisible'
+                      }`}
+                    >
+                      <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-400" />
+                    </button>
+                  </div>
+                );
+              })}
               {filteredConversations.length === 0 && (
                 <div className="px-4 py-8 text-center text-gray-500 text-sm">
                   {searchQuery ? 'Keine Chats gefunden' : 'Noch keine Unterhaltungen'}
