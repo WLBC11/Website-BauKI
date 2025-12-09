@@ -229,7 +229,7 @@ const Sidebar = () => {
                     onMouseLeave={() => setHoveredId(null)}
                     title={conv.title}
                   >
-                    <div className="flex items-center py-2 pl-3 pr-9">
+                    <div className="flex items-center py-2 pl-3 pr-12">
                       <MessageSquare className="h-4 w-4 text-gray-400 flex-shrink-0 mr-3" />
                       <div className="flex-1 overflow-hidden relative min-w-0">
                         <span className="block truncate text-sm text-gray-200">
@@ -241,20 +241,20 @@ const Sidebar = () => {
                     {/* Gradient fade overlay when hovering - covers text end */}
                     {isHovered && (
                       <div 
-                        className="absolute right-0 top-0 bottom-0 w-12 pointer-events-none z-10"
+                        className="absolute right-0 top-0 bottom-0 w-16 pointer-events-none z-10"
                         style={{
                           background: `linear-gradient(to left, ${isActive ? '#2f2f2f' : 'rgba(47, 47, 47, 0.5)'} 0%, transparent 100%)`
                         }}
                       />
                     )}
                     
-                    {/* Delete button - visible position */}
+                    {/* Delete button - at right-6 position */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         deleteConversation(conv.id);
                       }}
-                      className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-[#3f3f3f] rounded transition-all duration-200 z-20 ${
+                      className={`absolute right-6 top-1/2 -translate-y-1/2 p-1 hover:bg-[#3f3f3f] rounded transition-all duration-200 z-20 ${
                         isHovered ? 'opacity-100 visible' : 'opacity-0 invisible'
                       }`}
                     >
