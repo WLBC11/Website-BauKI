@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useChatContext } from '../context/ChatContext';
 import { useAuth } from '../context/AuthContext';
-import { Plus, MessageSquare, Trash2, Menu, PanelLeftClose, User, LogOut, Search, ChevronDown } from 'lucide-react';
+import { Plus, MessageSquare, Trash2, Menu, PanelLeftClose, User, LogOut, Search, ChevronDown, Settings } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import { Button } from './ui/button';
 import {
@@ -15,6 +15,7 @@ import {
   DropdownMenuRadioItem,
 } from './ui/dropdown-menu';
 import AuthModal from './AuthModal';
+import SettingsModal from './SettingsModal';
 
 const BUNDESLAENDER = [
   "Baden-Württemberg",
