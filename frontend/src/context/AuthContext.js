@@ -81,6 +81,18 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
+  const changePassword = useCallback(async (currentPassword, newPassword) => {
+    await axios.post(`${API}/auth/change-password`, { 
+      current_password: currentPassword, 
+      new_password: newPassword 
+    });
+  }, []);
+
+  const deleteAccount = useCallback(async () => {
+    await axios.delete(`${API}/auth/me`);
+    logout();
+  }, [logout]);
+
   const value = {
     user,
     token,
@@ -89,7 +101,9 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
-    updateBundesland
+    updateBundesland,
+    changePassword,
+    deleteAccount
   };
 
   return (
