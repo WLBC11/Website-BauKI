@@ -229,7 +229,7 @@ const Sidebar = () => {
                     onMouseLeave={() => setHoveredId(null)}
                     title={conv.title}
                   >
-                    <div className="flex items-center py-2 pl-3 pr-24">
+                    <div className="flex items-center py-2 pl-3" style={{ paddingRight: '115px' }}>
                       <MessageSquare className="h-4 w-4 text-gray-400 flex-shrink-0 mr-3" />
                       <div className="flex-1 overflow-hidden relative min-w-0">
                         <span className="block truncate text-sm text-gray-200">
@@ -237,29 +237,6 @@ const Sidebar = () => {
                         </span>
                       </div>
                     </div>
-                    
-                    {/* Solid background behind delete button when hovering */}
-                    {isHovered && (
-                      <div 
-                        className="absolute right-0 top-0 bottom-0 pointer-events-none z-10"
-                        style={{ 
-                          width: '120px',
-                          background: isActive ? '#2f2f2f' : 'rgba(47, 47, 47, 0.5)'
-                        }}
-                      />
-                    )}
-                    
-                    {/* Gradient fade overlay when hovering - smooth transition */}
-                    {isHovered && (
-                      <div 
-                        className="absolute top-0 bottom-0 pointer-events-none z-10"
-                        style={{
-                          left: 'calc(100% - 150px)',
-                          width: '30px',
-                          background: `linear-gradient(to right, transparent 0%, ${isActive ? '#2f2f2f' : 'rgba(47, 47, 47, 0.5)'} 100%)`
-                        }}
-                      />
-                    )}
                     
                     {/* Delete button - at custom 88px position */}
                     <button
