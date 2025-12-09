@@ -238,12 +238,25 @@ const Sidebar = () => {
                       </div>
                     </div>
                     
-                    {/* Gradient fade overlay when hovering - covers text end */}
+                    {/* Solid background behind delete button when hovering */}
                     {isHovered && (
                       <div 
-                        className="absolute right-0 top-0 bottom-0 w-28 pointer-events-none z-10"
+                        className="absolute right-0 top-0 bottom-0 pointer-events-none z-10"
+                        style={{ 
+                          width: '120px',
+                          background: isActive ? '#2f2f2f' : 'rgba(47, 47, 47, 0.5)'
+                        }}
+                      />
+                    )}
+                    
+                    {/* Gradient fade overlay when hovering - smooth transition */}
+                    {isHovered && (
+                      <div 
+                        className="absolute top-0 bottom-0 pointer-events-none z-10"
                         style={{
-                          background: `linear-gradient(to left, ${isActive ? '#2f2f2f' : 'rgba(47, 47, 47, 0.5)'} 0%, transparent 100%)`
+                          left: 'calc(100% - 150px)',
+                          width: '30px',
+                          background: `linear-gradient(to right, transparent 0%, ${isActive ? '#2f2f2f' : 'rgba(47, 47, 47, 0.5)'} 100%)`
                         }}
                       />
                     )}
