@@ -52,6 +52,7 @@ const Sidebar = () => {
   // Removed hoveredId state in favor of CSS group-hover for better performance and reliability
   const [searchQuery, setSearchQuery] = useState('');
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
 
   const filteredConversations = conversations.filter(conv =>
