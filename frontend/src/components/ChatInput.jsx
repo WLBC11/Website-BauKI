@@ -1,23 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChatContext } from '../context/ChatContext';
-import { Send, X, Square } from 'lucide-react';
+import { Send, Square } from 'lucide-react';
 import { Button } from './ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuCheckboxItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from './ui/dropdown-menu';
-import { Badge } from './ui/badge';
 
 const AVAILABLE_DATABASES = [
-  "Brandschutz", 
-  "Straßenbau", 
-  "TGA", 
-  "Energieberatung", 
-  "Beton"
+  "BauGB", 
+  "BauNVO", 
+  "VOB A", 
+  "VOB B", 
+  "VOB C",
+  "MBO (Brandschutz)",
+  "BPD BTA",
+  "VollzBekLBO",
+  "VV TB SH",
+  "Alle 16 Landesbauordnungen (LBOs)"
 ];
 
 const ChatInput = () => {
