@@ -238,6 +238,41 @@ async def get_me(user: dict = Depends(require_auth)):
         bundesland=user.get("bundesland")
     )
 
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+@api_router.post("/auth/change-password")
+async def change_password(data: ChangePasswordRequest, user: dict = Depends(require_auth)):
+    """Change user password"""
+    # Verify current password
+    # We need to fetch the full user with password hash (get_current_user returns it, but let's be safe)
+    db_user = await db.users.find_one({"id": user["id"]})
+    if not db_user or not verify_password(data.current_password, db_user["password_hash"]):
+        raise HTTPException(status_code=400, detail="Aktuelles Passwort ist falsch")
+    
+    # Update password
+    new_hash = hash_password(data.new_password)
+    await db.users.update_one(
+        {"id": user["id"]},
+        {"$set": {"password_hash": new_hash}}
+    )
+    return {"message": "Passwort erfolgreich geändert"}
+
+@api_router.delete("/auth/me")
+async def delete_account(user: dict = Depends(require_auth)):
+    """Delete current user account and all data"""
+    user_id = user["id"]
+    
+    # Delete all conversations
+    await db.conversations.delete_many({"user_id": user_id})
+    
+    # Delete user
+    await db.users.delete_one({"id": user_id})
+    
+    return {"message": "Konto erfolgreich gelöscht"}
+
 class UpdateBundeslandRequest(BaseModel):
     bundesland: Optional[str] = None
 
