@@ -210,7 +210,7 @@ const Sidebar = () => {
 
         {/* Conversations List - only show when authenticated */}
         {isAuthenticated ? (
-          <ScrollArea className="flex-1 px-1">
+          <ScrollArea className="flex-1 px-1 relative z-10">
             <div className="mb-4">
               <h3 className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Chats
