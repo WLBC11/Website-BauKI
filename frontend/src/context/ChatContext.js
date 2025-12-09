@@ -260,7 +260,7 @@ export const ChatProvider = ({ children }) => {
         abortControllerRef.current = null;
     }
 
-  }, [activeConversationId, currentGuestConversation, isAuthenticated, activeDatabases]);
+  }, [activeConversationId, currentGuestConversation, isAuthenticated]);
 
   const toggleSidebar = useCallback(() => {
     setSidebarOpen(prev => !prev);
