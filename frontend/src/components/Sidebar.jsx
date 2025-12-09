@@ -235,16 +235,16 @@ const Sidebar = () => {
                       </div>
                     </div>
                     
-                    {/* Delete button - TEMPORARILY ALWAYS VISIBLE for debugging */}
+                    {/* Delete button - EXTREME DEBUG MODE */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         deleteConversation(conv.id);
                       }}
-                      className="absolute top-1/2 -translate-y-1/2 p-1 hover:bg-[#3f3f3f] rounded transition-all duration-200 z-50 opacity-100"
-                      style={{ right: '88px' }}
+                      className="absolute top-1/2 -translate-y-1/2 p-2 bg-red-500 rounded z-[9999]"
+                      style={{ right: '10px' }}
                     >
-                      <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-400" />
+                      <Trash2 className="h-4 w-4 text-white" />
                     </button>
                   </div>
                 );
