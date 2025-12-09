@@ -281,8 +281,6 @@ export const ChatProvider = ({ children }) => {
     sendMessage,
     toggleSidebar,
     models,
-    activeDatabases,
-    setActiveDatabases,
     stopGeneration,
     isTyping,
     setIsTyping
