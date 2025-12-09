@@ -229,20 +229,27 @@ const Sidebar = () => {
                   title={conv.title}
                 >
                   <MessageSquare className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                  <span className="flex-1 truncate text-sm text-gray-200">
-                    {conv.title}
-                  </span>
-                  {(hoveredId === conv.id || activeConversationId === conv.id) && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteConversation(conv.id);
-                      }}
-                      className="opacity-0 group-hover:opacity-100 p-1 hover:bg-[#3f3f3f] rounded transition-opacity"
-                    >
-                      <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-400" />
-                    </button>
-                  )}
+                  <div className="flex-1 overflow-hidden relative">
+                    <span className={`block truncate text-sm text-gray-200 transition-all duration-200 ${hoveredId === conv.id ? 'pr-8' : ''}`}>
+                      {conv.title}
+                    </span>
+                    {/* Gradient fade when hovering to make space for delete button */}
+                    {hoveredId === conv.id && (
+                      <div className="absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-[#2f2f2f] to-transparent pointer-events-none" />
+                    )}
+                  </div>
+                  {/* Delete button with absolute positioning */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteConversation(conv.id);
+                    }}
+                    className={`absolute right-2 p-1 hover:bg-[#3f3f3f] rounded transition-opacity duration-200 ${
+                      hoveredId === conv.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                    }`}
+                  >
+                    <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-400" />
+                  </button>
                 </div>
               ))}
               {filteredConversations.length === 0 && (
