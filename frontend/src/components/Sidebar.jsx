@@ -229,7 +229,7 @@ const Sidebar = () => {
                     onMouseLeave={() => setHoveredId(null)}
                     title={conv.title}
                   >
-                    <div className="flex items-center py-2 pl-3" style={{ paddingRight: '125px' }}>
+                    <div className="flex items-center py-2 pl-3" style={{ paddingRight: '135px' }}>
                       <MessageSquare className="h-4 w-4 text-gray-400 flex-shrink-0 mr-3" />
                       <div className="flex-1 overflow-hidden relative min-w-0">
                         <span className="block truncate text-sm text-gray-200">
