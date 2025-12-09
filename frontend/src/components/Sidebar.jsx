@@ -319,6 +319,10 @@ const Sidebar = () => {
         onClose={() => setAuthModalOpen(false)} 
         initialMode={authMode}
       />
+      <SettingsModal 
+        isOpen={settingsModalOpen} 
+        onClose={() => setSettingsModalOpen(false)} 
+      />
     </>
   );
 };
