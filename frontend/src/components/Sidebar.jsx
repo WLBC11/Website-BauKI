@@ -226,25 +226,31 @@ const Sidebar = () => {
                     onClick={() => selectConversation(conv.id)}
                     title={conv.title}
                   >
-                    <div className="flex items-center py-2 pl-3 pr-10">
-                      <MessageSquare className="h-4 w-4 text-gray-400 flex-shrink-0 mr-3" />
+                    <div className="flex items-center py-2 pl-3 pr-3">
+                      {/* Icon Container - Swaps on hover */}
+                      <div className="relative w-4 h-4 mr-3 flex-shrink-0 flex items-center justify-center">
+                        {/* Normal Icon (Speech Bubble) - Hidden on hover */}
+                        <MessageSquare className="h-4 w-4 text-gray-400 group-hover:hidden" />
+                        
+                        {/* Delete Icon - Visible on hover */}
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                deleteConversation(conv.id);
+                            }}
+                            className="hidden group-hover:flex items-center justify-center text-gray-400 hover:text-red-400 transition-colors"
+                            title="Chat löschen"
+                        >
+                            <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+
                       <div className="flex-1 overflow-hidden relative min-w-0">
                         <span className="block truncate text-sm text-gray-200">
                           {conv.title}
                         </span>
                       </div>
                     </div>
-                    
-                    {/* Delete button */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteConversation(conv.id);
-                      }}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-red-400 hover:bg-[#3f3f3f] rounded-md transition-all duration-200 z-50 opacity-0 group-hover:opacity-100"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
                   </div>
                 );
               })}
