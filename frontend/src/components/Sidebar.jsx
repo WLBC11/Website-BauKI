@@ -225,8 +225,14 @@ const Sidebar = () => {
                     className={`group relative mx-2 rounded-lg cursor-pointer transition-colors duration-150 z-0
                       ${isActive ? 'bg-[#2f2f2f]' : 'hover:bg-[#2f2f2f]/50'}`}
                     onClick={() => selectConversation(conv.id)}
-                    onMouseEnter={() => setHoveredId(conv.id)}
-                    onMouseLeave={() => setHoveredId(null)}
+                    onMouseEnter={() => {
+                      console.log('Mouse entered chat:', conv.id);
+                      setHoveredId(conv.id);
+                    }}
+                    onMouseLeave={() => {
+                      console.log('Mouse left chat');
+                      setHoveredId(null);
+                    }}
                     title={conv.title}
                   >
                     <div className="flex items-center py-2 pl-3" style={{ paddingRight: '135px' }}>
