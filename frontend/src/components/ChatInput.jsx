@@ -88,48 +88,39 @@ const ChatInput = () => {
               {/* Bottom toolbar */}
               <div className="flex items-center justify-between px-3 pb-3 pt-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  {/* Database Tags */}
-                  {activeDatabases.map(db => (
-                    <Badge 
-                      key={db} 
-                      variant="secondary"
-                      className="bg-[#3f3f3f] hover:bg-[#4f4f4f] text-gray-200 cursor-pointer pl-2 pr-1 py-1 flex items-center gap-1 transition-colors border border-transparent hover:border-gray-500"
-                      onClick={() => removeDatabase(db)}
-                    >
-                      {db}
-                      <X className="h-3 w-3 text-gray-400 hover:text-white" />
-                    </Badge>
-                  ))}
-                  
-                  {/* Database Selector Button */}
+                  {/* Database Info Button */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className={`h-8 w-8 rounded-full flex-shrink-0 transition-colors ${activeDatabases.length > 0 ? 'bg-[#4f4f4f] hover:bg-[#5f5f5f]' : 'bg-[#3f3f3f] hover:bg-[#4f4f4f]'}`}
+                        className="h-8 w-8 rounded-full flex-shrink-0 transition-colors bg-[#3f3f3f] hover:bg-[#4f4f4f]"
                         type="button"
                       >
                         <img 
                           src="/law-book.png" 
-                          alt="Databases" 
-                          className={`h-5 w-5 object-contain transition-all duration-200 ${activeDatabases.length > 0 ? 'opacity-100' : 'opacity-70 hover:opacity-100'} invert mix-blend-screen`}
+                          alt="Verfügbare Datenbanken" 
+                          className="h-5 w-5 object-contain transition-all duration-200 opacity-70 hover:opacity-100 invert mix-blend-screen"
                         />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-56 bg-[#2f2f2f] border-[#3f3f3f] text-gray-200">
-                      <DropdownMenuLabel>Themen wählen</DropdownMenuLabel>
+                    <DropdownMenuContent align="start" className="w-72 bg-[#2f2f2f] border-[#3f3f3f] text-gray-200">
+                      <DropdownMenuLabel className="text-sm font-semibold">Verfügbare Datenbanken</DropdownMenuLabel>
                       <DropdownMenuSeparator className="bg-[#3f3f3f]" />
-                      {AVAILABLE_DATABASES.map(db => (
-                        <DropdownMenuCheckboxItem
-                          key={db}
-                          checked={activeDatabases.includes(db)}
-                          onCheckedChange={() => toggleDatabase(db)}
-                          className="focus:bg-[#3f3f3f] focus:text-white cursor-pointer"
-                        >
-                          {db}
-                        </DropdownMenuCheckboxItem>
-                      ))}
+                      <div className="px-2 py-2 space-y-1 max-h-[400px] overflow-y-auto">
+                        {AVAILABLE_DATABASES.map((db, index) => (
+                          <div 
+                            key={index} 
+                            className="px-2 py-2 rounded-md text-sm text-gray-300 hover:bg-[#3f3f3f] transition-colors"
+                          >
+                            {db}
+                          </div>
+                        ))}
+                      </div>
+                      <DropdownMenuSeparator className="bg-[#3f3f3f]" />
+                      <div className="px-3 py-2 text-xs text-gray-500">
+                        Die KI hat automatisch Zugriff auf alle Themen
+                      </div>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
