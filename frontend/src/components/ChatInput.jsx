@@ -99,13 +99,13 @@ const ChatInput = () => {
                       >
                         <img 
                           src="/law-book.png" 
-                          alt="Verfügbare Datenbanken" 
+                          alt="Integrierte Datenbanken" 
                           className="h-5 w-5 object-contain transition-all duration-200 opacity-70 hover:opacity-100 invert mix-blend-screen"
                         />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-72 bg-[#2f2f2f] border-[#3f3f3f] text-gray-200">
-                      <DropdownMenuLabel className="text-sm font-semibold">Verfügbare Datenbanken</DropdownMenuLabel>
+                    <DropdownMenuContent align="start" className="w-[500px] bg-[#2f2f2f] border-[#3f3f3f] text-gray-200">
+                      <DropdownMenuLabel className="text-sm font-semibold">Integrierte Datenbanken</DropdownMenuLabel>
                       <DropdownMenuSeparator className="bg-[#3f3f3f]" />
                       <div className="px-2 py-2 space-y-1 max-h-[400px] overflow-y-auto">
                         {AVAILABLE_DATABASES.map((db, index) => (
