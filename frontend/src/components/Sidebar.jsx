@@ -235,13 +235,13 @@ const Sidebar = () => {
                       </div>
                     </div>
                     
-                    {/* Delete button - always rendered but hidden until hover via CSS */}
+                    {/* Delete button - TEMPORARILY ALWAYS VISIBLE for debugging */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         deleteConversation(conv.id);
                       }}
-                      className="absolute top-1/2 -translate-y-1/2 p-1 hover:bg-[#3f3f3f] rounded transition-all duration-200 z-20 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto"
+                      className="absolute top-1/2 -translate-y-1/2 p-1 hover:bg-[#3f3f3f] rounded transition-all duration-200 z-50 opacity-100"
                       style={{ right: '88px' }}
                     >
                       <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-400" />
