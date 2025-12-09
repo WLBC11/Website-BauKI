@@ -11,12 +11,12 @@ import {
 } from './ui/dropdown-menu';
 
 const AVAILABLE_DATABASES = [
-  "BauGB", 
-  "BauNVO", 
-  "VOB A", 
-  "VOB B", 
-  "VOB C",
-  "MBO (Brandschutz)",
+  "BauGB (Baugesetzbuch)", 
+  "BauNVO (Baunutzungsverordnung)", 
+  "VOB A (Vergabe- und Vertragsordnung für Bauleistungen, Teil A)", 
+  "VOB B (Vergabe- und Vertragsordnung für Bauleistungen, Teil B)", 
+  "VOB C (Vergabe- und Vertragsordnung für Bauleistungen, Teil C)",
+  "MBO (Musterbauordnung - Brandschutz)",
   "BPD BTA",
   "VollzBekLBO",
   "VV TB SH",
