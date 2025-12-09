@@ -289,6 +289,10 @@ const Sidebar = () => {
                   {user?.email}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-[#3f3f3f]" />
+                <DropdownMenuItem onClick={() => setSettingsModalOpen(true)} className="text-gray-200 cursor-pointer">
+                  <Settings className="h-4 w-4 mr-2" />
+                  Einstellungen
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={logout} className="text-gray-200 cursor-pointer">
                   <LogOut className="h-4 w-4 mr-2" />
                   Abmelden
