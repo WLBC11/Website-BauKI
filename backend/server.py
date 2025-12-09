@@ -296,7 +296,6 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
             "message": request.message,
             "sessionId": session_id,
             "conversationId": conversation_id,
-            "databases": request.databases,
             "bundesland": user_bundesland
         }
         
