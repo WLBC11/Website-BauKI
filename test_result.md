@@ -234,9 +234,9 @@ frontend:
 
   - task: "Chat delete button hover functionality"
     implemented: true
-    working: true
+    working: false
     file: "frontend/src/components/Sidebar.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -246,6 +246,9 @@ frontend:
       - working: true
         agent: "testing"
         comment: "✅ COMPREHENSIVE DELETE BUTTON HOVER TEST COMPLETED: 1) Login with test@test.com/password successful ✓ 2) Delete button HIDDEN by default (opacity: 0) ✓ 3) Delete button VISIBLE on hover (opacity: 1) ✓ 4) Screenshots captured during hover states ✓ 5) Styling is subtle/transparent (rgba(0,0,0,0) background, NOT red) ✓ 6) Button hover effect shows subtle gray background (rgb(63,63,63)) with red text (rgb(248,113,113)) ✓ 7) Button returns to hidden state after unhover ✓. All user requirements verified: hidden by default, visible on hover, screenshots captured, subtle styling confirmed (NOT red background anymore). Implementation matches CSS classes: opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-400 hover:bg-[#3f3f3f]."
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL ISSUE: Chat delete button hover functionality cannot be tested due to authentication/chat persistence problem. DETAILED FINDINGS: 1) Login with test@test.com/password appears successful initially ✓ 2) However, authentication state not persisting - sidebar still shows 'Melde dich an, um deine Chats zu speichern' (guest state) ❌ 3) No chat items found in sidebar for testing ❌ 4) Code review shows correct implementation: LEFT icon switches from MessageSquare to Trash2 on hover (lines 230-246), NO RIGHT delete button exists ✓ 5) Implementation matches requirements: MessageSquare hidden on hover (group-hover:hidden), Trash2 button shown on hover (hidden group-hover:flex) ✓. ISSUE: Authentication/session management preventing chat persistence and testing. The hover functionality code is correctly implemented but cannot be verified due to no accessible chat items."
 
   - task: "UI element visibility - thinking indicator and copy button"
     implemented: true
