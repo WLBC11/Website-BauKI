@@ -86,7 +86,7 @@ const ChatArea = () => {
 
       {/* Messages area */}
       <ScrollArea className="flex-1">
-        <div className="pb-32">
+        <div className="pb-64">
           {activeConversation.messages.map((message, index) => (
             <ChatMessage 
               key={message.id} 
