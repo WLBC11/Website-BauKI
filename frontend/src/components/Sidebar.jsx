@@ -226,7 +226,7 @@ const Sidebar = () => {
                     onClick={() => selectConversation(conv.id)}
                     title={conv.title}
                   >
-                    <div className="flex items-center py-2 pl-3" style={{ paddingRight: '135px' }}>
+                    <div className="flex items-center py-2 pl-3 pr-10">
                       <MessageSquare className="h-4 w-4 text-gray-400 flex-shrink-0 mr-3" />
                       <div className="flex-1 overflow-hidden relative min-w-0">
                         <span className="block truncate text-sm text-gray-200">
@@ -235,16 +235,15 @@ const Sidebar = () => {
                       </div>
                     </div>
                     
-                    {/* Delete button - EXTREME DEBUG MODE */}
+                    {/* Delete button */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         deleteConversation(conv.id);
                       }}
-                      className="absolute top-1/2 -translate-y-1/2 p-2 bg-red-500 rounded z-[9999]"
-                      style={{ right: '10px' }}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-red-400 hover:bg-[#3f3f3f] rounded-md transition-all duration-200 z-50 opacity-0 group-hover:opacity-100"
                     >
-                      <Trash2 className="h-4 w-4 text-white" />
+                      <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
                 );
