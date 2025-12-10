@@ -580,6 +580,35 @@ async def claim_conversation(conversation_id: str, user: dict = Depends(require_
     return {"message": "Conversation claimed successfully"}
 
 
+# Feedback Models
+class FeedbackCreate(BaseModel):
+    message: str
+
+class FeedbackResponse(BaseModel):
+    id: str
+    user_id: str
+    user_name: str
+    user_email: str
+    message: str
+    created_at: datetime
+
+# Feedback Routes
+@api_router.post("/feedback")
+async def create_feedback(data: FeedbackCreate, user: dict = Depends(require_auth)):
+    """Create a new feedback message"""
+    feedback_id = str(uuid.uuid4())
+    feedback = {
+        "id": feedback_id,
+        "user_id": user["id"],
+        "user_name": user.get("name", "Unbekannt"),
+        "user_email": user["email"],
+        "message": data.message,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.feedback.insert_one(feedback)
+    return {"message": "Feedback erfolgreich gesendet", "id": feedback_id}
+
+
 # Admin Routes
 ADMIN_EMAILS = [
     "weiss.jonathan1107@outlook.com",
@@ -591,6 +620,20 @@ async def require_admin(user: dict = Depends(require_auth)) -> dict:
     if user["email"].lower() not in ADMIN_EMAILS:
         raise HTTPException(status_code=403, detail="Admin-Zugriff verweigert")
     return user
+
+@api_router.get("/admin/feedback")
+async def get_all_feedback(user: dict = Depends(require_admin)):
+    """Get all feedback messages (admin only)"""
+    feedback_list = await db.feedback.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return feedback_list
+
+@api_router.delete("/admin/feedback/{feedback_id}")
+async def delete_feedback(feedback_id: str, user: dict = Depends(require_admin)):
+    """Delete a feedback message (admin only)"""
+    result = await db.feedback.delete_one({"id": feedback_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Feedback nicht gefunden")
+    return {"message": "Feedback gelöscht"}
 
 @api_router.get("/admin/stats")
 async def get_admin_stats(
