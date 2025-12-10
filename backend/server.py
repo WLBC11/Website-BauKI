@@ -579,6 +579,136 @@ async def claim_conversation(conversation_id: str, user: dict = Depends(require_
     )
     return {"message": "Conversation claimed successfully"}
 
+
+# Admin Routes
+ADMIN_EMAILS = [
+    "weiss.jonathan1107@outlook.com",
+    "lukas.lust11@gmail.com"
+]
+
+async def require_admin(user: dict = Depends(require_auth)) -> dict:
+    """Require admin authentication"""
+    if user["email"].lower() not in ADMIN_EMAILS:
+        raise HTTPException(status_code=403, detail="Admin-Zugriff verweigert")
+    return user
+
+@api_router.get("/admin/stats")
+async def get_admin_stats(
+    start_date: str,
+    end_date: str,
+    user: dict = Depends(require_admin)
+):
+    """Get admin statistics for the dashboard"""
+    try:
+        start = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+        end = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+        
+        # Total users (all time)
+        total_users = await db.users.count_documents({})
+        
+        # New users in period
+        new_users_in_period = await db.users.count_documents({
+            "created_at": {
+                "$gte": start.isoformat(),
+                "$lte": end.isoformat()
+            }
+        })
+        
+        # Active users today (who sent messages today)
+        today_start = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+        active_users_today = len(await db.conversations.distinct("user_id", {
+            "user_id": {"$ne": None},
+            "updated_at": {"$gte": today_start.isoformat()}
+        }))
+        
+        # Active users in period (who sent messages in period)
+        active_users_in_period = len(await db.conversations.distinct("user_id", {
+            "user_id": {"$ne": None},
+            "updated_at": {
+                "$gte": start.isoformat(),
+                "$lte": end.isoformat()
+            }
+        }))
+        
+        # Total conversations and messages
+        total_conversations = await db.conversations.count_documents({})
+        
+        # Count total messages
+        pipeline = [
+            {"$project": {"message_count": {"$size": "$messages"}}},
+            {"$group": {"_id": None, "total": {"$sum": "$message_count"}}}
+        ]
+        message_result = await db.conversations.aggregate(pipeline).to_list(1)
+        total_messages = message_result[0]["total"] if message_result else 0
+        
+        # Average messages per chat
+        avg_messages_per_chat = total_messages / total_conversations if total_conversations > 0 else 0
+        
+        # Users with chats
+        users_with_chats = len(await db.conversations.distinct("user_id", {"user_id": {"$ne": None}}))
+        
+        # Top Bundesländer
+        bundesland_pipeline = [
+            {"$match": {"bundesland": {"$ne": None}}},
+            {"$group": {"_id": "$bundesland", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 5}
+        ]
+        top_bundeslaender = await db.users.aggregate(bundesland_pipeline).to_list(5)
+        top_bundeslaender = [{"bundesland": item["_id"], "count": item["count"]} for item in top_bundeslaender]
+        
+        # Chart data - daily breakdown
+        from datetime import timedelta
+        
+        chart_data = []
+        current_date = start
+        
+        while current_date <= end:
+            day_start = current_date.replace(hour=0, minute=0, second=0, microsecond=0)
+            day_end = day_start + timedelta(days=1)
+            
+            # New users on this day
+            new_users = await db.users.count_documents({
+                "created_at": {
+                    "$gte": day_start.isoformat(),
+                    "$lt": day_end.isoformat()
+                }
+            })
+            
+            # Active users on this day
+            active_users = len(await db.conversations.distinct("user_id", {
+                "user_id": {"$ne": None},
+                "updated_at": {
+                    "$gte": day_start.isoformat(),
+                    "$lt": day_end.isoformat()
+                }
+            }))
+            
+            chart_data.append({
+                "date": current_date.strftime("%d.%m"),
+                "new_users": new_users,
+                "active_users": active_users
+            })
+            
+            current_date += timedelta(days=1)
+        
+        return {
+            "total_users": total_users,
+            "new_users_in_period": new_users_in_period,
+            "active_users_today": active_users_today,
+            "active_users_in_period": active_users_in_period,
+            "total_conversations": total_conversations,
+            "total_messages": total_messages,
+            "avg_messages_per_chat": round(avg_messages_per_chat, 1),
+            "users_with_chats": users_with_chats,
+            "top_bundeslaender": top_bundeslaender,
+            "chart_data": chart_data
+        }
+        
+    except Exception as e:
+        logger.error(f"Admin stats error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Include the router in the main app
 app.include_router(api_router)
 
