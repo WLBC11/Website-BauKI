@@ -151,6 +151,12 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
         </div>
       </DialogContent>
     </Dialog>
+    
+    <ResetPasswordModal 
+      isOpen={resetPasswordOpen} 
+      onClose={() => setResetPasswordOpen(false)} 
+    />
+    </>
   );
 };
 
