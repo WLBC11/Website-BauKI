@@ -27,8 +27,10 @@ const AVAILABLE_DATABASES = [
 
 const ChatInput = () => {
   const [message, setMessage] = useState('');
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
   const textareaRef = useRef(null);
   const { sendMessage, isLoading, stopGeneration, isTyping } = useChatContext();
+  const { isAuthenticated } = useAuth();
 
   // Auto-resize textarea
   useEffect(() => {
