@@ -149,7 +149,7 @@ const ChatMessage = ({ message, isLast }) => {
           {/* Avatar */}
           <div className="flex-shrink-0">
             {isUser ? (
-              <div className="h-8 w-8 rounded-full bg-[#3b82f6] flex items-center justify-center text-white text-sm font-medium">
+              <div className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-[#3b82f6] flex items-center justify-center text-white text-xs md:text-sm font-medium">
                 {getUserInitial()}
               </div>
             ) : (
