@@ -430,6 +430,73 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Feedback Section */}
+        <div className="mt-8 bg-[#2f2f2f] rounded-lg p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+              💬 Nutzer-Feedback
+              {feedbackList.length > 0 && (
+                <span className="text-sm bg-[#3f3f3f] px-2 py-1 rounded-full">
+                  {feedbackList.length}
+                </span>
+              )}
+            </h2>
+            <button
+              onClick={fetchFeedback}
+              className="px-3 py-1 text-sm bg-[#3f3f3f] text-gray-300 rounded-lg hover:bg-[#4f4f4f] transition-colors"
+            >
+              Aktualisieren
+            </button>
+          </div>
+
+          {feedbackLoading ? (
+            <div className="text-center py-8 text-gray-400">Lade Feedback...</div>
+          ) : feedbackList.length === 0 ? (
+            <div className="text-center py-8 text-gray-400">
+              Noch kein Feedback vorhanden
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {feedbackList.map((feedback) => (
+                <div
+                  key={feedback.id}
+                  className="bg-[#1f1f1f] rounded-lg p-4 border border-[#3f3f3f]"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="h-8 w-8 rounded-full bg-[#3b82f6] flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
+                          {feedback.user_name?.[0]?.toUpperCase() || 'U'}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-white font-medium truncate">{feedback.user_name}</p>
+                          <p className="text-gray-400 text-xs truncate">{feedback.user_email}</p>
+                        </div>
+                      </div>
+                      <p className="text-gray-300 text-sm mb-2 break-words">{feedback.message}</p>
+                      <p className="text-gray-500 text-xs">
+                        {new Date(feedback.created_at).toLocaleDateString('de-DE', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleDeleteFeedback(feedback.id)}
+                      className="flex-shrink-0 px-3 py-2 bg-red-900/20 text-red-400 rounded-lg hover:bg-red-900/30 transition-colors text-sm"
+                    >
+                      Löschen
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
