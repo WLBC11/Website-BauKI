@@ -171,6 +171,12 @@ const ChatInput = () => {
           Die BauKI kann Fehler machen. Bitte überprüfen Sie wichtige Informationen.
         </p>
       </div>
+
+      {/* Feedback Modal */}
+      <FeedbackModal 
+        isOpen={feedbackOpen} 
+        onClose={() => setFeedbackOpen(false)} 
+      />
     </div>
   );
 };
