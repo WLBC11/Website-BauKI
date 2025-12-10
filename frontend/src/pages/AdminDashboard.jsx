@@ -137,8 +137,17 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-[#212121] p-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {/* Header with Back Button */}
         <div className="mb-8">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-4"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Zurück zum Chat
+          </button>
           <h1 className="text-4xl font-bold text-white mb-2">📊 Analytics Dashboard</h1>
           <p className="text-gray-400">BauKI - Verwaltung & Statistiken</p>
         </div>
