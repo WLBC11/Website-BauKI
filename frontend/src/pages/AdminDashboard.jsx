@@ -106,6 +106,14 @@ const AdminDashboard = () => {
     setEndDate(end);
   };
 
+  if (authLoading || (!isAuthenticated && loading)) {
+    return (
+      <div className="min-h-screen bg-[#212121] flex items-center justify-center">
+        <div className="text-white text-xl">Laden...</div>
+      </div>
+    );
+  }
+
   if (!isAdmin) {
     return null;
   }
@@ -113,7 +121,7 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#212121] flex items-center justify-center">
-        <div className="text-white text-xl">Laden...</div>
+        <div className="text-white text-xl">Daten werden geladen...</div>
       </div>
     );
   }
