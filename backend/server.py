@@ -636,8 +636,8 @@ async def require_admin(user: dict = Depends(require_auth)) -> dict:
 
 @api_router.get("/admin/feedback")
 async def get_all_feedback(user: dict = Depends(require_admin)):
-    """Get all feedback messages (admin only)"""
-    feedback_list = await db.feedback.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    """Get the 10 newest feedback messages (admin only)"""
+    feedback_list = await db.feedback.find({}, {"_id": 0}).sort("created_at", -1).to_list(10)
     return feedback_list
 
 @api_router.delete("/admin/feedback/{feedback_id}")
