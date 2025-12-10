@@ -124,7 +124,29 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="flex flex-col h-full w-[260px] bg-[#171717] border-r border-[#2f2f2f]">
+      {/* Mobile Menu Button - Only visible on mobile */}
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-[#2f2f2f] rounded-lg text-white"
+      >
+        <Menu className="h-6 w-6" />
+      </button>
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div className={`
+        flex flex-col h-full w-[260px] bg-[#171717] border-r border-[#2f2f2f]
+        fixed md:relative inset-y-0 left-0 z-40
+        transform transition-transform duration-300 ease-in-out
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}>
         {/* Header */}
         <div className="flex items-center justify-between p-3 border-b border-[#2f2f2f]">
           <Button
