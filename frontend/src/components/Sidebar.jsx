@@ -435,6 +435,10 @@ const Sidebar = () => {
         isOpen={legalOpen} 
         onClose={() => setLegalOpen(false)} 
       />
+      <FeedbackModal 
+        isOpen={feedbackOpen} 
+        onClose={() => setFeedbackOpen(false)} 
+      />
     </>
   );
 };
