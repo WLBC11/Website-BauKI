@@ -526,7 +526,7 @@ const AdminDashboard = () => {
                   key={feedback.id}
                   className="bg-[#1f1f1f] rounded-lg p-4 border border-[#3f3f3f]"
                 >
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-start gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-2">
                         <div className="h-8 w-8 rounded-full bg-[#3b82f6] flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
@@ -548,18 +548,6 @@ const AdminDashboard = () => {
                         })}
                       </p>
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('🔴 DELETE BUTTON CLICKED for ID:', feedback.id);
-                        handleDeleteFeedback(feedback.id);
-                      }}
-                      className="flex-shrink-0 px-3 py-2 bg-red-900/20 text-red-400 rounded-lg hover:bg-red-900/30 transition-colors text-sm cursor-pointer"
-                      type="button"
-                    >
-                      Löschen
-                    </button>
                   </div>
                 </div>
               ))}
