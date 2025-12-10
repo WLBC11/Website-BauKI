@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
+import ResetPasswordModal from './ResetPasswordModal';
 
 const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
   const [mode, setMode] = useState(initialMode);
@@ -12,6 +13,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const { login, register } = useAuth();
 
   // Update mode when initialMode changes
