@@ -352,6 +352,17 @@ const Sidebar = () => {
                   <FileText className="h-4 w-4 mr-2" />
                   Rechtliches
                 </DropdownMenuItem>
+                {isAdmin && (
+                  <>
+                    <DropdownMenuSeparator className="bg-[#3f3f3f]" />
+                    <DropdownMenuItem asChild>
+                      <a href="/admin" className="text-gray-200 cursor-pointer flex items-center">
+                        <BarChart3 className="h-4 w-4 mr-2" />
+                        Admin Dashboard
+                      </a>
+                    </DropdownMenuItem>
+                  </>
+                )}
                 <DropdownMenuSeparator className="bg-[#3f3f3f]" />
                 <DropdownMenuItem onClick={logout} className="text-gray-200 cursor-pointer">
                   <LogOut className="h-4 w-4 mr-2" />
