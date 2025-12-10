@@ -102,10 +102,24 @@ const AdminDashboard = () => {
   };
 
   const handleDeleteFeedback = async (feedbackId) => {
-    if (!window.confirm('Möchten Sie dieses Feedback wirklich löschen?')) {
+    console.log('🔴 handleDeleteFeedback called with ID:', feedbackId);
+    
+    // Check if confirm dialog works
+    let shouldDelete = false;
+    try {
+      shouldDelete = window.confirm('Möchten Sie dieses Feedback wirklich löschen?');
+      console.log('User confirmed deletion:', shouldDelete);
+    } catch (confirmError) {
+      console.error('Error with window.confirm:', confirmError);
+      shouldDelete = true; // Proceed anyway if confirm fails
+    }
+    
+    if (!shouldDelete) {
+      console.log('User cancelled deletion');
       return;
     }
 
+    console.log('Proceeding with deletion...');
     try {
       const token = localStorage.getItem('token');
       console.log('=== DELETE FEEDBACK DEBUG ===');
