@@ -497,14 +497,17 @@ const AdminDashboard = () => {
         {/* Feedback Section */}
         <div className="mt-8 bg-[#2f2f2f] rounded-lg p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-              💬 Nutzer-Feedback
-              {feedbackList.length > 0 && (
-                <span className="text-sm bg-[#3f3f3f] px-2 py-1 rounded-full">
-                  {feedbackList.length}
-                </span>
-              )}
-            </h2>
+            <div>
+              <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+                💬 Nutzer-Feedback
+                {feedbackList.length > 0 && (
+                  <span className="text-sm bg-[#3f3f3f] px-2 py-1 rounded-full">
+                    {feedbackList.length}
+                  </span>
+                )}
+              </h2>
+              <p className="text-gray-500 text-xs mt-1">Die neuesten 10 Feedback-Nachrichten</p>
+            </div>
             <button
               onClick={fetchFeedback}
               className="px-3 py-1 text-sm bg-[#3f3f3f] text-gray-300 rounded-lg hover:bg-[#4f4f4f] transition-colors"
