@@ -65,13 +65,13 @@ const ChatInput = () => {
   };
 
   return (
-    <div className="px-4 pb-4 pt-2">
+    <div className="px-3 md:px-4 pb-3 md:pb-4 pt-2">
       <div className="max-w-3xl mx-auto">
         <form onSubmit={handleSubmit}>
           <div className="relative bg-[#2f2f2f] rounded-2xl border border-[#3f3f3f] focus-within:border-[#5f5f5f] transition-colors">
             {/* Input area */}
             <div className="flex flex-col">
-              <div className="flex items-start px-4 pt-3 pb-2 gap-2">
+              <div className="flex items-start px-3 md:px-4 pt-3 pb-2 gap-2">
                 <textarea
                   ref={textareaRef}
                   value={message}
@@ -79,7 +79,7 @@ const ChatInput = () => {
                   onKeyDown={handleKeyDown}
                   placeholder="Nachricht eingeben..."
                   rows={1}
-                  className="flex-1 bg-transparent text-white text-base resize-none outline-none placeholder-gray-500 max-h-[200px] overflow-y-auto py-1"
+                  className="flex-1 bg-transparent text-white text-sm md:text-base resize-none outline-none placeholder-gray-500 max-h-[200px] overflow-y-auto py-1"
                   style={{ lineHeight: '1.5' }}
                   disabled={isLoading}
                 />
