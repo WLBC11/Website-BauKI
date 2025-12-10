@@ -272,9 +272,13 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Feedback System - User Feedback Sending"
+    - "Feedback System - Admin Dashboard Management"
   stuck_tasks:
     - "Chat API with N8N webhook integration"
+    - "Feedback System - User Feedback Sending"
+    - "Feedback System - Admin Dashboard Management"
   test_all: false
   test_priority: "high_first"
 
