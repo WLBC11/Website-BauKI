@@ -379,6 +379,10 @@ const Sidebar = () => {
                   <FileText className="h-4 w-4 mr-2" />
                   Rechtliches
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setFeedbackOpen(true)} className="text-gray-200 cursor-pointer">
+                  <HelpCircle className="h-4 w-4 mr-2" />
+                  Feedback senden
+                </DropdownMenuItem>
                 {isAdmin && (
                   <>
                     <DropdownMenuSeparator className="bg-[#3f3f3f]" />
