@@ -108,7 +108,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
           <div className="space-y-4">
             <h3 className="font-medium text-lg text-red-400 flex items-center gap-2">
               <AlertTriangle className="h-5 w-5" />
-              Gefahrenzone
+              Konto dauerhaft löschen
             </h3>
             {!deleteConfirm ? (
               <Button 
