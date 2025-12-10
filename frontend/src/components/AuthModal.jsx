@@ -118,6 +118,18 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
           >
             {isLoading ? 'Laden...' : (mode === 'login' ? 'Anmelden' : 'Registrieren')}
           </Button>
+
+          {mode === 'login' && (
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                Passwort vergessen?
+              </button>
+            </div>
+          )}
         </form>
 
         <div className="mt-4 text-center text-sm text-gray-400">
