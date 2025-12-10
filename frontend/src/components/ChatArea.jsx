@@ -54,9 +54,9 @@ const ChatArea = () => {
           </div>
         )}
         
-        {/* Centered content */}
-        <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <h1 className="text-3xl font-semibold text-white mb-10 text-center animate-in fade-in zoom-in duration-500">
+        {/* Centered content - Mobile optimized */}
+        <div className="flex-1 flex flex-col items-center justify-center px-4 md:px-6">
+          <h1 className="text-2xl md:text-3xl font-semibold text-white mb-6 md:mb-10 text-center animate-in fade-in zoom-in duration-500">
             {randomGreeting}
           </h1>
         </div>
