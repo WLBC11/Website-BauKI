@@ -20,7 +20,7 @@ const ADMIN_EMAILS = [
 ];
 
 const AdminDashboard = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   
   const [stats, setStats] = useState(null);
@@ -37,6 +37,11 @@ const AdminDashboard = () => {
   const isAdmin = isAuthenticated && user && ADMIN_EMAILS.includes(user.email.toLowerCase());
 
   useEffect(() => {
+    // Wait for auth to load
+    if (authLoading) {
+      return;
+    }
+    
     if (!isAuthenticated) {
       navigate('/');
       return;
@@ -48,7 +53,7 @@ const AdminDashboard = () => {
     }
     
     fetchStats();
-  }, [isAuthenticated, isAdmin, navigate, startDate, endDate]);
+  }, [isAuthenticated, isAdmin, navigate, startDate, endDate, authLoading]);
 
   const fetchStats = async () => {
     setLoading(true);
