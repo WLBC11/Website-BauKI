@@ -150,9 +150,47 @@ const SettingsModal = ({ isOpen, onClose }) => {
               </div>
             )}
           </div>
+
+          <div className="h-px bg-[#3f3f3f]" />
+
+          {/* Legal Links Section */}
+          <div className="space-y-3">
+            <h3 className="font-medium text-base text-gray-400">Rechtliches</h3>
+            <div className="space-y-2">
+              <button
+                onClick={() => setImpressumOpen(true)}
+                className="w-full flex items-center gap-3 px-3 py-2 text-left text-gray-300 hover:bg-[#3f3f3f] rounded-lg transition-colors"
+              >
+                <FileText className="h-4 w-4" />
+                <span className="text-sm">Impressum</span>
+              </button>
+              
+              <button
+                onClick={() => setDatenschutzOpen(true)}
+                className="w-full flex items-center gap-3 px-3 py-2 text-left text-gray-300 hover:bg-[#3f3f3f] rounded-lg transition-colors"
+              >
+                <Shield className="h-4 w-4" />
+                <span className="text-sm">Datenschutzerklärung</span>
+              </button>
+              
+              <button
+                onClick={() => setAgbOpen(true)}
+                className="w-full flex items-center gap-3 px-3 py-2 text-left text-gray-300 hover:bg-[#3f3f3f] rounded-lg transition-colors"
+              >
+                <ScrollText className="h-4 w-4" />
+                <span className="text-sm">AGB</span>
+              </button>
+            </div>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
+    
+    {/* Legal Modals */}
+    <Impressum isOpen={impressumOpen} onClose={() => setImpressumOpen(false)} />
+    <Datenschutz isOpen={datenschutzOpen} onClose={() => setDatenschutzOpen(false)} />
+    <AGB isOpen={agbOpen} onClose={() => setAgbOpen(false)} />
+    </>
   );
 };
 
