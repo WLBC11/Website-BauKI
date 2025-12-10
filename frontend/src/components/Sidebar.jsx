@@ -56,6 +56,9 @@ const Sidebar = () => {
 
   const { user, isAuthenticated, logout, updateBundesland } = useAuth();
 
+  // Check if user is admin
+  const isAdmin = isAuthenticated && user && ADMIN_EMAILS.includes(user.email.toLowerCase());
+
   // Removed hoveredId state in favor of CSS group-hover for better performance and reliability
   const [searchQuery, setSearchQuery] = useState('');
   const [authModalOpen, setAuthModalOpen] = useState(false);
