@@ -65,10 +65,14 @@ const AdminDashboard = () => {
     setError(null);
     
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.get(`${API}/admin/stats`, {
         params: {
           start_date: startOfDay(startDate).toISOString(),
           end_date: endOfDay(endDate).toISOString()
+        },
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
       });
       setStats(response.data);
@@ -83,7 +87,12 @@ const AdminDashboard = () => {
   const fetchFeedback = async () => {
     setFeedbackLoading(true);
     try {
-      const response = await axios.get(`${API}/admin/feedback`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API}/admin/feedback`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       setFeedbackList(response.data);
     } catch (err) {
       console.error('Error fetching feedback:', err);
@@ -98,7 +107,12 @@ const AdminDashboard = () => {
     }
 
     try {
-      await axios.delete(`${API}/admin/feedback/${feedbackId}`);
+      const token = localStorage.getItem('token');
+      await axios.delete(`${API}/admin/feedback/${feedbackId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       setFeedbackList(feedbackList.filter(f => f.id !== feedbackId));
     } catch (err) {
       console.error('Error deleting feedback:', err);
