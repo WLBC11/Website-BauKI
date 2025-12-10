@@ -73,6 +73,7 @@ const Sidebar = () => {
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
   const [legalOpen, setLegalOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   const filteredConversations = conversations.filter(conv =>
     conv.title.toLowerCase().includes(searchQuery.toLowerCase())
