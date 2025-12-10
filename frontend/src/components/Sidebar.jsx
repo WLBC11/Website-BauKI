@@ -327,14 +327,24 @@ const Sidebar = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[230px] bg-[#2f2f2f] border-[#3f3f3f]" align="start" side="top">
-                <DropdownMenuItem className="text-gray-400 text-xs cursor-default">
+                <DropdownMenuItem className="text-gray-400 text-xs cursor-default hover:bg-transparent">
                   {user?.email}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-[#3f3f3f]" />
-                <DropdownMenuItem onClick={() => setSettingsModalOpen(true)} className="text-gray-200 cursor-pointer">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Einstellungen
+                <DropdownMenuLabel className="text-gray-400 text-xs font-normal">Einstellungen</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => setChangePasswordOpen(true)} className="text-gray-200 cursor-pointer">
+                  <Key className="h-4 w-4 mr-2" />
+                  Passwort ändern
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setDeleteAccountOpen(true)} className="text-gray-200 cursor-pointer">
+                  <UserX className="h-4 w-4 mr-2" />
+                  Konto löschen
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLegalOpen(true)} className="text-gray-200 cursor-pointer">
+                  <FileText className="h-4 w-4 mr-2" />
+                  Rechtliches
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-[#3f3f3f]" />
                 <DropdownMenuItem onClick={logout} className="text-gray-200 cursor-pointer">
                   <LogOut className="h-4 w-4 mr-2" />
                   Abmelden
