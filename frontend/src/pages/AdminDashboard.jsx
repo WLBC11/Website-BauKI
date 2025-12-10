@@ -135,21 +135,21 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#212121] p-8">
+    <div className="min-h-screen bg-[#212121] p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header with Back Button */}
-        <div className="mb-8">
+        {/* Header with Back Button - Mobile optimized */}
+        <div className="mb-6 md:mb-8">
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-4"
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-3 md:mb-4 text-sm md:text-base"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             Zurück zum Chat
           </button>
-          <h1 className="text-4xl font-bold text-white mb-2">📊 Analytics Dashboard</h1>
-          <p className="text-gray-400">BauKI - Verwaltung & Statistiken</p>
+          <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">📊 Analytics Dashboard</h1>
+          <p className="text-sm md:text-base text-gray-400">BauKI - Verwaltung & Statistiken</p>
         </div>
 
         {/* Date Range Selector */}
