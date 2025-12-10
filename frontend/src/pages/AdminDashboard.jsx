@@ -108,24 +108,50 @@ const AdminDashboard = () => {
 
     try {
       const token = localStorage.getItem('token');
-      console.log('Deleting feedback:', feedbackId);
+      console.log('=== DELETE FEEDBACK DEBUG ===');
+      console.log('Feedback ID to delete:', feedbackId);
       console.log('Token exists:', !!token);
+      console.log('Token preview:', token ? token.substring(0, 20) + '...' : 'NO TOKEN');
       console.log('API URL:', `${API}/admin/feedback/${feedbackId}`);
+      console.log('Current feedback list length:', feedbackList.length);
       
       const response = await axios.delete(`${API}/admin/feedback/${feedbackId}`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       });
       
-      console.log('Delete response:', response.data);
-      setFeedbackList(feedbackList.filter(f => f.id !== feedbackId));
-      alert('Feedback erfolgreich gelöscht!');
+      console.log('✅ Delete successful!', response.data);
+      console.log('Filtering out feedback with ID:', feedbackId);
+      
+      const newList = feedbackList.filter(f => {
+        console.log(`Comparing: ${f.id} !== ${feedbackId} = ${f.id !== feedbackId}`);
+        return f.id !== feedbackId;
+      });
+      
+      console.log('New feedback list length:', newList.length);
+      setFeedbackList(newList);
+      
+      alert('✅ Feedback erfolgreich gelöscht!');
+      
+      // Force re-fetch to ensure sync
+      await fetchFeedback();
+      
     } catch (err) {
-      console.error('Error deleting feedback:', err);
+      console.error('❌ DELETE FAILED:', err);
       console.error('Error response:', err.response?.data);
       console.error('Error status:', err.response?.status);
-      alert(`Fehler beim Löschen des Feedbacks: ${err.response?.data?.detail || err.message}`);
+      console.error('Full error:', err);
+      
+      let errorMsg = 'Unbekannter Fehler';
+      if (err.response?.data?.detail) {
+        errorMsg = err.response.data.detail;
+      } else if (err.message) {
+        errorMsg = err.message;
+      }
+      
+      alert(`❌ Fehler beim Löschen: ${errorMsg}\n\nBitte öffnen Sie die Browser-Console (F12) für Details.`);
     }
   };
 
