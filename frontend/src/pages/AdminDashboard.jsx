@@ -108,15 +108,24 @@ const AdminDashboard = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`${API}/admin/feedback/${feedbackId}`, {
+      console.log('Deleting feedback:', feedbackId);
+      console.log('Token exists:', !!token);
+      console.log('API URL:', `${API}/admin/feedback/${feedbackId}`);
+      
+      const response = await axios.delete(`${API}/admin/feedback/${feedbackId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
+      
+      console.log('Delete response:', response.data);
       setFeedbackList(feedbackList.filter(f => f.id !== feedbackId));
+      alert('Feedback erfolgreich gelöscht!');
     } catch (err) {
       console.error('Error deleting feedback:', err);
-      alert('Fehler beim Löschen des Feedbacks');
+      console.error('Error response:', err.response?.data);
+      console.error('Error status:', err.response?.status);
+      alert(`Fehler beim Löschen des Feedbacks: ${err.response?.data?.detail || err.message}`);
     }
   };
 
