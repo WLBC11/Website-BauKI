@@ -606,6 +606,19 @@ async def create_feedback(data: FeedbackCreate, user: dict = Depends(require_aut
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.feedback.insert_one(feedback)
+    
+    # Keep only the 10 newest feedback messages
+    total_feedback = await db.feedback.count_documents({})
+    if total_feedback > 10:
+        # Get all feedback sorted by created_at (oldest first)
+        all_feedback = await db.feedback.find({}, {"_id": 0, "id": 1, "created_at": 1}).sort("created_at", 1).to_list(total_feedback)
+        # Calculate how many to delete
+        to_delete_count = total_feedback - 10
+        # Get IDs of oldest feedback to delete
+        ids_to_delete = [f["id"] for f in all_feedback[:to_delete_count]]
+        # Delete them
+        await db.feedback.delete_many({"id": {"$in": ids_to_delete}})
+    
     return {"message": "Feedback erfolgreich gesendet", "id": feedback_id}
 
 
