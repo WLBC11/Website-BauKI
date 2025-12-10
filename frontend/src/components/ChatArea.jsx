@@ -42,14 +42,14 @@ const ChatArea = () => {
       <div className="flex flex-col h-full bg-[#212121]">
         {/* Header with menu button when sidebar closed */}
         {!sidebarOpen && (
-          <div className="absolute top-0 left-0 z-10 p-3">
+          <div className="absolute top-0 left-0 z-0 p-3">
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleSidebar}
-              className="text-gray-400 hover:text-white hover:bg-[#2f2f2f] rounded-lg"
+              className="text-gray-400 hover:text-white hover:bg-[#2f2f2f] rounded-lg flex items-center justify-center"
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5 mx-auto" />
             </Button>
           </div>
         )}
@@ -72,14 +72,14 @@ const ChatArea = () => {
     <div className="flex flex-col h-full bg-[#212121]">
       {/* Header with menu button when sidebar closed */}
       {!sidebarOpen && (
-        <div className="absolute top-0 left-0 z-10 p-3">
+        <div className="absolute top-0 left-0 z-0 p-3">
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleSidebar}
-            className="text-gray-400 hover:text-white hover:bg-[#2f2f2f] rounded-lg"
+            className="text-gray-400 hover:text-white hover:bg-[#2f2f2f] rounded-lg flex items-center justify-center"
           >
-            <Menu className="h-5 w-5" />
+            <Menu className="h-5 w-5 mx-auto" />
           </Button>
         </div>
       )}
