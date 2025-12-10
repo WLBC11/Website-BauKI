@@ -6,6 +6,7 @@ import Sidebar from './components/Sidebar';
 import ChatArea from './components/ChatArea';
 import AdminDashboard from './pages/AdminDashboard';
 import './App.css';
+import './components/mobile-optimizations.css';
 
 function App() {
   return (
