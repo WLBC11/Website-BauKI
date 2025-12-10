@@ -59,6 +59,9 @@ const Sidebar = () => {
   // Check if user is admin
   const isAdmin = isAuthenticated && user && ADMIN_EMAILS.includes(user.email.toLowerCase());
 
+  // Mobile sidebar state
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   // Removed hoveredId state in favor of CSS group-hover for better performance and reliability
   const [searchQuery, setSearchQuery] = useState('');
   const [authModalOpen, setAuthModalOpen] = useState(false);
