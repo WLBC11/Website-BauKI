@@ -66,7 +66,7 @@ const FeedbackModal = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-[#2f2f2f] rounded-lg w-full max-w-md p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-white">💬 Feedback senden</h2>
+          <h2 className="text-xl font-semibold text-white">Feedback senden</h2>
           <button
             onClick={handleClose}
             disabled={loading}
@@ -78,7 +78,6 @@ const FeedbackModal = ({ isOpen, onClose }) => {
 
         {success ? (
           <div className="py-8 text-center">
-            <div className="text-5xl mb-4">✅</div>
             <p className="text-white text-lg">Vielen Dank für Ihr Feedback!</p>
           </div>
         ) : (
