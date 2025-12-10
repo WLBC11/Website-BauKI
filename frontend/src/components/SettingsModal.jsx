@@ -4,7 +4,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, FileText, Shield, ScrollText } from 'lucide-react';
+import Impressum from './legal/Impressum';
+import Datenschutz from './legal/Datenschutz';
+import AGB from './legal/AGB';
 
 const SettingsModal = ({ isOpen, onClose }) => {
   const { changePassword, deleteAccount } = useAuth();
@@ -13,6 +16,10 @@ const SettingsModal = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+  
+  const [impressumOpen, setImpressumOpen] = useState(false);
+  const [datenschutzOpen, setDatenschutzOpen] = useState(false);
+  const [agbOpen, setAgbOpen] = useState(false);
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
