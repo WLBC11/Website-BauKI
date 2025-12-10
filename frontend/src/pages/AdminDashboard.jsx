@@ -152,10 +152,10 @@ const AdminDashboard = () => {
           <p className="text-sm md:text-base text-gray-400">BauKI - Verwaltung & Statistiken</p>
         </div>
 
-        {/* Date Range Selector */}
-        <div className="bg-[#2f2f2f] rounded-lg p-6 mb-6">
-          <div className="flex items-center gap-3 mb-4 flex-wrap">
-            <span className="text-gray-300 font-medium">Zeitraum:</span>
+        {/* Date Range Selector - Mobile optimized */}
+        <div className="bg-[#2f2f2f] rounded-lg p-4 md:p-6 mb-4 md:mb-6">
+          <div className="flex items-center gap-2 md:gap-3 mb-4 flex-wrap">
+            <span className="text-gray-300 font-medium text-sm md:text-base">Zeitraum:</span>
             <button
               onClick={() => handleRangeChange('today')}
               className={`px-4 py-2 rounded-lg transition-colors ${
