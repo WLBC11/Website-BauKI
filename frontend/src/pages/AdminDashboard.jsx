@@ -158,7 +158,7 @@ const AdminDashboard = () => {
             <span className="text-gray-300 font-medium text-sm md:text-base">Zeitraum:</span>
             <button
               onClick={() => handleRangeChange('today')}
-              className={`px-4 py-2 rounded-lg transition-colors ${
+              className={`px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-colors text-sm md:text-base ${
                 selectedRange === 'today' 
                   ? 'bg-white text-black' 
                   : 'bg-[#3f3f3f] text-gray-300 hover:bg-[#4f4f4f]'
@@ -168,7 +168,7 @@ const AdminDashboard = () => {
             </button>
             <button
               onClick={() => handleRangeChange('7')}
-              className={`px-4 py-2 rounded-lg transition-colors ${
+              className={`px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-colors text-sm md:text-base ${
                 selectedRange === '7' 
                   ? 'bg-white text-black' 
                   : 'bg-[#3f3f3f] text-gray-300 hover:bg-[#4f4f4f]'
@@ -178,7 +178,7 @@ const AdminDashboard = () => {
             </button>
             <button
               onClick={() => handleRangeChange('14')}
-              className={`px-4 py-2 rounded-lg transition-colors ${
+              className={`px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-colors text-sm md:text-base ${
                 selectedRange === '14' 
                   ? 'bg-white text-black' 
                   : 'bg-[#3f3f3f] text-gray-300 hover:bg-[#4f4f4f]'
@@ -188,7 +188,7 @@ const AdminDashboard = () => {
             </button>
             <button
               onClick={() => handleRangeChange('30')}
-              className={`px-4 py-2 rounded-lg transition-colors ${
+              className={`px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-colors text-sm md:text-base ${
                 selectedRange === '30' 
                   ? 'bg-white text-black' 
                   : 'bg-[#3f3f3f] text-gray-300 hover:bg-[#4f4f4f]'
@@ -198,13 +198,14 @@ const AdminDashboard = () => {
             </button>
             <button
               onClick={() => handleRangeChange('custom')}
-              className={`px-4 py-2 rounded-lg transition-colors ${
+              className={`px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-colors text-sm md:text-base ${
                 selectedRange === 'custom' 
                   ? 'bg-white text-black' 
                   : 'bg-[#3f3f3f] text-gray-300 hover:bg-[#4f4f4f]'
               }`}
             >
-              Benutzerdefiniert
+              <span className="hidden sm:inline">Benutzerdefiniert</span>
+              <span className="sm:hidden">Custom</span>
             </button>
           </div>
 
