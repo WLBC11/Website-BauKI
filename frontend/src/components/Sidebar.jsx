@@ -65,6 +65,24 @@ const Sidebar = () => {
     setAuthModalOpen(true);
   };
 
+  const handleDeleteClick = (e, conversationId) => {
+    e.stopPropagation();
+    setDeleteConfirmId(conversationId);
+  };
+
+  const confirmDelete = (e) => {
+    e.stopPropagation();
+    if (deleteConfirmId) {
+      deleteConversation(deleteConfirmId);
+      setDeleteConfirmId(null);
+    }
+  };
+
+  const cancelDelete = (e) => {
+    e.stopPropagation();
+    setDeleteConfirmId(null);
+  };
+
   if (!sidebarOpen) {
     return (
       <>
