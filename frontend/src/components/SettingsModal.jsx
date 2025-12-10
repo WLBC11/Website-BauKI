@@ -65,6 +65,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
   }, [isOpen]);
 
   return (
+    <>
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-[#2f2f2f] border-[#3f3f3f] text-white max-w-md">
         <DialogHeader>
