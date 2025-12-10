@@ -285,6 +285,79 @@ async def update_bundesland(data: UpdateBundeslandRequest, user: dict = Depends(
     )
     return {"success": True, "bundesland": data.bundesland}
 
+
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+class PasswordResetConfirm(BaseModel):
+    email: EmailStr
+    reset_code: str
+    new_password: str
+
+@api_router.post("/auth/request-password-reset")
+async def request_password_reset(data: PasswordResetRequest):
+    """Request a password reset - generates a 6-digit code"""
+    user = await db.users.find_one({"email": data.email.lower()})
+    if not user:
+        # Don't reveal if email exists - security best practice
+        return {"message": "Wenn diese E-Mail registriert ist, wurde ein Reset-Code gesendet"}
+    
+    # Generate a 6-digit reset code
+    reset_code = str(uuid.uuid4().int)[:6]
+    expires_at = datetime.now(timezone.utc) + timedelta(minutes=15)
+    
+    # Store reset code in database
+    await db.password_resets.insert_one({
+        "email": data.email.lower(),
+        "reset_code": reset_code,
+        "expires_at": expires_at.isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    # In production, you would send this via email
+    # For now, we return it (for testing purposes)
+    logger.info(f"Password reset code for {data.email}: {reset_code}")
+    
+    return {
+        "message": "Reset-Code wurde generiert",
+        "reset_code": reset_code,  # In production, don't return this
+        "note": "In Produktion würde dieser Code per E-Mail gesendet"
+    }
+
+@api_router.post("/auth/reset-password")
+async def reset_password(data: PasswordResetConfirm):
+    """Reset password using the reset code"""
+    # Find valid reset request
+    reset_request = await db.password_resets.find_one({
+        "email": data.email.lower(),
+        "reset_code": data.reset_code
+    })
+    
+    if not reset_request:
+        raise HTTPException(status_code=400, detail="Ungültiger Reset-Code")
+    
+    # Check if expired
+    expires_at = datetime.fromisoformat(reset_request["expires_at"])
+    if datetime.now(timezone.utc) > expires_at:
+        # Clean up expired code
+        await db.password_resets.delete_one({"_id": reset_request["_id"]})
+        raise HTTPException(status_code=400, detail="Reset-Code ist abgelaufen")
+    
+    # Update user password
+    new_hash = hash_password(data.new_password)
+    result = await db.users.update_one(
+        {"email": data.email.lower()},
+        {"$set": {"password_hash": new_hash}}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Benutzer nicht gefunden")
+    
+    # Delete used reset code
+    await db.password_resets.delete_one({"_id": reset_request["_id"]})
+    
+    return {"message": "Passwort erfolgreich zurückgesetzt"}
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
