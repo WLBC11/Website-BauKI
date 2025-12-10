@@ -57,6 +57,7 @@ const AdminDashboard = () => {
     }
     
     fetchStats();
+    fetchFeedback();
   }, [isAuthenticated, isAdmin, navigate, startDate, endDate, authLoading]);
 
   const fetchStats = async () => {
@@ -76,6 +77,32 @@ const AdminDashboard = () => {
       setError('Fehler beim Laden der Statistiken');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchFeedback = async () => {
+    setFeedbackLoading(true);
+    try {
+      const response = await axios.get(`${API}/admin/feedback`);
+      setFeedbackList(response.data);
+    } catch (err) {
+      console.error('Error fetching feedback:', err);
+    } finally {
+      setFeedbackLoading(false);
+    }
+  };
+
+  const handleDeleteFeedback = async (feedbackId) => {
+    if (!window.confirm('Möchten Sie dieses Feedback wirklich löschen?')) {
+      return;
+    }
+
+    try {
+      await axios.delete(`${API}/admin/feedback/${feedbackId}`);
+      setFeedbackList(feedbackList.filter(f => f.id !== feedbackId));
+    } catch (err) {
+      console.error('Error deleting feedback:', err);
+      alert('Fehler beim Löschen des Feedbacks');
     }
   };
 
