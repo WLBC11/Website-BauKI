@@ -535,8 +535,14 @@ const AdminDashboard = () => {
                       </p>
                     </div>
                     <button
-                      onClick={() => handleDeleteFeedback(feedback.id)}
-                      className="flex-shrink-0 px-3 py-2 bg-red-900/20 text-red-400 rounded-lg hover:bg-red-900/30 transition-colors text-sm"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('🔴 DELETE BUTTON CLICKED for ID:', feedback.id);
+                        handleDeleteFeedback(feedback.id);
+                      }}
+                      className="flex-shrink-0 px-3 py-2 bg-red-900/20 text-red-400 rounded-lg hover:bg-red-900/30 transition-colors text-sm cursor-pointer"
+                      type="button"
                     >
                       Löschen
                     </button>
