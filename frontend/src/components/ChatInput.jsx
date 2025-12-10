@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChatContext } from '../context/ChatContext';
-import { Send, Square } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { Send, Square, HelpCircle } from 'lucide-react';
 import { Button } from './ui/button';
 import {
   DropdownMenu,
@@ -9,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from './ui/dropdown-menu';
+import FeedbackModal from './FeedbackModal';
 
 const AVAILABLE_DATABASES = [
   "BauGB (Baugesetzbuch)", 
