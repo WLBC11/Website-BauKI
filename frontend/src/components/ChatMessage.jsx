@@ -153,7 +153,7 @@ const ChatMessage = ({ message, isLast }) => {
                 {getUserInitial()}
               </div>
             ) : (
-              <div className="h-10 w-10 rounded-full bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1.5">
+              <div className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1.5">
                 <img 
                   src="/baumate-logo.png?v=2" 
                   alt="BauKI" 
