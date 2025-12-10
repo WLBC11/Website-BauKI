@@ -54,6 +54,7 @@ const Sidebar = () => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
 
   const filteredConversations = conversations.filter(conv =>
     conv.title.toLowerCase().includes(searchQuery.toLowerCase())
