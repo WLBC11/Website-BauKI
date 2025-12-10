@@ -371,9 +371,19 @@ const Sidebar = () => {
         onClose={() => setAuthModalOpen(false)} 
         initialMode={authMode}
       />
-      <SettingsModal 
-        isOpen={settingsModalOpen} 
-        onClose={() => setSettingsModalOpen(false)} 
+      
+      {/* Settings Modals */}
+      <ChangePasswordModal 
+        isOpen={changePasswordOpen} 
+        onClose={() => setChangePasswordOpen(false)} 
+      />
+      <DeleteAccountModal 
+        isOpen={deleteAccountOpen} 
+        onClose={() => setDeleteAccountOpen(false)} 
+      />
+      <LegalModal 
+        isOpen={legalOpen} 
+        onClose={() => setLegalOpen(false)} 
       />
     </>
   );
