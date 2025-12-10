@@ -33,6 +33,10 @@ const AdminDashboard = () => {
   const [endDate, setEndDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  // Feedback state
+  const [feedbackList, setFeedbackList] = useState([]);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
+
   // Check if user is admin
   const isAdmin = isAuthenticated && user && ADMIN_EMAILS.includes(user.email.toLowerCase());
 
