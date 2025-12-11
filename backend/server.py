@@ -532,6 +532,201 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
         logger.error(f"Chat error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
+# File upload constants
+MAX_FILE_SIZE = 25 * 1024 * 1024  # 25 MB
+ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"]
+ALLOWED_FILE_TYPES = ALLOWED_IMAGE_TYPES + ["application/pdf"]
+
+
+@api_router.post("/chat/upload", response_model=ChatResponse)
+async def send_chat_with_file(
+    message: str = Form(...),
+    conversation_id: Optional[str] = Form(None),
+    session_id: Optional[str] = Form(None),
+    file: UploadFile = File(...),
+    user: Optional[dict] = Depends(get_current_user)
+):
+    """Send a message with a file (image or PDF) to N8N webhook"""
+    try:
+        # Validate file type
+        if file.content_type not in ALLOWED_FILE_TYPES:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Dateityp nicht erlaubt. Erlaubt sind: Bilder (JPEG, PNG, GIF, WebP) und PDF"
+            )
+        
+        # Read file content
+        file_content = await file.read()
+        
+        # Validate file size
+        if len(file_content) > MAX_FILE_SIZE:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Datei zu groß. Maximum: {MAX_FILE_SIZE // (1024*1024)} MB"
+            )
+        
+        # Convert to base64
+        file_base64 = base64.b64encode(file_content).decode('utf-8')
+        
+        # Determine file type
+        is_image = file.content_type in ALLOWED_IMAGE_TYPES
+        file_type = "image" if is_image else "pdf"
+        
+        # Generate or use existing conversation/session ID
+        conv_id = conversation_id or str(uuid.uuid4())
+        sess_id = session_id or conv_id
+        
+        # Get bundesland from user account
+        user_bundesland = user.get("bundesland") if user else None
+        
+        # Prepare payload for N8N webhook with file data
+        payload = {
+            "message": message,
+            "sessionId": sess_id,
+            "conversationId": conv_id,
+            "bundesland": user_bundesland,
+            "file": {
+                "name": file.filename,
+                "type": file.content_type,
+                "fileType": file_type,
+                "data": file_base64,
+                "size": len(file_content)
+            }
+        }
+        
+        logger.info(f"Sending message with {file_type} to N8N webhook: {message[:50]}...")
+        logger.info(f"File: {file.filename}, Size: {len(file_content)} bytes")
+        
+        # Call N8N webhook with longer timeout for file uploads
+        response = await http_client.post(
+            N8N_WEBHOOK_URL,
+            json=payload,
+            headers={"Content-Type": "application/json"},
+            timeout=120.0  # Extended timeout for file processing
+        )
+        
+        logger.info(f"N8N response status: {response.status_code}")
+        
+        if response.status_code != 200:
+            logger.error(f"N8N webhook error: {response.text}")
+            raise HTTPException(
+                status_code=502,
+                detail=f"N8N webhook returned error: {response.status_code}"
+            )
+        
+        # Parse response
+        try:
+            response_data = response.json()
+            if isinstance(response_data, str):
+                ai_response = response_data
+            elif isinstance(response_data, dict):
+                ai_response = (
+                    response_data.get('response') or 
+                    response_data.get('output') or 
+                    response_data.get('message') or 
+                    response_data.get('text') or
+                    response_data.get('answer') or
+                    str(response_data)
+                )
+            elif isinstance(response_data, list) and len(response_data) > 0:
+                first_item = response_data[0]
+                if isinstance(first_item, str):
+                    ai_response = first_item
+                elif isinstance(first_item, dict):
+                    ai_response = (
+                        first_item.get('response') or 
+                        first_item.get('output') or 
+                        first_item.get('message') or 
+                        first_item.get('text') or
+                        first_item.get('answer') or
+                        str(first_item)
+                    )
+                else:
+                    ai_response = str(first_item)
+            else:
+                ai_response = str(response_data)
+        except Exception:
+            ai_response = response.text
+        
+        message_id = str(uuid.uuid4())
+        
+        # Store file info for display (only store metadata, not full base64 for large files)
+        file_info = {
+            "name": file.filename,
+            "type": file.content_type,
+            "fileType": file_type,
+            "size": len(file_content)
+        }
+        
+        # For images, store a smaller preview (first 100KB as base64 for thumbnails)
+        if is_image and len(file_content) <= 500 * 1024:  # Only for images under 500KB
+            file_info["preview"] = file_base64
+        
+        # Store conversation in database
+        user_msg = {
+            "id": str(uuid.uuid4()),
+            "role": "user",
+            "content": message,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "file": file_info
+        }
+        
+        assistant_msg = {
+            "id": message_id,
+            "role": "assistant",
+            "content": ai_response,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        
+        # Check if conversation exists
+        existing_conv = await db.conversations.find_one({"id": conv_id})
+        
+        # Get user_id if authenticated
+        user_id = user["id"] if user else None
+        
+        if existing_conv:
+            update_data = {
+                "$push": {"messages": {"$each": [user_msg, assistant_msg]}},
+                "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+            }
+            if user_id and not existing_conv.get("user_id"):
+                update_data["$set"]["user_id"] = user_id
+            
+            await db.conversations.update_one({"id": conv_id}, update_data)
+            response_title = existing_conv.get("title")
+        else:
+            generated_title = await generate_chat_title(message)
+            new_conv = {
+                "id": conv_id,
+                "user_id": user_id,
+                "title": generated_title,
+                "messages": [user_msg, assistant_msg],
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+            await db.conversations.insert_one(new_conv)
+            response_title = generated_title
+        
+        return ChatResponse(
+            response=ai_response,
+            conversation_id=conv_id,
+            message_id=message_id,
+            title=response_title
+        )
+        
+    except httpx.TimeoutException:
+        logger.error("N8N webhook timeout during file upload")
+        raise HTTPException(status_code=504, detail="N8N webhook timeout - Datei zu groß oder Server nicht erreichbar")
+    except httpx.RequestError as e:
+        logger.error(f"N8N webhook request error: {str(e)}")
+        raise HTTPException(status_code=502, detail=f"Failed to connect to N8N: {str(e)}")
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Chat with file error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @api_router.get("/conversations")
 async def get_conversations(user: dict = Depends(require_auth)):
     """Get all conversations for the logged-in user"""
