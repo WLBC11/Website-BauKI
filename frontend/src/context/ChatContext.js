@@ -262,6 +262,167 @@ export const ChatProvider = ({ children }) => {
 
   }, [activeConversationId, currentGuestConversation, isAuthenticated]);
 
+  // Send message with file (image or PDF)
+  const sendMessageWithFile = useCallback(async (content, file) => {
+    if (!file) return;
+
+    // Create file info for display
+    const fileInfo = {
+      name: file.name,
+      type: file.type,
+      fileType: file.type.startsWith('image/') ? 'image' : 'pdf',
+      size: file.size
+    };
+
+    // Create preview URL for images
+    if (file.type.startsWith('image/')) {
+      fileInfo.preview = URL.createObjectURL(file);
+    }
+
+    const userMessage = {
+      id: `msg-${Date.now()}`,
+      role: 'user',
+      content: content || 'Bitte analysiere diese Datei.',
+      timestamp: new Date(),
+      file: fileInfo
+    };
+
+    let conversationId = activeConversationId;
+    let isNewConversation = false;
+
+    if (!conversationId && !currentGuestConversation) {
+      conversationId = `conv-${Date.now()}`;
+      isNewConversation = true;
+      const newConversation = {
+        id: conversationId,
+        title: content.slice(0, 30) + (content.length > 30 ? '...' : ''),
+        messages: [userMessage],
+        createdAt: new Date()
+      };
+      
+      if (isAuthenticated) {
+        setConversations(prev => [newConversation, ...prev]);
+        setActiveConversationId(conversationId);
+      } else {
+        setCurrentGuestConversation(newConversation);
+      }
+    } else if (currentGuestConversation) {
+      conversationId = currentGuestConversation.id;
+      setCurrentGuestConversation(prev => ({
+        ...prev,
+        messages: [...prev.messages, userMessage]
+      }));
+    } else {
+      setConversations(prev => prev.map(c => 
+        c.id === conversationId 
+          ? { ...c, messages: [...c.messages, userMessage] }
+          : c
+      ));
+    }
+
+    setIsLoading(true);
+    abortControllerRef.current = new AbortController();
+    
+    try {
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append('message', content || 'Bitte analysiere diese Datei.');
+      formData.append('file', file);
+      if (!isNewConversation && conversationId) {
+        formData.append('conversation_id', conversationId);
+      }
+      formData.append('session_id', conversationId);
+
+      const response = await axios.post(`${API}/chat/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        signal: abortControllerRef.current.signal,
+        timeout: 120000 // 2 minute timeout for file uploads
+      });
+
+      const aiMessage = {
+        id: response.data.message_id,
+        role: 'assistant',
+        content: response.data.response,
+        timestamp: new Date(),
+        shouldAnimate: true
+      };
+
+      setIsTyping(true);
+
+      const realConversationId = response.data.conversation_id;
+      const realTitle = response.data.title;
+      
+      if (!isAuthenticated || currentGuestConversation) {
+        setCurrentGuestConversation(prev => {
+          if (!prev) {
+            return {
+              id: realConversationId,
+              title: realTitle || content.slice(0, 30) + (content.length > 30 ? '...' : ''),
+              messages: [userMessage, aiMessage],
+              createdAt: new Date()
+            };
+          }
+          return {
+            ...prev,
+            id: realConversationId,
+            title: realTitle || prev.title,
+            messages: [...prev.messages, aiMessage]
+          };
+        });
+      } else {
+        setConversations(prev => prev.map(c => {
+          if (c.id === conversationId) {
+            return { 
+              ...c, 
+              id: realConversationId,
+              title: realTitle || c.title,
+              messages: [...c.messages, aiMessage] 
+            };
+          }
+          return c;
+        }));
+
+        if (conversationId !== realConversationId) {
+          setActiveConversationId(realConversationId);
+        }
+      }
+
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        console.log('Request canceled', error.message);
+      } else {
+        console.error('Failed to send message with file:', error);
+        
+        const errorMessage = {
+          id: `msg-${Date.now()}-error`,
+          role: 'assistant',
+          content: `Entschuldigung, ein Fehler ist aufgetreten: ${error.response?.data?.detail || error.message || 'Unbekannter Fehler'}. Bitte versuche es erneut.`,
+          timestamp: new Date()
+        };
+
+        if (!isAuthenticated || currentGuestConversation) {
+          setCurrentGuestConversation(prev => prev ? {
+            ...prev,
+            messages: [...prev.messages, errorMessage]
+          } : null);
+        } else {
+          setConversations(prev => prev.map(c => 
+            c.id === conversationId 
+              ? { ...c, messages: [...c.messages, errorMessage] }
+              : c
+          ));
+        }
+      }
+    } finally {
+      setIsLoading(false);
+      abortControllerRef.current = null;
+    }
+
+  }, [activeConversationId, currentGuestConversation, isAuthenticated, token]);
+
   const toggleSidebar = useCallback(() => {
     setSidebarOpen(prev => !prev);
   }, []);
