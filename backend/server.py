@@ -699,7 +699,9 @@ async def send_chat_with_file(
             await db.conversations.update_one({"id": conv_id}, update_data)
             response_title = existing_conv.get("title")
         else:
-            generated_title = await generate_chat_title(message)
+            # Use filename for title if no message provided
+            title_source = message if message.strip() else file.filename
+            generated_title = await generate_chat_title(title_source)
             new_conv = {
                 "id": conv_id,
                 "user_id": user_id,
