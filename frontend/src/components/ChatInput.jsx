@@ -114,7 +114,8 @@ const ChatInput = () => {
 
     // If we have a file, use the file upload function
     if (hasFile) {
-      await sendMessageWithFile(message.trim() || 'Bitte analysiere diese Datei.', selectedFile);
+      // Send with message (can be empty - N8N/AI will decide what to do)
+      await sendMessageWithFile(message.trim(), selectedFile);
       handleRemoveFile();
     } else {
       sendMessage(message);
