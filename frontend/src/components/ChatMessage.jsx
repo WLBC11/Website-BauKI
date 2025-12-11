@@ -216,7 +216,10 @@ const ChatMessage = ({ message, isLast }) => {
                 <>
                   {/* Show file attachment if present */}
                   {message.file && <FileAttachment file={message.file} />}
-                  <p className="whitespace-pre-wrap break-words text-base">{message.content}</p>
+                  {/* Only show text if there is content */}
+                  {message.content && (
+                    <p className="whitespace-pre-wrap break-words text-base">{message.content}</p>
+                  )}
                 </>
               ) : (
                 <div className="markdown-body prose prose-invert prose-base max-w-none 
