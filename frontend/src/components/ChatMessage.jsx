@@ -70,6 +70,48 @@ const TdBlock = ({ children }) => (
   </td>
 );
 
+// File attachment display component
+const FileAttachment = ({ file }) => {
+  const formatFileSize = (bytes) => {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  };
+
+  const isImage = file.fileType === 'image' || file.type?.startsWith('image/');
+
+  return (
+    <div className="mt-2 mb-3">
+      <div className="inline-flex items-center gap-3 p-3 bg-[#3f3f3f] rounded-lg max-w-sm">
+        {/* Preview or Icon */}
+        {file.preview ? (
+          <img 
+            src={file.preview} 
+            alt={file.name} 
+            className="w-16 h-16 object-cover rounded-md"
+          />
+        ) : (
+          <div className="w-12 h-12 bg-[#4f4f4f] rounded-md flex items-center justify-center flex-shrink-0">
+            {isImage ? (
+              <ImageIcon className="w-6 h-6 text-blue-400" />
+            ) : (
+              <FileText className="w-6 h-6 text-red-400" />
+            )}
+          </div>
+        )}
+        
+        {/* File Info */}
+        <div className="min-w-0">
+          <p className="text-sm text-gray-200 truncate max-w-[200px]">{file.name}</p>
+          <p className="text-xs text-gray-500">
+            {isImage ? 'Bild' : 'PDF'} • {formatFileSize(file.size)}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ChatMessage = ({ message, isLast }) => {
   const [copied, setCopied] = useState(false);
   const { user } = useAuth();
