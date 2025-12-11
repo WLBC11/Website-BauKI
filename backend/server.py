@@ -541,7 +541,7 @@ ALLOWED_FILE_TYPES = ALLOWED_IMAGE_TYPES + ["application/pdf"]
 
 @api_router.post("/chat/upload", response_model=ChatResponse)
 async def send_chat_with_file(
-    message: str = Form(...),
+    message: str = Form(""),
     conversation_id: Optional[str] = Form(None),
     session_id: Optional[str] = Form(None),
     file: UploadFile = File(...),
@@ -581,8 +581,10 @@ async def send_chat_with_file(
         user_bundesland = user.get("bundesland") if user else None
         
         # Prepare payload for N8N webhook with file data
+        # Message can be empty - N8N/AI will decide what to do with the file
         payload = {
-            "message": message,
+            "message": message,  # Can be empty string
+            "hasMessage": bool(message.strip()),  # Flag to indicate if user provided a message
             "sessionId": sess_id,
             "conversationId": conv_id,
             "bundesland": user_bundesland,
@@ -595,7 +597,8 @@ async def send_chat_with_file(
             }
         }
         
-        logger.info(f"Sending message with {file_type} to N8N webhook: {message[:50]}...")
+        log_message = message[:50] if message else "(nur Datei)"
+        logger.info(f"Sending {file_type} to N8N webhook: {log_message}...")
         logger.info(f"File: {file.filename}, Size: {len(file_content)} bytes")
         
         # Call N8N webhook with longer timeout for file uploads
