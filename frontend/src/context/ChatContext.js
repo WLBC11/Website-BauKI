@@ -440,6 +440,7 @@ export const ChatProvider = ({ children }) => {
     selectConversation,
     deleteConversation,
     sendMessage,
+    sendMessageWithFile,
     toggleSidebar,
     models,
     stopGeneration,
