@@ -279,10 +279,14 @@ export const ChatProvider = ({ children }) => {
       fileInfo.preview = URL.createObjectURL(file);
     }
 
+    // For display: if no message, show file name instead
+    const displayContent = content || '';
+    const titleContent = content || file.name;
+
     const userMessage = {
       id: `msg-${Date.now()}`,
       role: 'user',
-      content: content || 'Bitte analysiere diese Datei.',
+      content: displayContent,
       timestamp: new Date(),
       file: fileInfo
     };
@@ -295,7 +299,7 @@ export const ChatProvider = ({ children }) => {
       isNewConversation = true;
       const newConversation = {
         id: conversationId,
-        title: content.slice(0, 30) + (content.length > 30 ? '...' : ''),
+        title: titleContent.slice(0, 30) + (titleContent.length > 30 ? '...' : ''),
         messages: [userMessage],
         createdAt: new Date()
       };
@@ -326,7 +330,8 @@ export const ChatProvider = ({ children }) => {
     try {
       // Create FormData for file upload
       const formData = new FormData();
-      formData.append('message', content || 'Bitte analysiere diese Datei.');
+      // Send empty string if no message - backend/N8N will handle it
+      formData.append('message', content || '');
       formData.append('file', file);
       if (!isNewConversation && conversationId) {
         formData.append('conversation_id', conversationId);
