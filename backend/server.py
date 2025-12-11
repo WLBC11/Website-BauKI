@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Depends
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, File, UploadFile, Form
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
@@ -14,6 +14,7 @@ import httpx
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 from passlib.context import CryptContext
 import jwt
+import base64
 
 
 ROOT_DIR = Path(__file__).parent
