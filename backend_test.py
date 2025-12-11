@@ -477,6 +477,11 @@ class BackendTester:
             ("Root Endpoint", self.test_root_endpoint),
             ("Chat Endpoint (N8N Integration)", self.test_chat_endpoint),
             ("Chat with Existing Conversation", self.test_chat_with_conversation_id),
+            ("File Upload - Valid Image", self.test_file_upload_valid_image),
+            ("File Upload - Valid PDF", self.test_file_upload_valid_pdf),
+            ("File Upload - Invalid Type", self.test_file_upload_invalid_type),
+            ("File Upload - Missing File", self.test_file_upload_missing_file),
+            ("File Upload - Missing Message", self.test_file_upload_missing_message),
             ("Conversations List", self.test_conversations_endpoint),
             ("Specific Conversation", self.test_specific_conversation),
             ("Error Handling", self.test_error_handling)
