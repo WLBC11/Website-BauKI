@@ -581,10 +581,19 @@ async def send_chat_with_file(
         user_bundesland = user.get("bundesland") if user else None
         
         # Prepare payload for N8N webhook with file data
-        # Message can be empty - N8N/AI will decide what to do with the file
+        # If no message provided, add instruction for AI to ask about intention
+        if not message.strip():
+            if is_image:
+                ai_instruction = "Der Nutzer hat ein Bild gesendet ohne eine Nachricht. Frage den Nutzer freundlich, was er mit dem Bild machen möchte oder was seine Frage dazu ist."
+            else:
+                ai_instruction = "Der Nutzer hat eine PDF-Datei gesendet ohne eine Nachricht. Frage den Nutzer freundlich, was er mit der Datei machen möchte oder welche Frage er dazu hat."
+        else:
+            ai_instruction = ""
+        
         payload = {
             "message": message,  # Can be empty string
             "hasMessage": bool(message.strip()),  # Flag to indicate if user provided a message
+            "aiInstruction": ai_instruction,  # Instruction for AI when no message
             "sessionId": sess_id,
             "conversationId": conv_id,
             "bundesland": user_bundesland,
