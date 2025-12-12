@@ -373,28 +373,23 @@ const Sidebar = () => {
                       </div>
                     ) : (
                       /* Normal View with Three-Dot Menu */
-                      <div className="flex items-center py-2 pl-3 pr-2">
-                        {/* Icon Container - Swaps on hover */}
-                        <div className="w-4 h-4 mr-3 flex-shrink-0 flex items-center justify-center">
-                          {/* Normal Icon (Speech Bubble) - Hidden on hover */}
-                          <MessageSquare className="h-4 w-4 text-gray-400 group-hover:hidden" />
-                          
-                          {/* Three-Dot Icon - Visible on hover (trigger moved outside) */}
-                          <MoreHorizontal className="h-4 w-4 text-gray-400 hover:text-white hidden group-hover:block" />
-                        </div>
+                      <div className="flex items-center py-2 pl-3 pr-1">
+                        {/* Chat Icon */}
+                        <MessageSquare className="h-4 w-4 text-gray-400 mr-3 flex-shrink-0" />
 
-                        <div className="flex-1 overflow-hidden relative min-w-0">
+                        {/* Chat Title */}
+                        <div className="flex-1 overflow-hidden min-w-0">
                           <span className="block truncate text-sm text-gray-200">
                             {conv.title}
                           </span>
                         </div>
 
-                        {/* Dropdown Menu - Positioned at the end of the row */}
+                        {/* Three-Dot Menu - Always in DOM, opacity controlled by hover */}
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <button
                               onClick={(e) => e.stopPropagation()}
-                              className="hidden group-hover:flex items-center justify-center text-gray-400 hover:text-white transition-colors ml-1 p-1 rounded hover:bg-[#3f3f3f]"
+                              className="opacity-0 group-hover:opacity-100 flex items-center justify-center text-gray-400 hover:text-white transition-opacity ml-1 p-1 rounded hover:bg-[#3f3f3f]"
                             >
                               <MoreHorizontal className="h-4 w-4" />
                             </button>
