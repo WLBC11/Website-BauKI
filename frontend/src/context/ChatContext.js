@@ -432,7 +432,7 @@ export const ChatProvider = ({ children }) => {
       const formData = new FormData();
       // Send empty string if no message - backend/N8N will handle it
       formData.append('message', content || '');
-      formData.append('file', file);
+      formData.append('file', processedFile);  // Use compressed file
       if (!isNewConversation && conversationId) {
         formData.append('conversation_id', conversationId);
       }
