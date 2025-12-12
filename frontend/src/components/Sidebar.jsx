@@ -346,7 +346,7 @@ const Sidebar = () => {
                         </button>
                         <button
                           onClick={handleRenameCancel}
-                          className="p-1 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors flex-shrink-0 mr-1"
+                          className="p-1 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors flex-shrink-0 mr-2"
                           title="Abbrechen"
                         >
                           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -372,10 +372,47 @@ const Sidebar = () => {
                         </button>
                       </div>
                     ) : (
-                      /* Normal View with Three-Dot Menu */
-                      <div className="flex items-center py-2 pl-3 pr-1">
-                        {/* Chat Icon */}
-                        <MessageSquare className="h-4 w-4 text-gray-400 mr-3 flex-shrink-0" />
+                      /* Normal View with Three-Dot Menu on LEFT */
+                      <div className="flex items-center py-2 pl-3 pr-2">
+                        {/* Icon Container - Swaps between MessageSquare and MoreHorizontal on hover */}
+                        <div className="relative w-4 h-4 mr-3 flex-shrink-0">
+                          {/* Speech Bubble - visible by default, hidden on hover */}
+                          <MessageSquare className="h-4 w-4 text-gray-400 absolute inset-0 group-hover:opacity-0 transition-opacity" />
+                          
+                          {/* Three-Dot Menu Trigger - hidden by default, visible on hover */}
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <button
+                                onClick={(e) => e.stopPropagation()}
+                                className="absolute inset-0 flex items-center justify-center text-gray-400 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent 
+                              className="w-[160px] bg-[#2f2f2f] border-[#3f3f3f]" 
+                              align="start" 
+                              side="bottom"
+                              sideOffset={4}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <DropdownMenuItem 
+                                onClick={(e) => handleRenameClick(e, conv.id, conv.title)}
+                                className="text-gray-200 cursor-pointer focus:bg-[#3f3f3f]"
+                              >
+                                <Pencil className="h-4 w-4 mr-2" />
+                                Chat umbenennen
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                onClick={(e) => handleDeleteClick(e, conv.id)}
+                                className="text-gray-200 cursor-pointer focus:bg-[#3f3f3f] focus:text-red-400"
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Chat löschen
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
 
                         {/* Chat Title */}
                         <div className="flex-1 overflow-hidden min-w-0">
@@ -383,40 +420,6 @@ const Sidebar = () => {
                             {conv.title}
                           </span>
                         </div>
-
-                        {/* Three-Dot Menu - Always in DOM, opacity controlled by hover */}
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <button
-                              onClick={(e) => e.stopPropagation()}
-                              className="opacity-0 group-hover:opacity-100 flex items-center justify-center text-gray-400 hover:text-white transition-opacity ml-1 p-1 rounded hover:bg-[#3f3f3f]"
-                            >
-                              <MoreHorizontal className="h-4 w-4" />
-                            </button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent 
-                            className="w-[160px] bg-[#2f2f2f] border-[#3f3f3f]" 
-                            align="end" 
-                            side="bottom"
-                            sideOffset={4}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <DropdownMenuItem 
-                              onClick={(e) => handleRenameClick(e, conv.id, conv.title)}
-                              className="text-gray-200 cursor-pointer focus:bg-[#3f3f3f]"
-                            >
-                              <Pencil className="h-4 w-4 mr-2" />
-                              Chat umbenennen
-                            </DropdownMenuItem>
-                            <DropdownMenuItem 
-                              onClick={(e) => handleDeleteClick(e, conv.id)}
-                              className="text-gray-200 cursor-pointer focus:bg-[#3f3f3f] focus:text-red-400"
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Chat löschen
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
                       </div>
                     )}
                   </div>
