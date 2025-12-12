@@ -5,8 +5,46 @@ import { ChatProvider } from './context/ChatContext';
 import Sidebar from './components/Sidebar';
 import ChatArea from './components/ChatArea';
 import AdminDashboard from './pages/AdminDashboard';
+import GlobalDropZone from './components/GlobalDropZone';
 import './App.css';
 import './components/mobile-optimizations.css';
+
+// Wrapper component to access ChatContext for file drop
+const ChatWithDropZone = () => {
+  const [droppedFile, setDroppedFile] = React.useState(null);
+  const [dropError, setDropError] = React.useState(null);
+
+  const handleFileDrop = (file, error) => {
+    if (error) {
+      setDropError(error);
+      setDroppedFile(null);
+    } else {
+      setDroppedFile(file);
+      setDropError(null);
+    }
+  };
+
+  // Clear dropped file after it's been processed
+  const clearDroppedFile = () => {
+    setDroppedFile(null);
+    setDropError(null);
+  };
+
+  return (
+    <GlobalDropZone onFileDrop={handleFileDrop}>
+      <div className="flex h-screen bg-[#212121] overflow-hidden">
+        <Sidebar />
+        <main className="flex-1 relative">
+          <ChatArea 
+            droppedFile={droppedFile} 
+            dropError={dropError}
+            onDroppedFileProcessed={clearDroppedFile}
+          />
+        </main>
+      </div>
+    </GlobalDropZone>
+  );
+};
 
 function App() {
   return (
@@ -19,12 +57,7 @@ function App() {
           {/* Main Chat Route */}
           <Route path="*" element={
             <ChatProvider>
-              <div className="flex h-screen bg-[#212121] overflow-hidden">
-                <Sidebar />
-                <main className="flex-1 relative">
-                  <ChatArea />
-                </main>
-              </div>
+              <ChatWithDropZone />
             </ChatProvider>
           } />
         </Routes>
