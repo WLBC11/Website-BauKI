@@ -105,6 +105,69 @@ const ChatInput = () => {
     }
   };
 
+  // Drag and Drop handlers
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isLoading && !isRecording) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Only set dragging to false if we're leaving the drop zone entirely
+    if (e.currentTarget === dropZoneRef.current && !e.currentTarget.contains(e.relatedTarget)) {
+      setIsDragging(false);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    if (isLoading || isRecording) return;
+
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      const file = files[0]; // Only take first file
+      processDroppedFile(file);
+    }
+  };
+
+  const processDroppedFile = (file) => {
+    setFileError(null);
+    
+    // Validate file type
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setFileError('Nur Bilder (JPEG, PNG, GIF, WebP) und PDF-Dateien erlaubt');
+      return;
+    }
+    
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      setFileError(`Datei zu groß. Maximum: ${MAX_FILE_SIZE / (1024 * 1024)} MB`);
+      return;
+    }
+    
+    setSelectedFile(file);
+    
+    // Create preview for images
+    if (file.type.startsWith('image/')) {
+      const previewUrl = URL.createObjectURL(file);
+      setFilePreview(previewUrl);
+    } else {
+      setFilePreview(null);
+    }
+  };
+
   // Voice recording functions
   const startRecording = async () => {
     try {
