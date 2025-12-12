@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChatContext } from '../context/ChatContext';
 import { useAuth } from '../context/AuthContext';
-import { Send, Square, HelpCircle, Paperclip, X, FileText, Image as ImageIcon, Mic, MicOff } from 'lucide-react';
+import { Send, Square, HelpCircle, Paperclip, X, FileText, Image as ImageIcon, Mic, MicOff, Upload } from 'lucide-react';
 import { Button } from './ui/button';
 import {
   DropdownMenu,
@@ -36,11 +36,13 @@ const ChatInput = () => {
   const [fileError, setFileError] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const recordingTimerRef = useRef(null);
+  const dropZoneRef = useRef(null);
   const { sendMessage, sendMessageWithFile, sendVoiceMessage, isLoading, stopGeneration, isTyping } = useChatContext();
   const { isAuthenticated } = useAuth();
 
