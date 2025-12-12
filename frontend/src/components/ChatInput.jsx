@@ -135,31 +135,6 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
   };
 
   // Voice recording functions
-    
-    // Validate file type
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      setFileError('Nur Bilder (JPEG, PNG, GIF, WebP) und PDF-Dateien erlaubt');
-      return;
-    }
-    
-    // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
-      setFileError(`Datei zu groß. Maximum: ${MAX_FILE_SIZE / (1024 * 1024)} MB`);
-      return;
-    }
-    
-    setSelectedFile(file);
-    
-    // Create preview for images
-    if (file.type.startsWith('image/')) {
-      const previewUrl = URL.createObjectURL(file);
-      setFilePreview(previewUrl);
-    } else {
-      setFilePreview(null);
-    }
-  };
-
-  // Voice recording functions
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
