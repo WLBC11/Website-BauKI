@@ -337,19 +337,19 @@ const Sidebar = () => {
                         />
                         <button
                           onClick={handleRenameSubmit}
-                          className="p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors flex-shrink-0"
+                          className="p-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors flex-shrink-0"
                           title="Speichern"
                         >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                           </svg>
                         </button>
                         <button
                           onClick={handleRenameCancel}
-                          className="p-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors flex-shrink-0"
+                          className="p-1 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors flex-shrink-0 mr-1"
                           title="Abbrechen"
                         >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
                           </svg>
                         </button>
