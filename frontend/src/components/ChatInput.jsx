@@ -28,7 +28,7 @@ const AVAILABLE_DATABASES = [
 const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25 MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'];
 
-const ChatInput = () => {
+const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
   const [message, setMessage] = useState('');
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -36,15 +36,44 @@ const ChatInput = () => {
   const [fileError, setFileError] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const recordingTimerRef = useRef(null);
-  const dropZoneRef = useRef(null);
   const { sendMessage, sendMessageWithFile, sendVoiceMessage, isLoading, stopGeneration, isTyping } = useChatContext();
   const { isAuthenticated } = useAuth();
+
+  // Handle dropped file from global drop zone
+  useEffect(() => {
+    if (droppedFile) {
+      setSelectedFile(droppedFile);
+      setFileError(null);
+      
+      // Create preview for images
+      if (droppedFile.type.startsWith('image/')) {
+        const previewUrl = URL.createObjectURL(droppedFile);
+        setFilePreview(previewUrl);
+      } else {
+        setFilePreview(null);
+      }
+      
+      // Clear the dropped file from parent
+      if (onDroppedFileProcessed) {
+        onDroppedFileProcessed();
+      }
+    }
+  }, [droppedFile, onDroppedFileProcessed]);
+
+  // Handle drop error from global drop zone
+  useEffect(() => {
+    if (dropError) {
+      setFileError(dropError);
+      if (onDroppedFileProcessed) {
+        onDroppedFileProcessed();
+      }
+    }
+  }, [dropError, onDroppedFileProcessed]);
 
   // Auto-resize textarea
   useEffect(() => {
