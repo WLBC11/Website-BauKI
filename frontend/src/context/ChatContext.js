@@ -6,6 +6,95 @@ import axios from 'axios';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
+// Image compression settings
+const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2 MB target size
+const MAX_IMAGE_DIMENSION = 2048; // Max width/height
+
+// Compress image using canvas
+const compressImage = (file) => {
+  return new Promise((resolve, reject) => {
+    // If not an image, return original file
+    if (!file.type.startsWith('image/')) {
+      resolve(file);
+      return;
+    }
+
+    // If already small enough, return original
+    if (file.size <= MAX_IMAGE_SIZE) {
+      console.log(`Image already small enough: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
+      resolve(file);
+      return;
+    }
+
+    console.log(`Compressing image from ${(file.size / 1024 / 1024).toFixed(2)} MB...`);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let { width, height } = img;
+
+        // Scale down if too large
+        if (width > MAX_IMAGE_DIMENSION || height > MAX_IMAGE_DIMENSION) {
+          if (width > height) {
+            height = (height / width) * MAX_IMAGE_DIMENSION;
+            width = MAX_IMAGE_DIMENSION;
+          } else {
+            width = (width / height) * MAX_IMAGE_DIMENSION;
+            height = MAX_IMAGE_DIMENSION;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Try different quality levels to get under target size
+        const tryCompress = (quality) => {
+          canvas.toBlob(
+            (blob) => {
+              if (!blob) {
+                reject(new Error('Bildkomprimierung fehlgeschlagen'));
+                return;
+              }
+
+              console.log(`Compressed to ${(blob.size / 1024 / 1024).toFixed(2)} MB at quality ${quality}`);
+
+              // If still too large and quality can be reduced, try again
+              if (blob.size > MAX_IMAGE_SIZE && quality > 0.3) {
+                tryCompress(quality - 0.1);
+              } else {
+                // Create new file with compressed data
+                const compressedFile = new File(
+                  [blob],
+                  file.name.replace(/\.[^/.]+$/, '.jpg'),
+                  { type: 'image/jpeg' }
+                );
+                console.log(`Final compressed size: ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB`);
+                resolve(compressedFile);
+              }
+            },
+            'image/jpeg',
+            quality
+          );
+        };
+
+        // Start with 0.8 quality
+        tryCompress(0.8);
+      };
+
+      img.onerror = () => reject(new Error('Bild konnte nicht geladen werden'));
+      img.src = e.target.result;
+    };
+
+    reader.onerror = () => reject(new Error('Datei konnte nicht gelesen werden'));
+    reader.readAsDataURL(file);
+  });
+};
+
 const ChatContext = createContext();
 
 export const useChatContext = () => {
