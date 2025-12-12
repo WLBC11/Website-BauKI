@@ -317,16 +317,15 @@ const Sidebar = () => {
                 return (
                   <div
                     key={conv.id}
-                    className={`group relative mx-2 rounded-lg cursor-pointer transition-colors duration-150 z-0
+                    className={`group relative mx-2 rounded-lg cursor-pointer transition-colors duration-150
                       ${isActive ? 'bg-[#2f2f2f]' : 'hover:bg-[#2f2f2f]/50'}
                       ${isConfirmingDelete ? 'bg-red-900/20 border border-red-900/50' : ''}`}
                     onClick={() => !isConfirmingDelete && !isRenaming && selectConversation(conv.id)}
                     title={!isConfirmingDelete && !isRenaming ? conv.title : ''}
                   >
                     {isRenaming ? (
-                      /* Rename Mode */
-                      <div className="flex items-center py-2 pl-3 pr-2 gap-2">
-                        <MessageSquare className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                      /* Rename Mode - Compact Layout */
+                      <div className="flex items-center py-2 px-2 gap-1">
                         <input
                           type="text"
                           value={renameValue}
@@ -338,15 +337,21 @@ const Sidebar = () => {
                         />
                         <button
                           onClick={handleRenameSubmit}
-                          className="px-2 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                          className="p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors flex-shrink-0"
+                          title="Speichern"
                         >
-                          OK
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
                         </button>
                         <button
                           onClick={handleRenameCancel}
-                          className="px-2 py-1 text-xs bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
+                          className="p-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors flex-shrink-0"
+                          title="Abbrechen"
                         >
-                          ✕
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
                         </button>
                       </div>
                     ) : isConfirmingDelete ? (
@@ -385,9 +390,10 @@ const Sidebar = () => {
                               </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent 
-                              className="w-[160px] bg-[#2f2f2f] border-[#3f3f3f]" 
+                              className="w-[160px] bg-[#2f2f2f] border-[#3f3f3f] z-50" 
                               align="start" 
-                              side="right"
+                              side="bottom"
+                              sideOffset={5}
                               onClick={(e) => e.stopPropagation()}
                             >
                               <DropdownMenuItem 
