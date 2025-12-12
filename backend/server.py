@@ -536,7 +536,8 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
 # File upload constants
 MAX_FILE_SIZE = 25 * 1024 * 1024  # 25 MB
 ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"]
-ALLOWED_FILE_TYPES = ALLOWED_IMAGE_TYPES + ["application/pdf"]
+ALLOWED_AUDIO_TYPES = ["audio/webm", "audio/mp4", "audio/mpeg", "audio/wav", "audio/ogg", "audio/mp3"]
+ALLOWED_FILE_TYPES = ALLOWED_IMAGE_TYPES + ["application/pdf"] + ALLOWED_AUDIO_TYPES
 
 
 @api_router.post("/chat/upload", response_model=ChatResponse)
