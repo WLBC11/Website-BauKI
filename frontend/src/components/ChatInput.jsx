@@ -215,17 +215,36 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
 
     if (!hasMessage && !hasFile) return;
 
-    if (hasFile) {
-      await sendMessageWithFile(message.trim(), selectedFile);
-      handleRemoveFile();
-    } else {
-      sendMessage(message);
+    // Store values before clearing
+    const messageToSend = message.trim();
+    const fileToSend = selectedFile;
+
+    // Clear input state IMMEDIATELY before sending
+    setMessage('');
+    if (fileToSend) {
+      // Clear file state immediately
+      if (filePreview) {
+        URL.revokeObjectURL(filePreview);
+      }
+      setSelectedFile(null);
+      setFilePreview(null);
+      setFileError(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
     
-    setMessage('');
+    // Reset textarea height
     if (textareaRef.current) {
       textareaRef.current.style.height = '52px';
       textareaRef.current.focus();
+    }
+
+    // Now send the message with the stored values
+    if (fileToSend) {
+      await sendMessageWithFile(messageToSend, fileToSend);
+    } else {
+      sendMessage(messageToSend);
     }
   };
 
