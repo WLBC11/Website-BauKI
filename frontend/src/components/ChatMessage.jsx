@@ -79,6 +79,24 @@ const FileAttachment = ({ file }) => {
   };
 
   const isImage = file.fileType === 'image' || file.type?.startsWith('image/');
+  const isAudio = file.fileType === 'audio' || file.type?.startsWith('audio/');
+
+  // For audio files, show a different indicator
+  if (isAudio) {
+    return (
+      <div className="mt-2 mb-3">
+        <div className="inline-flex items-center gap-3 p-3 bg-[#3f3f3f] rounded-lg">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <Mic className="w-5 h-5 text-white" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm text-gray-200">Sprachnachricht</p>
+            <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-2 mb-3">
