@@ -18,7 +18,7 @@ const GREETINGS = [
   "Welches Bauvorhaben gehen wir heute an?"
 ];
 
-const ChatArea = () => {
+const ChatArea = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
   const { activeConversation, isLoading, sidebarOpen, toggleSidebar } = useChatContext();
   const messagesEndRef = useRef(null);
   
@@ -62,7 +62,11 @@ const ChatArea = () => {
         </div>
         
         {/* Input at bottom */}
-        <ChatInput />
+        <ChatInput 
+          droppedFile={droppedFile}
+          dropError={dropError}
+          onDroppedFileProcessed={onDroppedFileProcessed}
+        />
       </div>
     );
   }
@@ -128,7 +132,11 @@ const ChatArea = () => {
 
       {/* Input area - fixed at bottom */}
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#212121] via-[#212121] to-transparent pt-6 z-10">
-        <ChatInput />
+        <ChatInput 
+          droppedFile={droppedFile}
+          dropError={dropError}
+          onDroppedFileProcessed={onDroppedFileProcessed}
+        />
       </div>
     </div>
   );
