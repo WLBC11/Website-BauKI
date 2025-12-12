@@ -284,7 +284,29 @@ const ChatInput = () => {
     <div className="px-3 md:px-4 pb-3 md:pb-4 pt-2">
       <div className="max-w-3xl mx-auto">
         <form onSubmit={handleSubmit}>
-          <div className="relative bg-[#2f2f2f] rounded-2xl border border-[#3f3f3f] focus-within:border-[#5f5f5f] transition-colors">
+          <div 
+            ref={dropZoneRef}
+            className={`relative bg-[#2f2f2f] rounded-2xl border-2 transition-all duration-200
+              ${isDragging 
+                ? 'border-blue-500 bg-blue-500/10' 
+                : 'border-[#3f3f3f] focus-within:border-[#5f5f5f]'
+              }`}
+            onDragEnter={handleDragEnter}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+            {/* Drag Overlay */}
+            {isDragging && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#2f2f2f]/90 rounded-2xl">
+                <div className="flex flex-col items-center gap-3 text-blue-400">
+                  <Upload className="w-12 h-12" />
+                  <span className="text-lg font-medium">Datei hier ablegen</span>
+                  <span className="text-sm text-gray-400">Bilder (JPEG, PNG, GIF, WebP) oder PDF</span>
+                </div>
+              </div>
+            )}
+
             {/* Recording Indicator */}
             {isRecording && (
               <div className="px-3 md:px-4 pt-3">
