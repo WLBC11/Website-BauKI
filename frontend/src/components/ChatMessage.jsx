@@ -263,10 +263,6 @@ const ChatMessage = ({ message, isLast }) => {
                   >
                     {displayedContent}
                   </ReactMarkdown>
-                  {/* Cursor effect for active typing */}
-                  {message.shouldAnimate && displayedContent.length < message.content.length && isTyping && (
-                    <span className="inline-block w-2 h-4 bg-gray-400 ml-1 animate-pulse align-middle" />
-                  )}
                 </div>
               )}
             </div>
