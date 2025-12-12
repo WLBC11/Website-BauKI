@@ -51,6 +51,7 @@ const Sidebar = () => {
     createNewConversation,
     selectConversation,
     deleteConversation,
+    renameConversation,
     sidebarOpen,
     toggleSidebar
   } = useChatContext();
@@ -68,6 +69,8 @@ const Sidebar = () => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [renamingId, setRenamingId] = useState(null);
+  const [renameValue, setRenameValue] = useState('');
   
   // Settings modals
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
