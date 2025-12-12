@@ -398,7 +398,7 @@ const Sidebar = () => {
                             >
                               <DropdownMenuItem 
                                 onClick={(e) => handleRenameClick(e, conv.id, conv.title)}
-                                className="text-gray-200 cursor-pointer focus:bg-[#3f3f3f]"
+                                className="text-gray-200 cursor-pointer focus:bg-blue-600/30 hover:bg-blue-600/30 focus:text-blue-300 hover:text-blue-300"
                               >
                                 <Pencil className="h-4 w-4 mr-2" />
                                 Chat umbenennen
