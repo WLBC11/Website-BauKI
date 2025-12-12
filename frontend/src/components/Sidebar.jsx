@@ -312,6 +312,7 @@ const Sidebar = () => {
               {filteredConversations.map(conv => {
                 const isActive = activeConversationId === conv.id;
                 const isConfirmingDelete = deleteConfirmId === conv.id;
+                const isRenaming = renamingId === conv.id;
                 
                 return (
                   <div
@@ -319,33 +320,37 @@ const Sidebar = () => {
                     className={`group relative mx-2 rounded-lg cursor-pointer transition-colors duration-150 z-0
                       ${isActive ? 'bg-[#2f2f2f]' : 'hover:bg-[#2f2f2f]/50'}
                       ${isConfirmingDelete ? 'bg-red-900/20 border border-red-900/50' : ''}`}
-                    onClick={() => !isConfirmingDelete && selectConversation(conv.id)}
-                    title={!isConfirmingDelete ? conv.title : ''}
+                    onClick={() => !isConfirmingDelete && !isRenaming && selectConversation(conv.id)}
+                    title={!isConfirmingDelete && !isRenaming ? conv.title : ''}
                   >
-                    {!isConfirmingDelete ? (
-                      <div className="flex items-center py-2 pl-3 pr-3">
-                        {/* Icon Container - Swaps on hover */}
-                        <div className="relative w-4 h-4 mr-3 flex-shrink-0 flex items-center justify-center">
-                          {/* Normal Icon (Speech Bubble) - Hidden on hover */}
-                          <MessageSquare className="h-4 w-4 text-gray-400 group-hover:hidden" />
-                          
-                          {/* Delete Icon - Visible on hover */}
-                          <button
-                              onClick={(e) => handleDeleteClick(e, conv.id)}
-                              className="hidden group-hover:flex items-center justify-center text-gray-400 hover:text-red-400 transition-colors"
-                              title="Chat löschen"
-                          >
-                              <Trash2 className="h-4 w-4" />
-                          </button>
-                        </div>
-
-                        <div className="flex-1 overflow-hidden relative min-w-0">
-                          <span className="block truncate text-sm text-gray-200">
-                            {conv.title}
-                          </span>
-                        </div>
+                    {isRenaming ? (
+                      /* Rename Mode */
+                      <div className="flex items-center py-2 pl-3 pr-2 gap-2">
+                        <MessageSquare className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                        <input
+                          type="text"
+                          value={renameValue}
+                          onChange={(e) => setRenameValue(e.target.value)}
+                          onKeyDown={handleRenameKeyDown}
+                          onClick={(e) => e.stopPropagation()}
+                          autoFocus
+                          className="flex-1 bg-[#3f3f3f] text-sm text-gray-200 rounded px-2 py-1 outline-none focus:ring-1 focus:ring-blue-500 min-w-0"
+                        />
+                        <button
+                          onClick={handleRenameSubmit}
+                          className="px-2 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                        >
+                          OK
+                        </button>
+                        <button
+                          onClick={handleRenameCancel}
+                          className="px-2 py-1 text-xs bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
+                        >
+                          ✕
+                        </button>
                       </div>
-                    ) : (
+                    ) : isConfirmingDelete ? (
+                      /* Delete Confirmation */
                       <div className="flex items-center gap-2 py-2 pl-3 pr-2">
                         <span className="text-xs text-red-200 flex-1">Löschen?</span>
                         <button
@@ -360,6 +365,54 @@ const Sidebar = () => {
                         >
                           Nein
                         </button>
+                      </div>
+                    ) : (
+                      /* Normal View with Three-Dot Menu */
+                      <div className="flex items-center py-2 pl-3 pr-2">
+                        {/* Icon Container - Swaps on hover */}
+                        <div className="relative w-4 h-4 mr-3 flex-shrink-0 flex items-center justify-center">
+                          {/* Normal Icon (Speech Bubble) - Hidden on hover */}
+                          <MessageSquare className="h-4 w-4 text-gray-400 group-hover:hidden" />
+                          
+                          {/* Three-Dot Menu - Visible on hover */}
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <button
+                                onClick={(e) => e.stopPropagation()}
+                                className="hidden group-hover:flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent 
+                              className="w-[160px] bg-[#2f2f2f] border-[#3f3f3f]" 
+                              align="start" 
+                              side="right"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <DropdownMenuItem 
+                                onClick={(e) => handleRenameClick(e, conv.id, conv.title)}
+                                className="text-gray-200 cursor-pointer focus:bg-[#3f3f3f]"
+                              >
+                                <Pencil className="h-4 w-4 mr-2" />
+                                Chat umbenennen
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                onClick={(e) => handleDeleteClick(e, conv.id)}
+                                className="text-gray-200 cursor-pointer focus:bg-[#3f3f3f] focus:text-red-400"
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Chat löschen
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+
+                        <div className="flex-1 overflow-hidden relative min-w-0">
+                          <span className="block truncate text-sm text-gray-200">
+                            {conv.title}
+                          </span>
+                        </div>
                       </div>
                     )}
                   </div>
