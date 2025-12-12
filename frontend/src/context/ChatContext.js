@@ -355,22 +355,33 @@ export const ChatProvider = ({ children }) => {
   const sendMessageWithFile = useCallback(async (content, file) => {
     if (!file) return;
 
+    // Compress image if needed
+    let processedFile = file;
+    if (file.type.startsWith('image/')) {
+      try {
+        processedFile = await compressImage(file);
+      } catch (error) {
+        console.error('Image compression failed:', error);
+        // Continue with original file if compression fails
+      }
+    }
+
     // Create file info for display
     const fileInfo = {
-      name: file.name,
-      type: file.type,
-      fileType: file.type.startsWith('image/') ? 'image' : 'pdf',
-      size: file.size
+      name: processedFile.name,
+      type: processedFile.type,
+      fileType: processedFile.type.startsWith('image/') ? 'image' : 'pdf',
+      size: processedFile.size
     };
 
     // Create preview URL for images
-    if (file.type.startsWith('image/')) {
-      fileInfo.preview = URL.createObjectURL(file);
+    if (processedFile.type.startsWith('image/')) {
+      fileInfo.preview = URL.createObjectURL(processedFile);
     }
 
     // For display: if no message, show file name instead
     const displayContent = content || '';
-    const titleContent = content || file.name;
+    const titleContent = content || processedFile.name;
 
     const userMessage = {
       id: `msg-${Date.now()}`,
