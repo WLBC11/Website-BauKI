@@ -105,6 +105,35 @@ const Sidebar = () => {
     setDeleteConfirmId(null);
   };
 
+  const handleRenameClick = (e, conversationId, currentTitle) => {
+    e.stopPropagation();
+    setRenamingId(conversationId);
+    setRenameValue(currentTitle);
+  };
+
+  const handleRenameSubmit = (e) => {
+    e.stopPropagation();
+    if (renamingId && renameValue.trim()) {
+      renameConversation(renamingId, renameValue.trim());
+    }
+    setRenamingId(null);
+    setRenameValue('');
+  };
+
+  const handleRenameCancel = (e) => {
+    e.stopPropagation();
+    setRenamingId(null);
+    setRenameValue('');
+  };
+
+  const handleRenameKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleRenameSubmit(e);
+    } else if (e.key === 'Escape') {
+      handleRenameCancel(e);
+    }
+  };
+
   if (!sidebarOpen) {
     return (
       <>
