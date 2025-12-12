@@ -134,45 +134,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
     }
   };
 
-  // Drag and Drop handlers
-  const handleDragEnter = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!isLoading && !isRecording) {
-      setIsDragging(true);
-    }
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // Only set dragging to false if we're leaving the drop zone entirely
-    if (e.currentTarget === dropZoneRef.current && !e.currentTarget.contains(e.relatedTarget)) {
-      setIsDragging(false);
-    }
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-
-    if (isLoading || isRecording) return;
-
-    const files = e.dataTransfer.files;
-    if (files && files.length > 0) {
-      const file = files[0]; // Only take first file
-      processDroppedFile(file);
-    }
-  };
-
-  const processDroppedFile = (file) => {
-    setFileError(null);
+  // Voice recording functions
     
     // Validate file type
     if (!ALLOWED_TYPES.includes(file.type)) {
