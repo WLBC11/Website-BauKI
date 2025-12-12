@@ -10,7 +10,7 @@ import base64
 from datetime import datetime
 
 # Backend URL from frontend .env
-BACKEND_URL = "https://bauki-assistant.preview.emergentagent.com"
+BACKEND_URL = "https://file-chat-bot.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 def test_file_upload_comprehensive():
