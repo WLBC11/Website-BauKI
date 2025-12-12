@@ -783,6 +783,28 @@ async def delete_conversation(conversation_id: str, user: dict = Depends(require
     await db.conversations.delete_one({"id": conversation_id})
     return {"message": "Conversation deleted"}
 
+
+class ConversationUpdate(BaseModel):
+    title: str
+
+
+@api_router.patch("/conversations/{conversation_id}")
+async def rename_conversation(conversation_id: str, update: ConversationUpdate, user: dict = Depends(require_auth)):
+    """Rename a conversation"""
+    # Only allow renaming own conversations
+    conversation = await db.conversations.find_one({"id": conversation_id})
+    if not conversation:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    if conversation.get("user_id") != user["id"]:
+        raise HTTPException(status_code=403, detail="Zugriff verweigert")
+    
+    await db.conversations.update_one(
+        {"id": conversation_id},
+        {"$set": {"title": update.title, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    return {"message": "Conversation renamed", "title": update.title}
+
+
 @api_router.post("/conversations/claim")
 async def claim_conversation(conversation_id: str, user: dict = Depends(require_auth)):
     """Claim a guest conversation for the logged-in user"""
