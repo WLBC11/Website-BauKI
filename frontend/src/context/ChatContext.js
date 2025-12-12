@@ -709,6 +709,7 @@ export const ChatProvider = ({ children }) => {
     createNewConversation,
     selectConversation,
     deleteConversation,
+    renameConversation,
     sendMessage,
     sendMessageWithFile,
     sendVoiceMessage,
