@@ -375,43 +375,12 @@ const Sidebar = () => {
                       /* Normal View with Three-Dot Menu */
                       <div className="flex items-center py-2 pl-3 pr-2">
                         {/* Icon Container - Swaps on hover */}
-                        <div className="relative w-4 h-4 mr-3 flex-shrink-0 flex items-center justify-center">
+                        <div className="w-4 h-4 mr-3 flex-shrink-0 flex items-center justify-center">
                           {/* Normal Icon (Speech Bubble) - Hidden on hover */}
                           <MessageSquare className="h-4 w-4 text-gray-400 group-hover:hidden" />
                           
-                          {/* Three-Dot Menu - Visible on hover */}
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <button
-                                onClick={(e) => e.stopPropagation()}
-                                className="hidden group-hover:flex items-center justify-center text-gray-400 hover:text-white transition-colors"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                              </button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent 
-                              className="w-[160px] bg-[#2f2f2f] border-[#3f3f3f] z-50" 
-                              align="start" 
-                              side="bottom"
-                              sideOffset={5}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <DropdownMenuItem 
-                                onClick={(e) => handleRenameClick(e, conv.id, conv.title)}
-                                className="text-gray-200 cursor-pointer focus:bg-[#3f3f3f]"
-                              >
-                                <Pencil className="h-4 w-4 mr-2" />
-                                Chat umbenennen
-                              </DropdownMenuItem>
-                              <DropdownMenuItem 
-                                onClick={(e) => handleDeleteClick(e, conv.id)}
-                                className="text-gray-200 cursor-pointer focus:bg-[#3f3f3f] focus:text-red-400"
-                              >
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Chat löschen
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
+                          {/* Three-Dot Icon - Visible on hover (trigger moved outside) */}
+                          <MoreHorizontal className="h-4 w-4 text-gray-400 hover:text-white hidden group-hover:block" />
                         </div>
 
                         <div className="flex-1 overflow-hidden relative min-w-0">
@@ -419,6 +388,40 @@ const Sidebar = () => {
                             {conv.title}
                           </span>
                         </div>
+
+                        {/* Dropdown Menu - Positioned at the end of the row */}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <button
+                              onClick={(e) => e.stopPropagation()}
+                              className="hidden group-hover:flex items-center justify-center text-gray-400 hover:text-white transition-colors ml-1 p-1 rounded hover:bg-[#3f3f3f]"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                            </button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent 
+                            className="w-[160px] bg-[#2f2f2f] border-[#3f3f3f]" 
+                            align="end" 
+                            side="bottom"
+                            sideOffset={4}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <DropdownMenuItem 
+                              onClick={(e) => handleRenameClick(e, conv.id, conv.title)}
+                              className="text-gray-200 cursor-pointer focus:bg-[#3f3f3f]"
+                            >
+                              <Pencil className="h-4 w-4 mr-2" />
+                              Chat umbenennen
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={(e) => handleDeleteClick(e, conv.id)}
+                              className="text-gray-200 cursor-pointer focus:bg-[#3f3f3f] focus:text-red-400"
+                            >
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Chat löschen
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     )}
                   </div>
