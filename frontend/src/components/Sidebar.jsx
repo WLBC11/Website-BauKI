@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useChatContext } from '../context/ChatContext';
 import { useAuth } from '../context/AuthContext';
-import { Plus, MessageSquare, Trash2, Menu, PanelLeftClose, User, LogOut, Search, ChevronDown, Settings, Key, UserX, FileText, BarChart3, HelpCircle } from 'lucide-react';
+import { Plus, MessageSquare, Trash2, Menu, PanelLeftClose, User, LogOut, Search, ChevronDown, Settings, Key, UserX, FileText, BarChart3, HelpCircle, MoreHorizontal, Pencil } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import { Button } from './ui/button';
 import {
