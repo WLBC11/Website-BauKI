@@ -548,13 +548,13 @@ async def send_chat_with_file(
     file: UploadFile = File(...),
     user: Optional[dict] = Depends(get_current_user)
 ):
-    """Send a message with a file (image or PDF) to N8N webhook"""
+    """Send a message with a file (image, PDF, or audio) to N8N webhook"""
     try:
         # Validate file type
         if file.content_type not in ALLOWED_FILE_TYPES:
             raise HTTPException(
                 status_code=400,
-                detail=f"Dateityp nicht erlaubt. Erlaubt sind: Bilder (JPEG, PNG, GIF, WebP) und PDF"
+                detail=f"Dateityp nicht erlaubt. Erlaubt sind: Bilder (JPEG, PNG, GIF, WebP), PDF und Audio"
             )
         
         # Read file content
@@ -572,7 +572,13 @@ async def send_chat_with_file(
         
         # Determine file type
         is_image = file.content_type in ALLOWED_IMAGE_TYPES
-        file_type = "image" if is_image else "pdf"
+        is_audio = file.content_type in ALLOWED_AUDIO_TYPES
+        if is_image:
+            file_type = "image"
+        elif is_audio:
+            file_type = "audio"
+        else:
+            file_type = "pdf"
         
         # Generate or use existing conversation/session ID
         conv_id = conversation_id or str(uuid.uuid4())
@@ -582,9 +588,11 @@ async def send_chat_with_file(
         user_bundesland = user.get("bundesland") if user else None
         
         # Prepare payload for N8N webhook with file data
-        # If no message provided, add instruction for AI to ask about intention
+        # If no message provided, add instruction for AI based on file type
         if not message.strip():
-            if is_image:
+            if is_audio:
+                ai_instruction = ""  # Audio will be transcribed by N8N, no instruction needed
+            elif is_image:
                 ai_instruction = "Der Nutzer hat ein Bild gesendet ohne eine Nachricht. Frage den Nutzer freundlich, was er mit dem Bild machen möchte oder was seine Frage dazu ist."
             else:
                 ai_instruction = "Der Nutzer hat eine PDF-Datei gesendet ohne eine Nachricht. Frage den Nutzer freundlich, was er mit der Datei machen möchte oder welche Frage er dazu hat."
