@@ -187,6 +187,18 @@ export const ChatProvider = ({ children }) => {
     }
   }, [activeConversationId, isAuthenticated]);
 
+  const renameConversation = useCallback(async (id, newTitle) => {
+    if (!isAuthenticated || !newTitle.trim()) return;
+    try {
+      await axios.patch(`${API}/conversations/${id}`, { title: newTitle.trim() });
+      setConversations(prev => prev.map(c => 
+        c.id === id ? { ...c, title: newTitle.trim() } : c
+      ));
+    } catch (error) {
+      console.error('Failed to rename conversation:', error);
+    }
+  }, [isAuthenticated]);
+
   const stopGeneration = useCallback(() => {
     if (isLoading) {
       // Cancel network request
