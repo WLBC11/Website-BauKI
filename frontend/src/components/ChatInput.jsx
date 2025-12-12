@@ -377,27 +377,6 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                     <Paperclip className="h-5 w-5 text-gray-300 transition-all duration-200 opacity-70 hover:opacity-100" />
                   </Button>
 
-                  {/* Voice Recording Button */}
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className={`h-8 w-8 rounded-full flex-shrink-0 transition-colors ${
-                      isRecording 
-                        ? 'bg-red-500/30 hover:bg-red-500/40' 
-                        : 'bg-[#3f3f3f] hover:bg-[#4f4f4f]'
-                    }`}
-                    type="button"
-                    onClick={toggleRecording}
-                    disabled={isLoading || selectedFile}
-                    title={isRecording ? "Aufnahme stoppen" : "Sprachnachricht aufnehmen"}
-                  >
-                    {isRecording ? (
-                      <MicOff className="h-5 w-5 text-red-400" />
-                    ) : (
-                      <Mic className="h-5 w-5 text-gray-300 transition-all duration-200 opacity-70 hover:opacity-100" />
-                    )}
-                  </Button>
-
                   {/* Database Info Button */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -449,24 +428,48 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                   )}
                 </div>
 
-                {/* Send Button */}
-                <Button
-                  type="submit"
-                  disabled={(!message.trim() && !selectedFile && !isLoading && !isTyping) || isRecording}
-                  className={`h-8 w-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0
-                    ${isLoading || isTyping 
-                      ? 'bg-white text-black hover:bg-gray-200' 
-                      : (message.trim() || selectedFile)
-                          ? 'bg-white text-black hover:bg-gray-200'
-                          : 'bg-[#3f3f3f] text-gray-500 cursor-not-allowed'
+                {/* Right side: Mic + Send buttons */}
+                <div className="flex items-center gap-2">
+                  {/* Voice Recording Button */}
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className={`h-8 w-8 rounded-full flex-shrink-0 transition-colors ${
+                      isRecording 
+                        ? 'bg-red-500/30 hover:bg-red-500/40' 
+                        : 'bg-[#3f3f3f] hover:bg-[#4f4f4f]'
                     }`}
-                >
-                  {isLoading || isTyping ? (
-                      <Square className="h-4 w-4 fill-black" />
-                  ) : (
-                      <Send className="h-4 w-4" />
-                  )}
-                </Button>
+                    type="button"
+                    onClick={toggleRecording}
+                    disabled={isLoading || selectedFile}
+                    title={isRecording ? "Aufnahme stoppen" : "Sprachnachricht aufnehmen"}
+                  >
+                    {isRecording ? (
+                      <MicOff className="h-5 w-5 text-red-400" />
+                    ) : (
+                      <Mic className="h-5 w-5 text-gray-300 transition-all duration-200 opacity-70 hover:opacity-100" />
+                    )}
+                  </Button>
+
+                  {/* Send Button */}
+                  <Button
+                    type="submit"
+                    disabled={(!message.trim() && !selectedFile && !isLoading && !isTyping) || isRecording}
+                    className={`h-8 w-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0
+                      ${isLoading || isTyping 
+                        ? 'bg-white text-black hover:bg-gray-200' 
+                        : (message.trim() || selectedFile)
+                            ? 'bg-white text-black hover:bg-gray-200'
+                            : 'bg-[#3f3f3f] text-gray-500 cursor-not-allowed'
+                      }`}
+                  >
+                    {isLoading || isTyping ? (
+                        <Square className="h-4 w-4 fill-black" />
+                    ) : (
+                        <Send className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
