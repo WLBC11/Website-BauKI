@@ -738,16 +738,16 @@ async def send_chat_with_file(
             title=response_title
         )
         
-    except httpx.TimeoutException:
-        logger.error("N8N webhook timeout during file upload")
+    except httpx.TimeoutException as e:
+        logger.error(f"N8N webhook timeout during file upload: {type(e).__name__} - {str(e)}")
         raise HTTPException(status_code=504, detail="N8N webhook timeout - Datei zu groß oder Server nicht erreichbar")
     except httpx.RequestError as e:
-        logger.error(f"N8N webhook request error: {str(e)}")
-        raise HTTPException(status_code=502, detail=f"Failed to connect to N8N: {str(e)}")
+        logger.error(f"N8N webhook request error: {type(e).__name__} - {str(e)} - {repr(e)}")
+        raise HTTPException(status_code=502, detail=f"Verbindung zu N8N fehlgeschlagen: {type(e).__name__}")
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Chat with file error: {str(e)}")
+        logger.error(f"Chat with file error: {type(e).__name__} - {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @api_router.get("/conversations")
