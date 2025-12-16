@@ -324,8 +324,8 @@ const Sidebar = () => {
                     title={!isConfirmingDelete && !isRenaming ? conv.title : ''}
                   >
                     {isRenaming ? (
-                      /* Rename Mode - Compact Layout */
-                      <div className="flex items-center py-2 px-2 gap-1">
+                      /* Rename Mode - Responsive Layout */
+                      <div className="flex items-center py-2 px-2 gap-1.5 overflow-hidden">
                         <input
                           type="text"
                           value={renameValue}
@@ -333,26 +333,28 @@ const Sidebar = () => {
                           onKeyDown={handleRenameKeyDown}
                           onClick={(e) => e.stopPropagation()}
                           autoFocus
-                          className="flex-1 bg-[#3f3f3f] text-sm text-gray-200 rounded px-2 py-1 outline-none focus:ring-1 focus:ring-blue-500 min-w-0"
+                          className="flex-1 bg-[#3f3f3f] text-sm text-gray-200 rounded px-2 py-1 outline-none focus:ring-1 focus:ring-blue-500 min-w-0 w-0"
                         />
-                        <button
-                          onClick={handleRenameSubmit}
-                          className="p-1 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors flex-shrink-0"
-                          title="Speichern"
-                        >
-                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
-                        </button>
-                        <button
-                          onClick={handleRenameCancel}
-                          className="p-1 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors flex-shrink-0 mr-2"
-                          title="Abbrechen"
-                        >
-                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          <button
+                            onClick={handleRenameSubmit}
+                            className="p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+                            title="Speichern"
+                          >
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={handleRenameCancel}
+                            className="p-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
+                            title="Abbrechen"
+                          >
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
                       </div>
                     ) : isConfirmingDelete ? (
                       /* Delete Confirmation */
