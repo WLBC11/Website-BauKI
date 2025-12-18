@@ -462,6 +462,26 @@ const Sidebar = () => {
         isOpen={feedbackOpen} 
         onClose={() => setFeedbackOpen(false)} 
       />
+      
+      {/* Chat Action Modals */}
+      <RenameChatModal 
+        isOpen={renameChatModalOpen} 
+        onClose={() => {
+          setRenameChatModalOpen(false);
+          setSelectedChat(null);
+        }}
+        currentTitle={selectedChat?.title || ''}
+        onRename={handleRenameChat}
+      />
+      <DeleteChatModal 
+        isOpen={deleteChatModalOpen} 
+        onClose={() => {
+          setDeleteChatModalOpen(false);
+          setSelectedChat(null);
+        }}
+        chatTitle={selectedChat?.title || ''}
+        onDelete={handleDeleteChat}
+      />
     </>
   );
 };
