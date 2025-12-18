@@ -7,10 +7,11 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 // Define components outside to avoid re-renders
+// No box styling - everything displays as normal text
 const PreBlock = ({ children }) => (
-  <pre className="bg-[#0d0d0d] rounded-md overflow-hidden my-4 border border-gray-800">
+  <span className="whitespace-pre-wrap">
     {children}
-  </pre>
+  </span>
 );
 
 const CodeBlock = ({ node, inline, className, children, ...props }) => {
