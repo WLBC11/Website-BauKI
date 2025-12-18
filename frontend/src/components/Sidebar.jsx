@@ -70,9 +70,10 @@ const Sidebar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
-  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
-  const [renamingId, setRenamingId] = useState(null);
-  const [renameValue, setRenameValue] = useState('');
+  // Chat action modals
+  const [renameChatModalOpen, setRenameChatModalOpen] = useState(false);
+  const [deleteChatModalOpen, setDeleteChatModalOpen] = useState(false);
+  const [selectedChat, setSelectedChat] = useState(null);
   
   // Settings modals
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
