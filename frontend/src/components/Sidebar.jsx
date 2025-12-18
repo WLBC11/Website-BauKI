@@ -295,119 +295,64 @@ const Sidebar = () => {
               </h3>
               {filteredConversations.map(conv => {
                 const isActive = activeConversationId === conv.id;
-                const isConfirmingDelete = deleteConfirmId === conv.id;
-                const isRenaming = renamingId === conv.id;
                 
                 return (
                   <div
                     key={conv.id}
                     className={`group relative mx-2 rounded-lg cursor-pointer transition-colors duration-150
-                      ${isActive ? 'bg-[#2f2f2f]' : 'hover:bg-[#2f2f2f]/50'}
-                      ${isConfirmingDelete ? 'bg-red-900/20 border border-red-900/50' : ''}`}
-                    onClick={() => !isConfirmingDelete && !isRenaming && selectConversation(conv.id)}
-                    title={!isConfirmingDelete && !isRenaming ? conv.title : ''}
+                      ${isActive ? 'bg-[#2f2f2f]' : 'hover:bg-[#2f2f2f]/50'}`}
+                    onClick={() => selectConversation(conv.id)}
+                    title={conv.title}
                   >
-                    {isRenaming ? (
-                      /* Rename Mode - Responsive Layout */
-                      <div className="flex items-center py-2 px-2 gap-1.5 overflow-hidden">
-                        <input
-                          type="text"
-                          value={renameValue}
-                          onChange={(e) => setRenameValue(e.target.value)}
-                          onKeyDown={handleRenameKeyDown}
-                          onClick={(e) => e.stopPropagation()}
-                          autoFocus
-                          className="flex-1 bg-[#3f3f3f] text-sm text-gray-200 rounded px-2 py-1 outline-none focus:ring-1 focus:ring-blue-500 min-w-0 w-0"
-                        />
-                        <div className="flex items-center gap-1 flex-shrink-0">
-                          <button
-                            onClick={handleRenameSubmit}
-                            className="p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
-                            title="Speichern"
-                          >
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                            </svg>
-                          </button>
-                          <button
-                            onClick={handleRenameCancel}
-                            className="p-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
-                            title="Abbrechen"
-                          >
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    ) : isConfirmingDelete ? (
-                      /* Delete Confirmation */
-                      <div className="flex items-center gap-2 py-2 pl-3 pr-2">
-                        <span className="text-xs text-red-200 flex-1">Löschen?</span>
-                        <button
-                          onClick={confirmDelete}
-                          className="px-2 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded transition-colors"
-                        >
-                          Ja
-                        </button>
-                        <button
-                          onClick={cancelDelete}
-                          className="px-2 py-1 text-xs bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors"
-                        >
-                          Nein
-                        </button>
-                      </div>
-                    ) : (
-                      /* Normal View with Three-Dot Menu on LEFT */
-                      <div className="flex items-center py-2 pl-3 pr-2">
-                        {/* Icon Container - Swaps between MessageSquare and MoreHorizontal on hover */}
-                        <div className="relative w-4 h-4 mr-3 flex-shrink-0">
-                          {/* Speech Bubble - visible by default, hidden on hover */}
-                          <MessageSquare className="h-4 w-4 text-gray-400 absolute inset-0 group-hover:opacity-0 transition-opacity" />
-                          
-                          {/* Three-Dot Menu Trigger - hidden by default, visible on hover */}
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <button
-                                onClick={(e) => e.stopPropagation()}
-                                className="absolute inset-0 flex items-center justify-center text-gray-400 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                              </button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent 
-                              className="w-[160px] bg-[#2f2f2f] border-[#3f3f3f]" 
-                              align="start" 
-                              side="bottom"
-                              sideOffset={4}
+                    {/* Normal View with Three-Dot Menu on LEFT */}
+                    <div className="flex items-center py-2 pl-3 pr-2">
+                      {/* Icon Container - Swaps between MessageSquare and MoreHorizontal on hover */}
+                      <div className="relative w-4 h-4 mr-3 flex-shrink-0">
+                        {/* Speech Bubble - visible by default, hidden on hover */}
+                        <MessageSquare className="h-4 w-4 text-gray-400 absolute inset-0 group-hover:opacity-0 transition-opacity" />
+                        
+                        {/* Three-Dot Menu Trigger - hidden by default, visible on hover */}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <button
                               onClick={(e) => e.stopPropagation()}
+                              className="absolute inset-0 flex items-center justify-center text-gray-400 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
                             >
-                              <DropdownMenuItem 
-                                onClick={(e) => handleRenameClick(e, conv.id, conv.title)}
-                                className="text-gray-200 cursor-pointer focus:bg-blue-600/30 hover:bg-blue-600/30 focus:text-blue-300 hover:text-blue-300"
-                              >
-                                <Pencil className="h-4 w-4 mr-2" />
-                                Chat umbenennen
-                              </DropdownMenuItem>
-                              <DropdownMenuItem 
-                                onClick={(e) => handleDeleteClick(e, conv.id)}
-                                className="text-gray-200 cursor-pointer focus:bg-[#3f3f3f] focus:text-red-400"
-                              >
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Chat löschen
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-
-                        {/* Chat Title */}
-                        <div className="flex-1 overflow-hidden min-w-0">
-                          <span className="block truncate text-sm text-gray-200">
-                            {conv.title}
-                          </span>
-                        </div>
+                              <MoreHorizontal className="h-4 w-4" />
+                            </button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent 
+                            className="w-[160px] bg-[#2f2f2f] border-[#3f3f3f]" 
+                            align="start" 
+                            side="bottom"
+                            sideOffset={4}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <DropdownMenuItem 
+                              onClick={(e) => handleRenameClick(e, conv)}
+                              className="text-gray-200 cursor-pointer focus:bg-blue-600/30 hover:bg-blue-600/30 focus:text-blue-300 hover:text-blue-300"
+                            >
+                              <Pencil className="h-4 w-4 mr-2" />
+                              Chat umbenennen
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={(e) => handleDeleteClick(e, conv)}
+                              className="text-gray-200 cursor-pointer focus:bg-[#3f3f3f] focus:text-red-400 hover:bg-red-600/20 hover:text-red-400"
+                            >
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Chat löschen
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
-                    )}
+
+                      {/* Chat Title */}
+                      <div className="flex-1 overflow-hidden min-w-0">
+                        <span className="block truncate text-sm text-gray-200">
+                          {conv.title}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 );
               })}
