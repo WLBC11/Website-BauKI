@@ -25,34 +25,45 @@ const CodeBlock = ({ node, inline, className, children, ...props }) => {
      setTimeout(() => setCopied(false), 2000);
   };
 
-  // Check if this is REAL code that needs a code box
-  // Real code has: specific language set, OR contains programming patterns
-  const isRealCode = language || (
-    content.includes('{') && content.includes('}') ||
-    content.includes('function') ||
+  // List of REAL programming languages that should show code box
+  const programmingLanguages = [
+    'javascript', 'js', 'typescript', 'ts', 'python', 'py', 'java', 'c', 'cpp', 
+    'csharp', 'cs', 'php', 'ruby', 'go', 'rust', 'swift', 'kotlin', 'scala',
+    'html', 'css', 'scss', 'sass', 'sql', 'bash', 'shell', 'sh', 'powershell',
+    'json', 'xml', 'yaml', 'yml', 'dockerfile', 'makefile', 'r', 'matlab',
+    'perl', 'lua', 'groovy', 'dart', 'elixir', 'erlang', 'haskell', 'clojure',
+    'jsx', 'tsx', 'vue', 'svelte', 'graphql', 'nginx', 'apache', 'toml', 'ini'
+  ];
+  
+  // Check if this is REAL programming code
+  const isProgrammingLanguage = language && programmingLanguages.includes(language.toLowerCase());
+  
+  // Check if content has clear programming patterns (even without language tag)
+  const hasProgrammingPatterns = (
+    (content.includes('{') && content.includes('}') && (content.includes('function') || content.includes('=>') || content.includes('class '))) ||
     content.includes('const ') ||
     content.includes('let ') ||
     content.includes('var ') ||
     content.includes('import ') ||
     content.includes('export ') ||
-    content.includes('class ') ||
     content.includes('def ') ||
     content.includes('return ') ||
-    content.includes('if (') ||
-    content.includes('for (') ||
-    content.includes('while (') ||
     content.includes('console.') ||
     content.includes('print(') ||
-    content.includes('<?') ||
+    content.includes('<?php') ||
     content.includes('<!DOCTYPE') ||
-    content.includes('<html')
+    content.includes('<html') ||
+    content.includes('#!/')
   );
+  
+  const isRealCode = isProgrammingLanguage || hasProgrammingPatterns;
 
   if (!inline) {
-    // ChatGPT-style: Non-code content (numbers, formulas, measurements) as normal text
+    // ChatGPT-style: Non-code content (numbers, formulas, math, measurements) as normal text
+    // This includes: "A = Länge * Breite", "5 + 3 = 8", "100 qm", etc.
     if (!isRealCode) {
       return (
-        <span className="text-gray-200" {...props}>
+        <span className="block text-gray-200 my-2" {...props}>
           {children}
         </span>
       );
