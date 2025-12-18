@@ -63,7 +63,7 @@ const CodeBlock = ({ node, inline, className, children, ...props }) => {
     // This includes: "A = Länge * Breite", "5 + 3 = 8", "100 qm", etc.
     if (!isRealCode) {
       return (
-        <span className="block text-gray-200 my-2" {...props}>
+        <span className="text-gray-200 whitespace-pre-wrap" {...props}>
           {children}
         </span>
       );
