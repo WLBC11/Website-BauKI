@@ -17,14 +17,33 @@ const CodeBlock = ({ node, inline, className, children, ...props }) => {
   const match = /language-(\w+)/.exec(className || '');
   const language = match ? match[1] : '';
   const [copied, setCopied] = useState(false);
+  const content = String(children).replace(/\n$/, '');
 
   const handleCopy = () => {
-     navigator.clipboard.writeText(String(children).replace(/\n$/, ''));
+     navigator.clipboard.writeText(content);
      setCopied(true);
      setTimeout(() => setCopied(false), 2000);
   };
 
+  // Check if this is a "simple" code block (no language, short content, no real code)
+  // These should be displayed as normal text like ChatGPT does
+  const isSimpleContent = !language && content.length < 100 && 
+    !content.includes('{') && !content.includes('}') && 
+    !content.includes('function') && !content.includes('const ') &&
+    !content.includes('import ') && !content.includes('class ') &&
+    !content.includes('def ') && !content.includes('return ');
+
   if (!inline) {
+    // For simple content (like numbers, measurements), display as normal bold text
+    if (isSimpleContent) {
+      return (
+        <span className="font-semibold text-gray-100" {...props}>
+          {children}
+        </span>
+      );
+    }
+    
+    // For actual code blocks, show with syntax highlighting box
     return (
       <div className="relative group">
         <div className="flex items-center justify-between px-4 py-2 bg-[#2d2d2d] text-xs text-gray-400 rounded-t-md">
