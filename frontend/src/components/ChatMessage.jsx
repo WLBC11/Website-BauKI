@@ -25,19 +25,34 @@ const CodeBlock = ({ node, inline, className, children, ...props }) => {
      setTimeout(() => setCopied(false), 2000);
   };
 
-  // Check if this is a "simple" code block (no language, short content, no real code)
-  // These should be displayed as normal text like ChatGPT does
-  const isSimpleContent = !language && content.length < 100 && 
-    !content.includes('{') && !content.includes('}') && 
-    !content.includes('function') && !content.includes('const ') &&
-    !content.includes('import ') && !content.includes('class ') &&
-    !content.includes('def ') && !content.includes('return ');
+  // Check if this is REAL code that needs a code box
+  // Real code has: specific language set, OR contains programming patterns
+  const isRealCode = language || (
+    content.includes('{') && content.includes('}') ||
+    content.includes('function') ||
+    content.includes('const ') ||
+    content.includes('let ') ||
+    content.includes('var ') ||
+    content.includes('import ') ||
+    content.includes('export ') ||
+    content.includes('class ') ||
+    content.includes('def ') ||
+    content.includes('return ') ||
+    content.includes('if (') ||
+    content.includes('for (') ||
+    content.includes('while (') ||
+    content.includes('console.') ||
+    content.includes('print(') ||
+    content.includes('<?') ||
+    content.includes('<!DOCTYPE') ||
+    content.includes('<html')
+  );
 
   if (!inline) {
-    // For simple content (like numbers, measurements), display as normal bold text
-    if (isSimpleContent) {
+    // ChatGPT-style: Non-code content (numbers, formulas, measurements) as normal text
+    if (!isRealCode) {
       return (
-        <span className="font-semibold text-gray-100" {...props}>
+        <span className="text-gray-200" {...props}>
           {children}
         </span>
       );
