@@ -90,50 +90,31 @@ const Sidebar = () => {
     setAuthModalOpen(true);
   };
 
-  const handleDeleteClick = (e, conversationId) => {
+  // Open rename modal
+  const handleRenameClick = (e, conversation) => {
     e.stopPropagation();
-    setDeleteConfirmId(conversationId);
+    setSelectedChat(conversation);
+    setRenameChatModalOpen(true);
   };
 
-  const confirmDelete = (e) => {
+  // Open delete modal
+  const handleDeleteClick = (e, conversation) => {
     e.stopPropagation();
-    if (deleteConfirmId) {
-      deleteConversation(deleteConfirmId);
-      setDeleteConfirmId(null);
+    setSelectedChat(conversation);
+    setDeleteChatModalOpen(true);
+  };
+
+  // Handle rename from modal
+  const handleRenameChat = (newTitle) => {
+    if (selectedChat) {
+      renameConversation(selectedChat.id, newTitle);
     }
   };
 
-  const cancelDelete = (e) => {
-    e.stopPropagation();
-    setDeleteConfirmId(null);
-  };
-
-  const handleRenameClick = (e, conversationId, currentTitle) => {
-    e.stopPropagation();
-    setRenamingId(conversationId);
-    setRenameValue(currentTitle);
-  };
-
-  const handleRenameSubmit = (e) => {
-    e.stopPropagation();
-    if (renamingId && renameValue.trim()) {
-      renameConversation(renamingId, renameValue.trim());
-    }
-    setRenamingId(null);
-    setRenameValue('');
-  };
-
-  const handleRenameCancel = (e) => {
-    e.stopPropagation();
-    setRenamingId(null);
-    setRenameValue('');
-  };
-
-  const handleRenameKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleRenameSubmit(e);
-    } else if (e.key === 'Escape') {
-      handleRenameCancel(e);
+  // Handle delete from modal
+  const handleDeleteChat = () => {
+    if (selectedChat) {
+      deleteConversation(selectedChat.id);
     }
   };
 
