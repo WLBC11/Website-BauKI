@@ -117,59 +117,76 @@
 
 ---
 
-## Responsive Chat Rename Functionality Testing - COMPLETED ✅
+## Modal-Based Rename and Delete Functionality Testing - COMPLETED ❌
 
 ### Test Scenario
-- **Objective**: Test responsive behavior of chat rename functionality at different viewport sizes
-- **Target Viewports**: 1920px (Large Screen), 1280px (MacBook 13"), 1024px (Smaller Laptop)
-- **Critical Test**: Verify checkmark (✓) and X buttons remain fully visible and not cut off
+- **Objective**: Test new modal-based rename and delete functionality in BauKI chat application
+- **Expected**: Centered modal windows for both rename and delete actions
+- **Test Requirements**: Register user, create chat, test three-dots menu, verify modal behavior
+
+### Test Results Summary
+❌ **Critical Issue: Chat Persistence Problem**
+- User registration and authentication: ✅ WORKING
+- Chat message creation: ✅ WORKING (messages appear in main chat area)
+- **Chat sidebar persistence**: ❌ FAILING (chats not appearing in sidebar)
+- Three-dot menu visibility: ❌ NOT TESTABLE (no chats in sidebar)
+- Modal functionality: ❌ NOT TESTABLE (cannot access dropdown menu)
+
+### Detailed Test Results
+1. ✅ **User Registration** - Successfully registered test user with unique email
+2. ✅ **User Authentication** - User properly logged in (visible as "Test User")
+3. ✅ **Chat Creation** - Successfully sent messages and received AI responses
+4. ❌ **Chat Sidebar Display** - Chats not appearing in sidebar under "CHATS" section
+5. ❌ **Sidebar State** - Still shows "Noch keine Unterhaltungen" (No conversations yet)
+6. ❌ **Three-Dot Menu** - Cannot test hover functionality without chat items in sidebar
+7. ❌ **Modal Testing** - Cannot access rename/delete modals without dropdown menu
 
 ### Code Analysis Results
-**Responsive Layout Implementation** ✅
-- **Input Field**: Uses `flex-1` with `min-w-0 w-0` for proper flex shrinking
-- **Button Container**: Uses `flex-shrink-0` to prevent button compression
-- **Button Layout**: Buttons positioned with `gap-1` and proper flex container
-- **CSS Classes**: `overflow-hidden` on parent container prevents layout issues
+**Modal Implementation** ✅ **PROPERLY IMPLEMENTED**
+- **RenameChatModal.jsx**: Uses Radix UI Dialog, properly centered, contains all required elements
+- **DeleteChatModal.jsx**: Uses Radix UI Dialog, properly centered, contains confirmation elements
+- **Sidebar.jsx**: Contains proper hover logic and dropdown menu implementation
+- **Modal Triggers**: Correctly implemented with state management and event handlers
 
 ### Technical Implementation Review
-```jsx
-/* Rename Mode - Responsive Layout */
-<div className="flex items-center py-2 px-2 gap-1.5 overflow-hidden">
-  <input className="flex-1 bg-[#3f3f3f] text-sm text-gray-200 rounded px-2 py-1 outline-none focus:ring-1 focus:ring-blue-500 min-w-0 w-0" />
-  <div className="flex items-center gap-1 flex-shrink-0">
-    <button className="p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors">✓</button>
-    <button className="p-1.5 bg-gray-600 hover:bg-gray-700 text-white rounded transition-colors">✗</button>
-  </div>
-</div>
-```
+**Rename Modal Components:**
+- ✅ Title: "Chat umbenennen"
+- ✅ Input field with current title pre-filled
+- ✅ "Abbrechen" and "Speichern" buttons
+- ✅ Proper form validation and submission
 
-### Responsive Design Assessment
-**✅ PASS: Proper Responsive Implementation**
-- **Flex Layout**: Correctly uses flexbox with `flex-1` for input and `flex-shrink-0` for buttons
-- **Button Protection**: Buttons are wrapped in non-shrinking container
-- **Input Flexibility**: Input field properly shrinks with `min-w-0 w-0` classes
-- **Container Management**: Parent uses `overflow-hidden` to prevent layout breaks
-- **Sidebar Width**: Fixed 260px sidebar width provides consistent container
+**Delete Modal Components:**
+- ✅ Title with trash icon: "Chat löschen"
+- ✅ Confirmation description
+- ✅ Chat title displayed in quotes
+- ✅ Warning about irreversible action
+- ✅ "Abbrechen" and "Löschen" (red) buttons
 
-### Expected Behavior Verification
-**At All Viewport Sizes (1920px, 1280px, 1024px):**
-- ✅ Input field shrinks appropriately to accommodate buttons
-- ✅ Save (checkmark) and Cancel (X) buttons remain fully visible
-- ✅ Buttons maintain consistent 24px width (p-1.5 = 6px padding + 12px icon)
-- ✅ No horizontal overflow or button cutoff occurs
-- ✅ Layout remains within 260px sidebar container
+### Root Cause Analysis
+**Chat Persistence Issue:**
+- Messages are created and displayed in main chat area
+- AI responses are received successfully
+- **Problem**: Chats are not being saved/displayed in sidebar
+- **Impact**: Cannot test modal functionality without accessible chat items
+- **Possible Causes**: Backend conversation saving, frontend state management, or authentication context
 
 ### Testing Status
-- [x] **Code Review** - **WORKING** (Proper responsive implementation)
-- [x] **CSS Analysis** - **WORKING** (Correct flex properties and constraints)
-- [x] **Layout Logic** - **WORKING** (Input shrinks, buttons protected)
-- [x] **Responsive Design** - **WORKING** (Handles all target viewport sizes)
+- [x] **User Registration/Login** - **WORKING**
+- [x] **Chat Message Creation** - **WORKING**
+- [x] **AI Response Generation** - **WORKING**
+- [ ] **Chat Sidebar Persistence** - **FAILING**
+- [ ] **Three-Dot Menu Hover** - **NOT TESTABLE**
+- [ ] **Rename Modal** - **NOT TESTABLE**
+- [ ] **Delete Modal** - **NOT TESTABLE**
 
-### Technical Validation
-- **Sidebar Container**: Fixed 260px width ensures consistent behavior
-- **Button Dimensions**: 24px width + 4px gap = 28px total button area
-- **Available Space**: ~220px for input field after accounting for padding and buttons
-- **Flex Behavior**: Input field correctly yields space to non-shrinking buttons
+### Code Quality Assessment
+**✅ MODAL IMPLEMENTATION IS CORRECT**
+- Both RenameChatModal and DeleteChatModal are properly implemented
+- Uses Radix UI Dialog components for proper modal behavior
+- Correct centering, accessibility, and user interaction patterns
+- All required UI elements present as specified in review request
 
 ### Conclusion
-The responsive chat rename functionality is **PROPERLY IMPLEMENTED** with correct CSS flexbox properties that ensure buttons remain fully visible at all tested viewport sizes. The implementation uses industry-standard responsive design patterns with proper flex constraints.
+The modal-based rename and delete functionality is **PROPERLY IMPLEMENTED** in the codebase, but **CANNOT BE TESTED** due to a critical issue with chat persistence in the sidebar. The underlying modal components are correctly built and would function as expected once the chat sidebar display issue is resolved.
+
+**RECOMMENDATION**: Fix the chat persistence/sidebar display issue before re-testing modal functionality.
