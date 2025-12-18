@@ -19,6 +19,8 @@ import ChangePasswordModal from './ChangePasswordModal';
 import DeleteAccountModal from './DeleteAccountModal';
 import LegalModal from './LegalModal';
 import FeedbackModal from './FeedbackModal';
+import RenameChatModal from './RenameChatModal';
+import DeleteChatModal from './DeleteChatModal';
 
 const ADMIN_EMAILS = [
   'weiss.jonathan1107@outlook.com',
