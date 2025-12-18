@@ -43,10 +43,13 @@ const CodeBlock = ({ node, inline, className, children, ...props }) => {
       </div>
     );
   }
+  
+  // ChatGPT-style: Inline code appears as normal text, no special formatting
+  // This makes numbers and short inline code blend naturally with the text
   return (
-    <code className="text-pink-400 bg-[#3f3f3f] px-1.5 py-0.5 rounded text-base font-mono" {...props}>
+    <span className="text-gray-200" {...props}>
       {children}
-    </code>
+    </span>
   );
 };
 
