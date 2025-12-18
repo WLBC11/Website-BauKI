@@ -277,19 +277,19 @@ const ChatMessage = ({ message, isLast }) => {
                   )}
                 </>
               ) : (
-                <div className="markdown-body prose prose-invert prose-lg max-w-none 
-                  prose-headings:text-white prose-headings:font-bold prose-headings:mt-8 prose-headings:mb-4
-                  prose-p:text-gray-200 prose-p:my-4 prose-p:leading-8 prose-p:text-[17px]
+                <div className="markdown-body prose prose-invert prose-base max-w-none 
+                  prose-headings:text-white prose-headings:font-semibold prose-headings:mt-6 prose-headings:mb-3
+                  prose-p:text-gray-200 prose-p:my-3 prose-p:leading-7
                   prose-strong:text-white prose-strong:font-semibold
-                  prose-h1:text-3xl prose-h1:mb-5
-                  prose-h2:text-2xl prose-h2:mb-4
-                  prose-h3:text-xl prose-h3:mb-3
-                  prose-h4:text-lg prose-h4:mb-2
-                  prose-ul:my-5 prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-2
-                  prose-ol:my-5 prose-ol:list-decimal prose-ol:pl-6 prose-ol:space-y-2
-                  prose-li:text-gray-200 prose-li:my-2 prose-li:leading-7
-                  prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-5 prose-blockquote:italic prose-blockquote:text-gray-300 prose-blockquote:my-5
-                  prose-a:text-blue-400 prose-a:underline hover:prose-a:text-blue-300
+                  prose-h1:text-xl prose-h1:mb-4
+                  prose-h2:text-lg prose-h2:mb-3
+                  prose-h3:text-base prose-h3:mb-2
+                  prose-h4:text-base prose-h4:mb-2
+                  prose-ul:my-3 prose-ul:list-disc prose-ul:pl-5 prose-ul:space-y-1
+                  prose-ol:my-3 prose-ol:list-decimal prose-ol:pl-5 prose-ol:space-y-1
+                  prose-li:text-gray-200 prose-li:my-1 prose-li:leading-7
+                  prose-blockquote:border-l-4 prose-blockquote:border-gray-500 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-300 prose-blockquote:my-4
+                  prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
                   ">
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
