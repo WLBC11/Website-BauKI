@@ -14,90 +14,13 @@ const PreBlock = ({ children }) => (
 );
 
 const CodeBlock = ({ node, inline, className, children, ...props }) => {
-  const match = /language-(\w+)/.exec(className || '');
-  const language = match ? match[1] : '';
-  const [copied, setCopied] = useState(false);
-  const content = String(children).replace(/\n$/, '');
-
-  const handleCopy = () => {
-     navigator.clipboard.writeText(content);
-     setCopied(true);
-     setTimeout(() => setCopied(false), 2000);
-  };
-
-  // Check if content has REAL programming code patterns
-  // Only show code box if we find actual code syntax
-  const hasRealCodeSyntax = (
-    // JavaScript/TypeScript patterns
-    content.includes('function ') ||
-    content.includes('const ') ||
-    content.includes('let ') ||
-    content.includes('var ') ||
-    content.includes('=>') ||
-    content.includes('import ') ||
-    content.includes('export ') ||
-    content.includes('require(') ||
-    content.includes('module.exports') ||
-    // Python patterns
-    content.includes('def ') ||
-    content.includes('class ') ||
-    content.includes('import ') ||
-    content.includes('from ') ||
-    // General programming patterns
-    content.includes('return ') ||
-    content.includes('console.') ||
-    content.includes('print(') ||
-    content.includes('System.') ||
-    content.includes('public ') ||
-    content.includes('private ') ||
-    content.includes('void ') ||
-    // HTML/PHP
-    content.includes('<?php') ||
-    content.includes('<!DOCTYPE') ||
-    content.includes('<html') ||
-    content.includes('</') ||
-    // Shell
-    content.includes('#!/') ||
-    content.includes('sudo ') ||
-    content.includes('apt ') ||
-    content.includes('npm ') ||
-    content.includes('yarn ') ||
-    // SQL
-    content.includes('SELECT ') ||
-    content.includes('INSERT ') ||
-    content.includes('UPDATE ') ||
-    content.includes('DELETE ') ||
-    // Curly braces with code context
-    (content.includes('{') && content.includes('}') && content.includes(';'))
-  );
-
-  // For both inline and block: if no real code syntax, show as normal text
-  if (!inline && !hasRealCodeSyntax) {
+  // ChatGPT-style: EVERYTHING is displayed as normal text - no code boxes ever
+  // All numbers, formulas, code, everything appears as regular text
+  if (!inline) {
     return (
       <span className="text-gray-200 whitespace-pre-wrap" {...props}>
         {children}
       </span>
-    );
-  }
-  
-  if (!inline && hasRealCodeSyntax) {
-    // For actual code blocks with real code, show with syntax highlighting box
-    return (
-      <div className="relative group">
-        <div className="flex items-center justify-between px-4 py-2 bg-[#2d2d2d] text-xs text-gray-400 rounded-t-md">
-          <span>{language || 'code'}</span>
-          <button
-            onClick={handleCopy}
-            className="flex items-center gap-1 hover:text-white transition-colors"
-          >
-            {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-            {copied ? 'Kopiert!' : 'Code kopieren'}
-          </button>
-        </div>
-        <code className="block p-4 overflow-x-auto text-base text-gray-300 font-mono bg-black/50" {...props}>
-          {children}
-        </code>
-      </div>
     );
   }
   
