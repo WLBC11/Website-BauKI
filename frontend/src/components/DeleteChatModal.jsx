@@ -31,8 +31,8 @@ const DeleteChatModal = ({ isOpen, onClose, chatTitle, onDelete }) => {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="mt-2 p-3 bg-[#3f3f3f] rounded-lg">
-          <p className="text-gray-200 text-sm truncate">&ldquo;{chatTitle}&rdquo;</p>
+        <div className="mt-2 p-3 bg-[#3f3f3f] rounded-lg overflow-hidden">
+          <p className="text-gray-200 text-sm truncate max-w-full">&ldquo;{chatTitle}&rdquo;</p>
         </div>
 
         <p className="text-gray-400 text-sm mt-2">
