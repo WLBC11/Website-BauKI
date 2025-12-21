@@ -5,6 +5,9 @@ import { useAuth } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 
 // Define components outside to avoid re-renders
 // No box styling - everything displays as normal text
