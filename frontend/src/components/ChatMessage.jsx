@@ -242,7 +242,8 @@ const ChatMessage = ({ message, isLast }) => {
                   prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
                   ">
                   <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
+                    remarkPlugins={[remarkGfm, remarkMath]}
+                    rehypePlugins={[rehypeKatex]}
                     components={{
                       pre: PreBlock,
                       code: CodeBlock,
