@@ -1029,7 +1029,7 @@ http_client = None
 @app.on_event("startup")
 async def startup_event():
     global http_client
-    http_client = httpx.AsyncClient(timeout=300.0)  # 5 Minuten für KI-Antworten
+    http_client = httpx.AsyncClient(timeout=httpx.Timeout(300.0, connect=30.0))  # 5 Minuten für KI-Antworten, 30 Sek. für Verbindung
 
 @app.on_event("shutdown")
 async def shutdown_event():
