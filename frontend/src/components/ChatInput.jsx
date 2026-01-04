@@ -11,6 +11,37 @@ import {
   DropdownMenuLabel,
 } from './ui/dropdown-menu';
 import FeedbackModal from './FeedbackModal';
+import * as pdfjsLib from 'pdfjs-dist';
+
+// Set up PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+
+// Generate PDF thumbnail from first page
+const generatePdfThumbnail = async (file) => {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const page = await pdf.getPage(1);
+    
+    // Scale to fit in thumbnail
+    const viewport = page.getViewport({ scale: 0.5 });
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    
+    await page.render({
+      canvasContext: context,
+      viewport: viewport
+    }).promise;
+    
+    return canvas.toDataURL('image/png');
+  } catch (error) {
+    console.error('Error generating PDF thumbnail:', error);
+    return null;
+  }
+};
 
 const AVAILABLE_DATABASES = [
   "BauGB (Baugesetzbuch)", 
