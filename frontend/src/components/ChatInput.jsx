@@ -26,13 +26,14 @@ const AVAILABLE_DATABASES = [
 ];
 
 const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25 MB
+const MAX_FILES = 5; // Maximum 5 files
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'];
 
 const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
   const [message, setMessage] = useState('');
   const [feedbackOpen, setFeedbackOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [filePreview, setFilePreview] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [filePreviews, setFilePreviews] = useState({});
   const [fileError, setFileError] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
