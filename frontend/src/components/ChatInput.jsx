@@ -329,41 +329,63 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
             )}
 
             {/* File Preview Area */}
-            {selectedFile && !isRecording && (
+            {selectedFiles.length > 0 && !isRecording && (
               <div className="px-3 md:px-4 pt-3">
-                <div className="flex items-center gap-3 p-2 bg-[#3f3f3f] rounded-lg">
-                  <div className="flex-shrink-0">
-                    {filePreview ? (
-                      <img 
-                        src={filePreview} 
-                        alt="Preview" 
-                        className="w-12 h-12 object-cover rounded-md"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 bg-[#4f4f4f] rounded-md flex items-center justify-center">
-                        {selectedFile.type === 'application/pdf' ? (
-                          <FileText className="w-6 h-6 text-red-400" />
-                        ) : (
-                          <ImageIcon className="w-6 h-6 text-blue-400" />
-                        )}
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-gray-400">{selectedFiles.length} von {MAX_FILES} Dateien</span>
+                  {selectedFiles.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs text-gray-400 hover:text-white h-6 px-2"
+                      onClick={clearAllFiles}
+                    >
+                      Alle entfernen
+                    </Button>
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {selectedFiles.map((file, index) => {
+                    const fileKey = file.name + file.size;
+                    const preview = filePreviews[fileKey];
+                    return (
+                      <div key={fileKey} className="flex items-center gap-2 p-2 bg-[#3f3f3f] rounded-lg max-w-[200px]">
+                        <div className="flex-shrink-0">
+                          {preview ? (
+                            <img 
+                              src={preview} 
+                              alt="Preview" 
+                              className="w-10 h-10 object-cover rounded-md"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 bg-[#4f4f4f] rounded-md flex items-center justify-center">
+                              {file.type === 'application/pdf' ? (
+                                <FileText className="w-5 h-5 text-red-400" />
+                              ) : (
+                                <ImageIcon className="w-5 h-5 text-blue-400" />
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs text-gray-200 truncate">{file.name}</p>
+                          <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
+                        </div>
+                        
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 flex-shrink-0 text-gray-400 hover:text-white hover:bg-[#5f5f5f]"
+                          onClick={() => handleRemoveFile(index)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
                       </div>
-                    )}
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-200 truncate">{selectedFile.name}</p>
-                    <p className="text-xs text-gray-500">{formatFileSize(selectedFile.size)}</p>
-                  </div>
-                  
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 flex-shrink-0 text-gray-400 hover:text-white hover:bg-[#5f5f5f]"
-                    onClick={handleRemoveFile}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+                    );
+                  })}
                 </div>
               </div>
             )}
