@@ -412,19 +412,29 @@ export const ChatProvider = ({ children }) => {
       })
     );
 
-    // Create file infos for display
-    const fileInfos = processedFiles.map(file => {
-      const fileInfo = {
-        name: file.name,
-        type: file.type,
-        fileType: file.type.startsWith('image/') ? 'image' : 'pdf',
-        size: file.size
-      };
-      if (file.type.startsWith('image/')) {
-        fileInfo.preview = URL.createObjectURL(file);
-      }
-      return fileInfo;
-    });
+    // Create file infos for display - generate previews for both images and PDFs
+    const fileInfos = await Promise.all(
+      processedFiles.map(async (file) => {
+        const fileInfo = {
+          name: file.name,
+          type: file.type,
+          fileType: file.type.startsWith('image/') ? 'image' : 'pdf',
+          size: file.size
+        };
+        
+        if (file.type.startsWith('image/')) {
+          fileInfo.preview = URL.createObjectURL(file);
+        } else if (file.type === 'application/pdf') {
+          // Generate PDF thumbnail
+          const pdfPreview = await generatePdfThumbnail(file);
+          if (pdfPreview) {
+            fileInfo.preview = pdfPreview;
+          }
+        }
+        
+        return fileInfo;
+      })
+    );
 
     // For display: if no message, show file count instead
     const displayContent = content || '';
