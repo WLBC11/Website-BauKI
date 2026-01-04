@@ -48,15 +48,22 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
   // Handle dropped file from global drop zone
   useEffect(() => {
     if (droppedFile) {
-      setSelectedFile(droppedFile);
+      // Check if we can add more files
+      if (selectedFiles.length >= MAX_FILES) {
+        setFileError(`Maximal ${MAX_FILES} Dateien erlaubt`);
+        if (onDroppedFileProcessed) {
+          onDroppedFileProcessed();
+        }
+        return;
+      }
+      
+      setSelectedFiles(prev => [...prev, droppedFile]);
       setFileError(null);
       
       // Create preview for images
       if (droppedFile.type.startsWith('image/')) {
         const previewUrl = URL.createObjectURL(droppedFile);
-        setFilePreview(previewUrl);
-      } else {
-        setFilePreview(null);
+        setFilePreviews(prev => ({ ...prev, [droppedFile.name + droppedFile.size]: previewUrl }));
       }
       
       // Clear the dropped file from parent
@@ -64,7 +71,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
         onDroppedFileProcessed();
       }
     }
-  }, [droppedFile, onDroppedFileProcessed]);
+  }, [droppedFile, onDroppedFileProcessed, selectedFiles.length]);
 
   // Handle drop error from global drop zone
   useEffect(() => {
