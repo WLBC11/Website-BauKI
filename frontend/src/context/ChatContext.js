@@ -363,44 +363,49 @@ export const ChatProvider = ({ children }) => {
 
   }, [activeConversationId, currentGuestConversation, isAuthenticated]);
 
-  // Send message with file (image or PDF)
-  const sendMessageWithFile = useCallback(async (content, file) => {
-    if (!file) return;
+  // Send message with files (images or PDFs) - supports multiple files
+  const sendMessageWithFiles = useCallback(async (content, files) => {
+    if (!files || files.length === 0) return;
 
-    // Compress image if needed
-    let processedFile = file;
-    if (file.type.startsWith('image/')) {
-      try {
-        processedFile = await compressImage(file);
-      } catch (error) {
-        console.error('Image compression failed:', error);
-        // Continue with original file if compression fails
+    // Process all files (compress images if needed)
+    const processedFiles = await Promise.all(
+      files.map(async (file) => {
+        if (file.type.startsWith('image/')) {
+          try {
+            return await compressImage(file);
+          } catch (error) {
+            console.error('Image compression failed:', error);
+            return file;
+          }
+        }
+        return file;
+      })
+    );
+
+    // Create file infos for display
+    const fileInfos = processedFiles.map(file => {
+      const fileInfo = {
+        name: file.name,
+        type: file.type,
+        fileType: file.type.startsWith('image/') ? 'image' : 'pdf',
+        size: file.size
+      };
+      if (file.type.startsWith('image/')) {
+        fileInfo.preview = URL.createObjectURL(file);
       }
-    }
+      return fileInfo;
+    });
 
-    // Create file info for display
-    const fileInfo = {
-      name: processedFile.name,
-      type: processedFile.type,
-      fileType: processedFile.type.startsWith('image/') ? 'image' : 'pdf',
-      size: processedFile.size
-    };
-
-    // Create preview URL for images
-    if (processedFile.type.startsWith('image/')) {
-      fileInfo.preview = URL.createObjectURL(processedFile);
-    }
-
-    // For display: if no message, show file name instead
+    // For display: if no message, show file count instead
     const displayContent = content || '';
-    const titleContent = content || processedFile.name;
+    const titleContent = content || (files.length === 1 ? files[0].name : `${files.length} Dateien`);
 
     const userMessage = {
       id: `msg-${Date.now()}`,
       role: 'user',
       content: displayContent,
       timestamp: new Date(),
-      file: fileInfo
+      files: fileInfos // Array of files instead of single file
     };
 
     let conversationId = activeConversationId;
@@ -442,9 +447,13 @@ export const ChatProvider = ({ children }) => {
     try {
       // Create FormData for file upload
       const formData = new FormData();
-      // Send empty string if no message - backend/N8N will handle it
       formData.append('message', content || '');
-      formData.append('file', processedFile);  // Use compressed file
+      
+      // Append all files
+      processedFiles.forEach((file) => {
+        formData.append('files', file);
+      });
+      
       if (!isNewConversation && conversationId) {
         formData.append('conversation_id', conversationId);
       }
@@ -456,7 +465,7 @@ export const ChatProvider = ({ children }) => {
           ...(token ? { Authorization: `Bearer ${token}` } : {})
         },
         signal: abortControllerRef.current.signal,
-        timeout: 120000 // 2 minute timeout for file uploads
+        timeout: 180000 // 3 minute timeout for multiple file uploads
       });
 
       const aiMessage = {
@@ -477,7 +486,7 @@ export const ChatProvider = ({ children }) => {
           if (!prev) {
             return {
               id: realConversationId,
-              title: realTitle || content.slice(0, 30) + (content.length > 30 ? '...' : ''),
+              title: realTitle || titleContent.slice(0, 30) + (titleContent.length > 30 ? '...' : ''),
               messages: [userMessage, aiMessage],
               createdAt: new Date()
             };
@@ -511,7 +520,7 @@ export const ChatProvider = ({ children }) => {
       if (axios.isCancel(error)) {
         console.log('Request canceled', error.message);
       } else {
-        console.error('Failed to send message with file:', error);
+        console.error('Failed to send message with files:', error);
         
         const errorMessage = {
           id: `msg-${Date.now()}-error`,
