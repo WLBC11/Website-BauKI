@@ -717,17 +717,19 @@ async def send_chat_with_files(
         
         message_id = str(uuid.uuid4())
         
-        # Store file info for display (only store metadata, not full base64 for large files)
-        file_info = {
-            "name": file.filename,
-            "type": file.content_type,
-            "fileType": file_type,
-            "size": len(file_content)
-        }
-        
-        # For images, store a smaller preview (first 100KB as base64 for thumbnails)
-        if is_image and len(file_content) <= 500 * 1024:  # Only for images under 500KB
-            file_info["preview"] = file_base64
+        # Store file infos for display (only store metadata, not full base64 for large files)
+        file_infos = []
+        for f in processed_files:
+            file_info = {
+                "name": f["name"],
+                "type": f["type"],
+                "fileType": f["fileType"],
+                "size": f["size"]
+            }
+            # For images, store a smaller preview (only for images under 500KB)
+            if f["is_image"] and f["size"] <= 500 * 1024:
+                file_info["preview"] = f["data"]
+            file_infos.append(file_info)
         
         # Store conversation in database
         user_msg = {
@@ -735,7 +737,7 @@ async def send_chat_with_files(
             "role": "user",
             "content": message,
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            "file": file_info
+            "files": file_infos  # Array of files
         }
         
         assistant_msg = {
@@ -763,7 +765,7 @@ async def send_chat_with_files(
             response_title = existing_conv.get("title")
         else:
             # Use filename for title if no message provided
-            title_source = message if message.strip() else file.filename
+            title_source = message if message.strip() else (processed_files[0]["name"] if len(processed_files) == 1 else f"{len(processed_files)} Dateien")
             generated_title = await generate_chat_title(title_source)
             new_conv = {
                 "id": conv_id,
@@ -785,7 +787,7 @@ async def send_chat_with_files(
         
     except httpx.TimeoutException as e:
         logger.error(f"N8N webhook timeout during file upload: {type(e).__name__} - {str(e)}")
-        raise HTTPException(status_code=504, detail="N8N webhook timeout - Datei zu groß oder Server nicht erreichbar")
+        raise HTTPException(status_code=504, detail="N8N webhook timeout - Dateien zu groß oder Server nicht erreichbar")
     except httpx.RequestError as e:
         logger.error(f"N8N webhook request error: {type(e).__name__} - {str(e)} - {repr(e)}")
         raise HTTPException(status_code=502, detail=f"Verbindung zu N8N fehlgeschlagen: {type(e).__name__}")
