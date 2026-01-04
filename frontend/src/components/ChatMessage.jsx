@@ -219,8 +219,16 @@ const ChatMessage = ({ message, isLast }) => {
             <div className={`text-gray-200 leading-relaxed ${!isUser ? 'mt-1' : ''}`}>
               {isUser ? (
                 <>
-                  {/* Show file attachment if present */}
-                  {message.file && <FileAttachment file={message.file} />}
+                  {/* Show file attachments if present (support both single file and multiple files) */}
+                  {message.files && message.files.length > 0 && (
+                    <div className={`flex flex-wrap gap-2 ${message.files.length > 1 ? 'mb-3' : ''}`}>
+                      {message.files.map((file, index) => (
+                        <FileAttachment key={`${file.name}-${index}`} file={file} compact={message.files.length > 1} />
+                      ))}
+                    </div>
+                  )}
+                  {/* Backwards compatibility for single file */}
+                  {message.file && !message.files && <FileAttachment file={message.file} />}
                   {/* Only show text if there is content */}
                   {message.content && (
                     <p className="whitespace-pre-wrap break-words text-base">{message.content}</p>
