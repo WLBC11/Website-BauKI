@@ -661,6 +661,16 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
         isOpen={feedbackOpen} 
         onClose={() => setFeedbackOpen(false)} 
       />
+
+      {/* File Preview Modal */}
+      {previewModalFile && (
+        <FilePreviewModal
+          file={previewModalFile.file}
+          previewUrl={previewModalFile.previewUrl}
+          isOpen={!!previewModalFile}
+          onClose={() => setPreviewModalFile(null)}
+        />
+      )}
     </div>
   );
 };
