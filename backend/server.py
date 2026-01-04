@@ -534,51 +534,72 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
 
 
 # File upload constants
-MAX_FILE_SIZE = 25 * 1024 * 1024  # 25 MB
+MAX_FILE_SIZE = 25 * 1024 * 1024  # 25 MB per file
+MAX_FILES = 5  # Maximum 5 files
 ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"]
 ALLOWED_AUDIO_TYPES = ["audio/webm", "audio/mp4", "audio/mpeg", "audio/wav", "audio/ogg", "audio/mp3"]
 ALLOWED_FILE_TYPES = ALLOWED_IMAGE_TYPES + ["application/pdf"] + ALLOWED_AUDIO_TYPES
 
 
 @api_router.post("/chat/upload", response_model=ChatResponse)
-async def send_chat_with_file(
+async def send_chat_with_files(
     message: str = Form(""),
     conversation_id: Optional[str] = Form(None),
     session_id: Optional[str] = Form(None),
-    file: UploadFile = File(...),
+    files: List[UploadFile] = File(...),
     user: Optional[dict] = Depends(get_current_user)
 ):
-    """Send a message with a file (image, PDF, or audio) to N8N webhook"""
+    """Send a message with multiple files (images, PDFs, or audio) to N8N webhook"""
     try:
-        # Validate file type
-        if file.content_type not in ALLOWED_FILE_TYPES:
+        # Validate number of files
+        if len(files) > MAX_FILES:
             raise HTTPException(
                 status_code=400,
-                detail=f"Dateityp nicht erlaubt. Erlaubt sind: Bilder (JPEG, PNG, GIF, WebP), PDF und Audio"
+                detail=f"Zu viele Dateien. Maximum: {MAX_FILES}"
             )
         
-        # Read file content
-        file_content = await file.read()
+        processed_files = []
         
-        # Validate file size
-        if len(file_content) > MAX_FILE_SIZE:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Datei zu groß. Maximum: {MAX_FILE_SIZE // (1024*1024)} MB"
-            )
-        
-        # Convert to base64
-        file_base64 = base64.b64encode(file_content).decode('utf-8')
-        
-        # Determine file type
-        is_image = file.content_type in ALLOWED_IMAGE_TYPES
-        is_audio = file.content_type in ALLOWED_AUDIO_TYPES
-        if is_image:
-            file_type = "image"
-        elif is_audio:
-            file_type = "audio"
-        else:
-            file_type = "pdf"
+        for file in files:
+            # Validate file type
+            if file.content_type not in ALLOWED_FILE_TYPES:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Dateityp nicht erlaubt für '{file.filename}'. Erlaubt sind: Bilder (JPEG, PNG, GIF, WebP), PDF und Audio"
+                )
+            
+            # Read file content
+            file_content = await file.read()
+            
+            # Validate file size
+            if len(file_content) > MAX_FILE_SIZE:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Datei '{file.filename}' zu groß. Maximum: {MAX_FILE_SIZE // (1024*1024)} MB"
+                )
+            
+            # Convert to base64
+            file_base64 = base64.b64encode(file_content).decode('utf-8')
+            
+            # Determine file type
+            is_image = file.content_type in ALLOWED_IMAGE_TYPES
+            is_audio = file.content_type in ALLOWED_AUDIO_TYPES
+            if is_image:
+                file_type = "image"
+            elif is_audio:
+                file_type = "audio"
+            else:
+                file_type = "pdf"
+            
+            processed_files.append({
+                "name": file.filename,
+                "type": file.content_type,
+                "fileType": file_type,
+                "data": file_base64,
+                "size": len(file_content),
+                "is_image": is_image,
+                "is_audio": is_audio
+            })
         
         # Generate or use existing conversation/session ID
         conv_id = conversation_id or str(uuid.uuid4())
