@@ -62,6 +62,8 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'ap
 
 // File Preview Modal Component for ChatInput
 const FilePreviewModal = ({ file, previewUrl, isOpen, onClose }) => {
+  const [pdfObjectUrl, setPdfObjectUrl] = useState(null);
+  
   // Handle escape key
   useEffect(() => {
     if (!isOpen) return;
@@ -72,11 +74,19 @@ const FilePreviewModal = ({ file, previewUrl, isOpen, onClose }) => {
     return () => window.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
+  // Create object URL for PDF when modal opens
+  useEffect(() => {
+    if (isOpen && file && file.type === 'application/pdf') {
+      const url = URL.createObjectURL(file);
+      setPdfObjectUrl(url);
+      return () => URL.revokeObjectURL(url);
+    }
+  }, [isOpen, file]);
+
   if (!isOpen || !file) return null;
 
   const isImage = file.type?.startsWith('image/');
   const isPdf = file.type === 'application/pdf';
-  const dataUrl = previewUrl || (isPdf ? URL.createObjectURL(file) : null);
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) onClose();
@@ -125,19 +135,19 @@ const FilePreviewModal = ({ file, previewUrl, isOpen, onClose }) => {
             </Button>
           </div>
         </div>
-        <div className="p-4 max-h-[calc(90vh-60px)] overflow-auto">
+        <div className="p-4 max-h-[calc(90vh-60px)] overflow-auto flex items-center justify-center">
           {isImage && previewUrl ? (
             <img 
               src={previewUrl} 
               alt={file.name}
               className="max-w-full max-h-[80vh] object-contain mx-auto rounded-lg"
             />
-          ) : isPdf ? (
-            <div className="flex flex-col items-center gap-4">
+          ) : isPdf && pdfObjectUrl ? (
+            <div className="flex flex-col items-center gap-4 w-full">
               <iframe
-                src={dataUrl}
+                src={pdfObjectUrl}
                 title={file.name}
-                className="w-full h-[70vh] min-w-[600px] rounded-lg border border-[#3f3f3f]"
+                className="w-full h-[70vh] min-w-[600px] rounded-lg border border-[#3f3f3f] bg-white"
               />
               <p className="text-sm text-gray-400">
                 PDF wird nicht angezeigt? 
