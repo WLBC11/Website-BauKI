@@ -514,11 +514,11 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                   {/* Send Button */}
                   <Button
                     type="submit"
-                    disabled={(!message.trim() && !selectedFile && !isLoading && !isTyping) || isRecording}
+                    disabled={(!message.trim() && selectedFiles.length === 0 && !isLoading && !isTyping) || isRecording}
                     className={`h-8 w-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0
                       ${isLoading || isTyping 
                         ? 'bg-white text-black hover:bg-gray-200' 
-                        : (message.trim() || selectedFile)
+                        : (message.trim() || selectedFiles.length > 0)
                             ? 'bg-white text-black hover:bg-gray-200'
                             : 'bg-[#3f3f3f] text-gray-500 cursor-not-allowed'
                       }`}
