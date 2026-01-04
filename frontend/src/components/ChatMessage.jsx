@@ -216,6 +216,8 @@ const TdBlock = ({ children }) => (
 
 // File attachment display component - clickable to open preview
 const FileAttachment = ({ file, compact = false, onClick }) => {
+  const [pdfThumbnail, setPdfThumbnail] = useState(null);
+  
   const formatFileSize = (bytes) => {
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
@@ -223,8 +225,23 @@ const FileAttachment = ({ file, compact = false, onClick }) => {
   };
 
   const isImage = file.fileType === 'image' || file.type?.startsWith('image/');
+  const isPdf = file.fileType === 'pdf' || file.type === 'application/pdf';
   const isAudio = file.fileType === 'audio' || file.type?.startsWith('audio/');
-  const canPreview = isImage || file.fileType === 'pdf' || file.type === 'application/pdf';
+  const canPreview = isImage || isPdf;
+
+  // Generate PDF thumbnail when file data is available
+  useEffect(() => {
+    if (isPdf && file.data && !file.preview && !pdfThumbnail) {
+      generatePdfThumbnailFromBase64(file.data).then(thumbnail => {
+        if (thumbnail) {
+          setPdfThumbnail(thumbnail);
+        }
+      });
+    }
+  }, [isPdf, file.data, file.preview, pdfThumbnail]);
+
+  // Determine the preview image to show
+  const previewImage = file.preview || pdfThumbnail;
 
   // For audio files, show a different indicator (not clickable for preview)
   if (isAudio) {
@@ -254,11 +271,11 @@ const FileAttachment = ({ file, compact = false, onClick }) => {
       >
         {/* Preview or Icon */}
         <div className="relative">
-          {file.preview ? (
+          {previewImage ? (
             <img 
-              src={file.preview} 
+              src={previewImage} 
               alt={file.name} 
-              className={`${compact ? 'w-10 h-10' : 'w-16 h-16'} object-cover rounded-md`}
+              className={`${compact ? 'w-10 h-10' : 'w-16 h-16'} object-cover rounded-md bg-white`}
             />
           ) : (
             <div className={`${compact ? 'w-8 h-8' : 'w-12 h-12'} bg-[#4f4f4f] rounded-md flex items-center justify-center flex-shrink-0`}>
