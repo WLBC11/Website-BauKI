@@ -177,30 +177,41 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
 
   // Handle dropped file from global drop zone
   useEffect(() => {
-    if (droppedFile) {
-      // Check if we can add more files
-      if (selectedFiles.length >= MAX_FILES) {
-        setFileError(`Maximal ${MAX_FILES} Dateien erlaubt`);
+    const handleDroppedFile = async () => {
+      if (droppedFile) {
+        // Check if we can add more files
+        if (selectedFiles.length >= MAX_FILES) {
+          setFileError(`Maximal ${MAX_FILES} Dateien erlaubt`);
+          if (onDroppedFileProcessed) {
+            onDroppedFileProcessed();
+          }
+          return;
+        }
+        
+        setSelectedFiles(prev => [...prev, droppedFile]);
+        setFileError(null);
+        
+        // Create preview for images
+        if (droppedFile.type.startsWith('image/')) {
+          const previewUrl = URL.createObjectURL(droppedFile);
+          setFilePreviews(prev => ({ ...prev, [droppedFile.name + droppedFile.size]: previewUrl }));
+        }
+        // Generate thumbnail for PDFs
+        else if (droppedFile.type === 'application/pdf') {
+          const pdfThumbnail = await generatePdfThumbnail(droppedFile);
+          if (pdfThumbnail) {
+            setFilePreviews(prev => ({ ...prev, [droppedFile.name + droppedFile.size]: pdfThumbnail }));
+          }
+        }
+        
+        // Clear the dropped file from parent
         if (onDroppedFileProcessed) {
           onDroppedFileProcessed();
         }
-        return;
       }
-      
-      setSelectedFiles(prev => [...prev, droppedFile]);
-      setFileError(null);
-      
-      // Create preview for images
-      if (droppedFile.type.startsWith('image/')) {
-        const previewUrl = URL.createObjectURL(droppedFile);
-        setFilePreviews(prev => ({ ...prev, [droppedFile.name + droppedFile.size]: previewUrl }));
-      }
-      
-      // Clear the dropped file from parent
-      if (onDroppedFileProcessed) {
-        onDroppedFileProcessed();
-      }
-    }
+    };
+    
+    handleDroppedFile();
   }, [droppedFile, onDroppedFileProcessed, selectedFiles.length]);
 
   // Handle drop error from global drop zone
