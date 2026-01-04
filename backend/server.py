@@ -608,18 +608,32 @@ async def send_chat_with_files(
         # Get bundesland from user account
         user_bundesland = user.get("bundesland") if user else None
         
+        # Determine overall file types for AI instruction
+        has_images = any(f["is_image"] for f in processed_files)
+        has_audio = any(f["is_audio"] for f in processed_files)
+        has_pdfs = any(f["fileType"] == "pdf" for f in processed_files)
+        
         # Prepare payload for N8N webhook with file data
-        # If no message provided, add instruction for AI based on file type
+        # If no message provided, add instruction for AI based on file types
         if not message.strip():
-            if is_audio:
+            if has_audio:
                 ai_instruction = ""  # Audio will be transcribed by N8N, no instruction needed
-            elif is_image:
-                ai_instruction = "Der Nutzer hat ein Bild gesendet ohne eine Nachricht. Frage den Nutzer freundlich, was er mit dem Bild machen möchte oder was seine Frage dazu ist."
+            elif len(processed_files) == 1:
+                if has_images:
+                    ai_instruction = "Der Nutzer hat ein Bild gesendet ohne eine Nachricht. Frage den Nutzer freundlich, was er mit dem Bild machen möchte oder was seine Frage dazu ist."
+                else:
+                    ai_instruction = "Der Nutzer hat eine PDF-Datei gesendet ohne eine Nachricht. Frage den Nutzer freundlich, was er mit der Datei machen möchte oder welche Frage er dazu hat."
             else:
-                ai_instruction = "Der Nutzer hat eine PDF-Datei gesendet ohne eine Nachricht. Frage den Nutzer freundlich, was er mit der Datei machen möchte oder welche Frage er dazu hat."
+                file_types = []
+                if has_images:
+                    file_types.append("Bilder")
+                if has_pdfs:
+                    file_types.append("PDF-Dateien")
+                ai_instruction = f"Der Nutzer hat {len(processed_files)} Dateien gesendet ({', '.join(file_types)}) ohne eine Nachricht. Frage den Nutzer freundlich, was er mit den Dateien machen möchte oder welche Frage er dazu hat."
         else:
             ai_instruction = ""
         
+        # Build payload with files array
         payload = {
             "message": message,  # Can be empty string
             "hasMessage": bool(message.strip()),  # Flag to indicate if user provided a message
@@ -627,25 +641,35 @@ async def send_chat_with_files(
             "sessionId": sess_id,
             "conversationId": conv_id,
             "bundesland": user_bundesland,
+            "files": [{
+                "name": f["name"],
+                "type": f["type"],
+                "fileType": f["fileType"],
+                "data": f["data"],
+                "size": f["size"]
+            } for f in processed_files],
+            # Keep single file for backwards compatibility
             "file": {
-                "name": file.filename,
-                "type": file.content_type,
-                "fileType": file_type,
-                "data": file_base64,
-                "size": len(file_content)
-            }
+                "name": processed_files[0]["name"],
+                "type": processed_files[0]["type"],
+                "fileType": processed_files[0]["fileType"],
+                "data": processed_files[0]["data"],
+                "size": processed_files[0]["size"]
+            } if len(processed_files) == 1 else None,
+            "fileCount": len(processed_files)
         }
         
-        log_message = message[:50] if message else "(nur Datei)"
-        logger.info(f"Sending {file_type} to N8N webhook: {log_message}...")
-        logger.info(f"File: {file.filename}, Size: {len(file_content)} bytes")
+        log_message = message[:50] if message else f"({len(processed_files)} Dateien)"
+        logger.info(f"Sending {len(processed_files)} file(s) to N8N webhook: {log_message}...")
+        for f in processed_files:
+            logger.info(f"File: {f['name']}, Type: {f['fileType']}, Size: {f['size']} bytes")
         
         # Call N8N webhook with longer timeout for file uploads
         response = await http_client.post(
             N8N_WEBHOOK_URL,
             json=payload,
             headers={"Content-Type": "application/json"},
-            timeout=120.0  # Extended timeout for file processing
+            timeout=180.0  # Extended timeout for multiple file processing
         )
         
         logger.info(f"N8N response status: {response.status_code}")
