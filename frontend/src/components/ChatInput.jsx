@@ -42,7 +42,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const recordingTimerRef = useRef(null);
-  const { sendMessage, sendMessageWithFile, sendVoiceMessage, isLoading, stopGeneration, isTyping } = useChatContext();
+  const { sendMessage, sendMessageWithFiles, sendVoiceMessage, isLoading, stopGeneration, isTyping } = useChatContext();
   const { isAuthenticated } = useAuth();
 
   // Handle dropped file from global drop zone
