@@ -606,7 +606,7 @@ export const ChatProvider = ({ children }) => {
     try {
       const formData = new FormData();
       formData.append('message', '');  // Empty message for voice
-      formData.append('file', audioFile);
+      formData.append('files', audioFile);  // Must use 'files' to match backend endpoint
       if (!isNewConversation && conversationId) {
         formData.append('conversation_id', conversationId);
       }
