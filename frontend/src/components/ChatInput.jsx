@@ -400,12 +400,12 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
             {/* Input area */}
             <div className="flex flex-col">
               <div className="flex items-start px-3 md:px-4 pt-3 pb-2 gap-2">
-                <textarea
+                  <textarea
                   ref={textareaRef}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder={isRecording ? "Aufnahme läuft..." : selectedFile ? "Nachricht zur Datei hinzufügen..." : "Nachricht eingeben..."}
+                  placeholder={isRecording ? "Aufnahme läuft..." : selectedFiles.length > 0 ? "Nachricht zu den Dateien hinzufügen..." : "Nachricht eingeben..."}
                   rows={1}
                   className="flex-1 bg-transparent text-white text-sm md:text-base resize-none outline-none placeholder-gray-500 max-h-[200px] overflow-y-auto py-1"
                   style={{ lineHeight: '1.5' }}
