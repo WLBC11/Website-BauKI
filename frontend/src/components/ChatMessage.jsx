@@ -11,6 +11,17 @@ import 'katex/dist/katex.min.css';
 
 // File Preview Modal Component
 const FilePreviewModal = ({ file, isOpen, onClose }) => {
+  // Handle escape key - must be before any conditional returns
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !file) return null;
 
   const isImage = file.fileType === 'image' || file.type?.startsWith('image/');
@@ -34,15 +45,6 @@ const FilePreviewModal = ({ file, isOpen, onClose }) => {
       onClose();
     }
   };
-
-  // Handle escape key
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
-  }, [onClose]);
 
   // Open PDF in new tab
   const openInNewTab = () => {
