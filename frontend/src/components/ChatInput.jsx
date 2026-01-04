@@ -250,23 +250,21 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
     }
 
     const hasMessage = message.trim();
-    const hasFile = selectedFile;
+    const hasFiles = selectedFiles.length > 0;
 
-    if (!hasMessage && !hasFile) return;
+    if (!hasMessage && !hasFiles) return;
 
     // Store values before clearing
     const messageToSend = message.trim();
-    const fileToSend = selectedFile;
+    const filesToSend = [...selectedFiles];
 
     // Clear input state IMMEDIATELY before sending
     setMessage('');
-    if (fileToSend) {
+    if (filesToSend.length > 0) {
       // Clear file state immediately
-      if (filePreview) {
-        URL.revokeObjectURL(filePreview);
-      }
-      setSelectedFile(null);
-      setFilePreview(null);
+      Object.values(filePreviews).forEach(url => URL.revokeObjectURL(url));
+      setSelectedFiles([]);
+      setFilePreviews({});
       setFileError(null);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
@@ -280,8 +278,8 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
     }
 
     // Now send the message with the stored values
-    if (fileToSend) {
-      await sendMessageWithFile(messageToSend, fileToSend);
+    if (filesToSend.length > 0) {
+      await sendMessageWithFiles(messageToSend, filesToSend);
     } else {
       sendMessage(messageToSend);
     }
