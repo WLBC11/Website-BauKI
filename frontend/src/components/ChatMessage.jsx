@@ -58,7 +58,7 @@ const TdBlock = ({ children }) => (
 );
 
 // File attachment display component
-const FileAttachment = ({ file }) => {
+const FileAttachment = ({ file, compact = false }) => {
   const formatFileSize = (bytes) => {
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
@@ -71,13 +71,13 @@ const FileAttachment = ({ file }) => {
   // For audio files, show a different indicator
   if (isAudio) {
     return (
-      <div className="mt-2 mb-3">
-        <div className="inline-flex items-center gap-3 p-3 bg-[#3f3f3f] rounded-lg">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-            <Mic className="w-5 h-5 text-white" />
+      <div className={compact ? '' : 'mt-2 mb-3'}>
+        <div className={`inline-flex items-center gap-2 p-2 bg-[#3f3f3f] rounded-lg ${compact ? 'max-w-[150px]' : ''}`}>
+          <div className={`${compact ? 'w-8 h-8' : 'w-10 h-10'} bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0`}>
+            <Mic className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-white`} />
           </div>
           <div className="min-w-0">
-            <p className="text-sm text-gray-200">Sprachnachricht</p>
+            <p className={`${compact ? 'text-xs' : 'text-sm'} text-gray-200`}>Sprachnachricht</p>
             <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
           </div>
         </div>
@@ -86,28 +86,28 @@ const FileAttachment = ({ file }) => {
   }
 
   return (
-    <div className="mt-2 mb-3">
-      <div className="inline-flex items-center gap-3 p-3 bg-[#3f3f3f] rounded-lg max-w-sm">
+    <div className={compact ? '' : 'mt-2 mb-3'}>
+      <div className={`inline-flex items-center gap-2 p-2 bg-[#3f3f3f] rounded-lg ${compact ? 'max-w-[150px]' : 'max-w-sm gap-3 p-3'}`}>
         {/* Preview or Icon */}
         {file.preview ? (
           <img 
             src={file.preview} 
             alt={file.name} 
-            className="w-16 h-16 object-cover rounded-md"
+            className={`${compact ? 'w-10 h-10' : 'w-16 h-16'} object-cover rounded-md`}
           />
         ) : (
-          <div className="w-12 h-12 bg-[#4f4f4f] rounded-md flex items-center justify-center flex-shrink-0">
+          <div className={`${compact ? 'w-8 h-8' : 'w-12 h-12'} bg-[#4f4f4f] rounded-md flex items-center justify-center flex-shrink-0`}>
             {isImage ? (
-              <ImageIcon className="w-6 h-6 text-blue-400" />
+              <ImageIcon className={`${compact ? 'w-4 h-4' : 'w-6 h-6'} text-blue-400`} />
             ) : (
-              <FileText className="w-6 h-6 text-red-400" />
+              <FileText className={`${compact ? 'w-4 h-4' : 'w-6 h-6'} text-red-400`} />
             )}
           </div>
         )}
         
         {/* File Info */}
         <div className="min-w-0">
-          <p className="text-sm text-gray-200 truncate max-w-[200px]">{file.name}</p>
+          <p className={`${compact ? 'text-xs' : 'text-sm'} text-gray-200 truncate ${compact ? 'max-w-[80px]' : 'max-w-[200px]'}`}>{file.name}</p>
           <p className="text-xs text-gray-500">
             {isImage ? 'Bild' : 'PDF'} • {formatFileSize(file.size)}
           </p>
