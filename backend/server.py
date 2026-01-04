@@ -633,31 +633,44 @@ async def send_chat_with_files(
         else:
             ai_instruction = ""
         
-        # Build payload with files array
+        # Build payload - always include first file as "file" for backwards compatibility
+        # Additional files as file2, file3, etc.
         payload = {
-            "message": message,  # Can be empty string
-            "hasMessage": bool(message.strip()),  # Flag to indicate if user provided a message
-            "aiInstruction": ai_instruction,  # Instruction for AI when no message
+            "message": message,
+            "hasMessage": bool(message.strip()),
+            "aiInstruction": ai_instruction,
             "sessionId": sess_id,
             "conversationId": conv_id,
             "bundesland": user_bundesland,
-            "files": [{
-                "name": f["name"],
-                "type": f["type"],
-                "fileType": f["fileType"],
-                "data": f["data"],
-                "size": f["size"]
-            } for f in processed_files],
-            # Keep single file for backwards compatibility
+            "fileCount": len(processed_files),
+            # Always include first file as "file"
             "file": {
                 "name": processed_files[0]["name"],
                 "type": processed_files[0]["type"],
                 "fileType": processed_files[0]["fileType"],
                 "data": processed_files[0]["data"],
                 "size": processed_files[0]["size"]
-            } if len(processed_files) == 1 else None,
-            "fileCount": len(processed_files)
+            }
         }
+        
+        # Add additional files as file2, file3, file4, file5
+        for i, f in enumerate(processed_files[1:], start=2):
+            payload[f"file{i}"] = {
+                "name": f["name"],
+                "type": f["type"],
+                "fileType": f["fileType"],
+                "data": f["data"],
+                "size": f["size"]
+            }
+        
+        # Also include files array for N8N workflows that support it
+        payload["files"] = [{
+            "name": f["name"],
+            "type": f["type"],
+            "fileType": f["fileType"],
+            "data": f["data"],
+            "size": f["size"]
+        } for f in processed_files]
         
         log_message = message[:50] if message else f"({len(processed_files)} Dateien)"
         logger.info(f"Sending {len(processed_files)} file(s) to N8N webhook: {log_message}...")
