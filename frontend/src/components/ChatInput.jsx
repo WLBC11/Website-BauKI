@@ -448,9 +448,19 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                   {selectedFiles.map((file, index) => {
                     const fileKey = file.name + file.size;
                     const preview = filePreviews[fileKey];
+                    const isImage = file.type?.startsWith('image/');
+                    const isPdf = file.type === 'application/pdf';
+                    const canPreview = isImage || isPdf;
+                    
                     return (
-                      <div key={fileKey} className="flex items-center gap-2 p-2 bg-[#3f3f3f] rounded-lg max-w-[200px]">
-                        <div className="flex-shrink-0">
+                      <div key={fileKey} className="flex items-center gap-2 p-2 bg-[#3f3f3f] rounded-lg max-w-[200px] group">
+                        {/* Clickable preview area */}
+                        <button
+                          type="button"
+                          onClick={canPreview ? () => setPreviewModalFile({ file, previewUrl: preview }) : undefined}
+                          className={`flex-shrink-0 relative ${canPreview ? 'cursor-pointer' : ''}`}
+                          title={canPreview ? 'Klicken zum Anzeigen' : undefined}
+                        >
                           {preview ? (
                             <img 
                               src={preview} 
@@ -459,14 +469,20 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                             />
                           ) : (
                             <div className="w-10 h-10 bg-[#4f4f4f] rounded-md flex items-center justify-center">
-                              {file.type === 'application/pdf' ? (
+                              {isPdf ? (
                                 <FileText className="w-5 h-5 text-red-400" />
                               ) : (
                                 <ImageIcon className="w-5 h-5 text-blue-400" />
                               )}
                             </div>
                           )}
-                        </div>
+                          {/* Zoom overlay on hover */}
+                          {canPreview && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
+                              <ZoomIn className="w-4 h-4 text-white" />
+                            </div>
+                          )}
+                        </button>
                         
                         <div className="flex-1 min-w-0">
                           <p className="text-xs text-gray-200 truncate">{file.name}</p>
