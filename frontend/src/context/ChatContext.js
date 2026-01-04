@@ -425,11 +425,17 @@ export const ChatProvider = ({ children }) => {
         if (file.type.startsWith('image/')) {
           fileInfo.preview = URL.createObjectURL(file);
         } else if (file.type === 'application/pdf') {
-          // Generate PDF thumbnail
+          // Generate PDF thumbnail for display
           const pdfPreview = await generatePdfThumbnail(file);
           if (pdfPreview) {
             fileInfo.preview = pdfPreview;
           }
+          // Also store the full PDF data for modal viewing
+          const arrayBuffer = await file.arrayBuffer();
+          const base64 = btoa(
+            new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+          );
+          fileInfo.data = base64;
         }
         
         return fileInfo;
