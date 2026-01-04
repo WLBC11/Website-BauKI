@@ -46,6 +46,8 @@ const generatePdfThumbnailFromBase64 = async (base64Data) => {
 
 // File Preview Modal Component
 const FilePreviewModal = ({ file, isOpen, onClose }) => {
+  const [pdfDataUrl, setPdfDataUrl] = useState(null);
+  
   // Handle escape key - must be before any conditional returns
   useEffect(() => {
     if (!isOpen) return;
@@ -57,22 +59,34 @@ const FilePreviewModal = ({ file, isOpen, onClose }) => {
     return () => window.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
+  // Generate full PDF data URL for viewing (not the thumbnail)
+  useEffect(() => {
+    if (!isOpen || !file) return;
+    
+    const isPdf = file.fileType === 'pdf' || file.type === 'application/pdf';
+    if (isPdf && file.data) {
+      // Create a proper PDF data URL from base64 data
+      setPdfDataUrl(`data:application/pdf;base64,${file.data}`);
+    }
+  }, [isOpen, file]);
+
   if (!isOpen || !file) return null;
 
   const isImage = file.fileType === 'image' || file.type?.startsWith('image/');
   const isPdf = file.fileType === 'pdf' || file.type === 'application/pdf';
 
   // Get the data URL for display
-  const getDataUrl = () => {
-    if (file.preview) return file.preview;
-    if (file.data) {
-      const mimeType = file.type || (isImage ? 'image/png' : 'application/pdf');
+  const getImageDataUrl = () => {
+    // For images, use preview or base64 data
+    if (file.preview && isImage) return file.preview;
+    if (file.data && isImage) {
+      const mimeType = file.type || 'image/png';
       return `data:${mimeType};base64,${file.data}`;
     }
     return null;
   };
 
-  const dataUrl = getDataUrl();
+  const imageDataUrl = getImageDataUrl();
 
   // Handle click outside to close
   const handleBackdropClick = (e) => {
@@ -83,8 +97,11 @@ const FilePreviewModal = ({ file, isOpen, onClose }) => {
 
   // Open PDF in new tab
   const openInNewTab = () => {
-    if (dataUrl) {
-      window.open(dataUrl, '_blank');
+    if (pdfDataUrl) {
+      window.open(pdfDataUrl, '_blank');
+    } else if (file.data && isPdf) {
+      const url = `data:application/pdf;base64,${file.data}`;
+      window.open(url, '_blank');
     }
   };
 
@@ -105,7 +122,7 @@ const FilePreviewModal = ({ file, isOpen, onClose }) => {
             <span className="text-sm text-gray-200 truncate max-w-[300px]">{file.name}</span>
           </div>
           <div className="flex items-center gap-2">
-            {isPdf && dataUrl && (
+            {isPdf && (
               <Button
                 variant="ghost"
                 size="sm"
@@ -130,19 +147,26 @@ const FilePreviewModal = ({ file, isOpen, onClose }) => {
 
         {/* Content */}
         <div className="p-4 max-h-[calc(90vh-60px)] overflow-auto">
-          {isImage && dataUrl ? (
+          {isImage && imageDataUrl ? (
             <img 
-              src={dataUrl} 
+              src={imageDataUrl} 
               alt={file.name}
               className="max-w-full max-h-[80vh] object-contain mx-auto rounded-lg"
             />
-          ) : isPdf && dataUrl ? (
+          ) : isPdf ? (
             <div className="flex flex-col items-center gap-4">
-              <iframe
-                src={dataUrl}
-                title={file.name}
-                className="w-full h-[70vh] min-w-[600px] rounded-lg border border-[#3f3f3f]"
-              />
+              {pdfDataUrl ? (
+                <iframe
+                  src={pdfDataUrl}
+                  title={file.name}
+                  className="w-full h-[70vh] min-w-[600px] rounded-lg border border-[#3f3f3f] bg-white"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+                  <FileText className="w-16 h-16 mb-4 opacity-50" />
+                  <p>PDF-Daten nicht verfügbar für Inline-Vorschau</p>
+                </div>
+              )}
               <p className="text-sm text-gray-400">
                 PDF wird nicht angezeigt? 
                 <button 
