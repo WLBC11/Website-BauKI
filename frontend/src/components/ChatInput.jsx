@@ -95,47 +95,78 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
   // Clean up on unmount
   useEffect(() => {
     return () => {
-      if (filePreview) {
-        URL.revokeObjectURL(filePreview);
-      }
+      Object.values(filePreviews).forEach(url => URL.revokeObjectURL(url));
       if (recordingTimerRef.current) {
         clearInterval(recordingTimerRef.current);
       }
     };
-  }, [filePreview]);
+  }, [filePreviews]);
 
   const handleFileSelect = (e) => {
-    const file = e.target.files?.[0];
+    const files = Array.from(e.target.files || []);
     setFileError(null);
     
-    if (!file) return;
+    if (!files.length) return;
     
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      setFileError('Nur Bilder (JPEG, PNG, GIF, WebP) und PDF-Dateien erlaubt');
+    // Check total file count
+    const totalFiles = selectedFiles.length + files.length;
+    if (totalFiles > MAX_FILES) {
+      setFileError(`Maximal ${MAX_FILES} Dateien erlaubt. Sie haben bereits ${selectedFiles.length} ausgewählt.`);
       return;
     }
     
-    if (file.size > MAX_FILE_SIZE) {
-      setFileError(`Datei zu groß. Maximum: ${MAX_FILE_SIZE / (1024 * 1024)} MB`);
-      return;
+    const newFiles = [];
+    const newPreviews = {};
+    
+    for (const file of files) {
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        setFileError('Nur Bilder (JPEG, PNG, GIF, WebP) und PDF-Dateien erlaubt');
+        return;
+      }
+      
+      if (file.size > MAX_FILE_SIZE) {
+        setFileError(`Datei "${file.name}" zu groß. Maximum: ${MAX_FILE_SIZE / (1024 * 1024)} MB`);
+        return;
+      }
+      
+      newFiles.push(file);
+      
+      if (file.type.startsWith('image/')) {
+        const previewUrl = URL.createObjectURL(file);
+        newPreviews[file.name + file.size] = previewUrl;
+      }
     }
     
-    setSelectedFile(file);
+    setSelectedFiles(prev => [...prev, ...newFiles]);
+    setFilePreviews(prev => ({ ...prev, ...newPreviews }));
     
-    if (file.type.startsWith('image/')) {
-      const previewUrl = URL.createObjectURL(file);
-      setFilePreview(previewUrl);
-    } else {
-      setFilePreview(null);
+    // Reset input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
-  const handleRemoveFile = () => {
-    if (filePreview) {
-      URL.revokeObjectURL(filePreview);
+  const handleRemoveFile = (index) => {
+    const fileToRemove = selectedFiles[index];
+    const fileKey = fileToRemove.name + fileToRemove.size;
+    
+    if (filePreviews[fileKey]) {
+      URL.revokeObjectURL(filePreviews[fileKey]);
+      setFilePreviews(prev => {
+        const newPreviews = { ...prev };
+        delete newPreviews[fileKey];
+        return newPreviews;
+      });
     }
-    setSelectedFile(null);
-    setFilePreview(null);
+    
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+    setFileError(null);
+  };
+
+  const clearAllFiles = () => {
+    Object.values(filePreviews).forEach(url => URL.revokeObjectURL(url));
+    setSelectedFiles([]);
+    setFilePreviews({});
     setFileError(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
