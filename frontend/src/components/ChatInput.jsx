@@ -232,7 +232,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
     };
   }, [filePreviews]);
 
-  const handleFileSelect = (e) => {
+  const handleFileSelect = async (e) => {
     const files = Array.from(e.target.files || []);
     setFileError(null);
     
@@ -261,9 +261,17 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
       
       newFiles.push(file);
       
+      // Generate preview for images
       if (file.type.startsWith('image/')) {
         const previewUrl = URL.createObjectURL(file);
         newPreviews[file.name + file.size] = previewUrl;
+      }
+      // Generate thumbnail for PDFs
+      else if (file.type === 'application/pdf') {
+        const pdfThumbnail = await generatePdfThumbnail(file);
+        if (pdfThumbnail) {
+          newPreviews[file.name + file.size] = pdfThumbnail;
+        }
       }
     }
     
