@@ -2,6 +2,10 @@ import React, { createContext, useContext, useState, useCallback, useEffect, use
 import { models } from '../data/mockData';
 import { useAuth } from './AuthContext';
 import axios from 'axios';
+import * as pdfjsLib from 'pdfjs-dist';
+
+// Set up PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -9,6 +13,32 @@ const API = `${BACKEND_URL}/api`;
 // Image compression settings
 const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2 MB target size
 const MAX_IMAGE_DIMENSION = 2048; // Max width/height
+
+// Generate PDF thumbnail from file
+const generatePdfThumbnail = async (file) => {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const page = await pdf.getPage(1);
+    
+    const viewport = page.getViewport({ scale: 0.5 });
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    
+    await page.render({
+      canvasContext: context,
+      viewport: viewport
+    }).promise;
+    
+    return canvas.toDataURL('image/png');
+  } catch (error) {
+    console.error('Error generating PDF thumbnail:', error);
+    return null;
+  }
+};
 
 // Compress image using canvas
 const compressImage = (file) => {
