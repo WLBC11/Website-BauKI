@@ -359,12 +359,22 @@ const ChatMessage = ({ message, isLast }) => {
                   {message.files && message.files.length > 0 && (
                     <div className={`flex flex-wrap gap-2 ${message.files.length > 1 ? 'mb-3' : ''}`}>
                       {message.files.map((file, index) => (
-                        <FileAttachment key={`${file.name}-${index}`} file={file} compact={message.files.length > 1} />
+                        <FileAttachment 
+                          key={`${file.name}-${index}`} 
+                          file={file} 
+                          compact={message.files.length > 1}
+                          onClick={() => setPreviewFile(file)}
+                        />
                       ))}
                     </div>
                   )}
                   {/* Backwards compatibility for single file */}
-                  {message.file && !message.files && <FileAttachment file={message.file} />}
+                  {message.file && !message.files && (
+                    <FileAttachment 
+                      file={message.file}
+                      onClick={() => setPreviewFile(message.file)}
+                    />
+                  )}
                   {/* Only show text if there is content */}
                   {message.content && (
                     <p className="whitespace-pre-wrap break-words text-base">{message.content}</p>
