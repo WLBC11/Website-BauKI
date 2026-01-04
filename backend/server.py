@@ -677,6 +677,10 @@ async def send_chat_with_files(
         for f in processed_files:
             logger.info(f"File: {f['name']}, Type: {f['fileType']}, Size: {f['size']} bytes")
         
+        # Log payload keys being sent to N8N
+        payload_keys = [k for k in payload.keys() if k not in ['files']]  # Exclude files array from log
+        logger.info(f"Payload keys being sent: {payload_keys}")
+        
         # Call N8N webhook with longer timeout for file uploads
         response = await http_client.post(
             N8N_WEBHOOK_URL,
