@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChatContext } from '../context/ChatContext';
 import { useAuth } from '../context/AuthContext';
-import { Send, Square, HelpCircle, Paperclip, X, FileText, Image as ImageIcon, Mic, MicOff } from 'lucide-react';
+import { Send, Square, HelpCircle, Paperclip, X, FileText, Image as ImageIcon, Mic, MicOff, ZoomIn, ExternalLink } from 'lucide-react';
 import { Button } from './ui/button';
 import {
   DropdownMenu,
@@ -29,6 +29,104 @@ const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25 MB
 const MAX_FILES = 5; // Maximum 5 files
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'];
 
+// File Preview Modal Component for ChatInput
+const FilePreviewModal = ({ file, previewUrl, isOpen, onClose }) => {
+  // Handle escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !file) return null;
+
+  const isImage = file.type?.startsWith('image/');
+  const isPdf = file.type === 'application/pdf';
+  const dataUrl = previewUrl || (isPdf ? URL.createObjectURL(file) : null);
+
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) onClose();
+  };
+
+  const openInNewTab = () => {
+    const url = URL.createObjectURL(file);
+    window.open(url, '_blank');
+  };
+
+  return (
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={handleBackdropClick}
+    >
+      <div className="relative max-w-[90vw] max-h-[90vh] bg-[#1f1f1f] rounded-xl shadow-2xl overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3 bg-[#2f2f2f] border-b border-[#3f3f3f]">
+          <div className="flex items-center gap-3 min-w-0">
+            {isImage ? (
+              <ImageIcon className="w-5 h-5 text-blue-400 flex-shrink-0" />
+            ) : (
+              <FileText className="w-5 h-5 text-red-400 flex-shrink-0" />
+            )}
+            <span className="text-sm text-gray-200 truncate max-w-[300px]">{file.name}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            {isPdf && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={openInNewTab}
+                className="text-gray-400 hover:text-white hover:bg-[#3f3f3f]"
+                title="In neuem Tab öffnen"
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Öffnen
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="h-8 w-8 text-gray-400 hover:text-white hover:bg-[#3f3f3f]"
+            >
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
+        </div>
+        <div className="p-4 max-h-[calc(90vh-60px)] overflow-auto">
+          {isImage && previewUrl ? (
+            <img 
+              src={previewUrl} 
+              alt={file.name}
+              className="max-w-full max-h-[80vh] object-contain mx-auto rounded-lg"
+            />
+          ) : isPdf ? (
+            <div className="flex flex-col items-center gap-4">
+              <iframe
+                src={dataUrl}
+                title={file.name}
+                className="w-full h-[70vh] min-w-[600px] rounded-lg border border-[#3f3f3f]"
+              />
+              <p className="text-sm text-gray-400">
+                PDF wird nicht angezeigt? 
+                <button onClick={openInNewTab} className="ml-2 text-blue-400 hover:underline">
+                  In neuem Tab öffnen
+                </button>
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-12 text-gray-400">
+              <FileText className="w-16 h-16 mb-4 opacity-50" />
+              <p>Vorschau nicht verfügbar</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
   const [message, setMessage] = useState('');
   const [feedbackOpen, setFeedbackOpen] = useState(false);
@@ -37,6 +135,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
   const [fileError, setFileError] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
+  const [previewModalFile, setPreviewModalFile] = useState(null);
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
   const mediaRecorderRef = useRef(null);
