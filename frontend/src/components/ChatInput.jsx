@@ -501,7 +501,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                     }`}
                     type="button"
                     onClick={toggleRecording}
-                    disabled={isLoading || selectedFile}
+                    disabled={isLoading || selectedFiles.length > 0}
                     title={isRecording ? "Aufnahme stoppen" : "Sprachnachricht aufnehmen"}
                   >
                     {isRecording ? (
