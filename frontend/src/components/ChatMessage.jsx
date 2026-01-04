@@ -254,6 +254,7 @@ const FileAttachment = ({ file, compact = false, onClick }) => {
 
 const ChatMessage = ({ message, isLast }) => {
   const [copied, setCopied] = useState(false);
+  const [previewFile, setPreviewFile] = useState(null);
   const { user } = useAuth();
   const { isTyping, setIsTyping } = useChatContext();
   const isUser = message.role === 'user';
