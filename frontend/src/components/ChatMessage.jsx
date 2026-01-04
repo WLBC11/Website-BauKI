@@ -428,6 +428,13 @@ const ChatMessage = ({ message, isLast }) => {
           </div>
         </div>
       </div>
+
+      {/* File Preview Modal */}
+      <FilePreviewModal
+        file={previewFile}
+        isOpen={!!previewFile}
+        onClose={() => setPreviewFile(null)}
+      />
     </div>
   );
 };
