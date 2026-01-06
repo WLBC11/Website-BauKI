@@ -95,16 +95,6 @@ const FilePreviewModal = ({ file, isOpen, onClose }) => {
     }
   };
 
-  // Open PDF in new tab
-  const openInNewTab = () => {
-    if (pdfDataUrl) {
-      window.open(pdfDataUrl, '_blank');
-    } else if (file.data && isPdf) {
-      const url = `data:application/pdf;base64,${file.data}`;
-      window.open(url, '_blank');
-    }
-  };
-
   return (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
@@ -122,18 +112,6 @@ const FilePreviewModal = ({ file, isOpen, onClose }) => {
             <span className="text-sm text-gray-200 truncate max-w-[300px]">{file.name}</span>
           </div>
           <div className="flex items-center gap-2">
-            {isPdf && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={openInNewTab}
-                className="text-gray-400 hover:text-white hover:bg-[#3f3f3f]"
-                title="In neuem Tab öffnen"
-              >
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Öffnen
-              </Button>
-            )}
             <Button
               variant="ghost"
               size="icon"
@@ -153,29 +131,13 @@ const FilePreviewModal = ({ file, isOpen, onClose }) => {
               alt={file.name}
               className="max-w-full max-h-[80vh] object-contain mx-auto rounded-lg"
             />
-          ) : isPdf ? (
-            <div className="flex flex-col items-center gap-4">
-              {pdfDataUrl ? (
-                <iframe
-                  src={pdfDataUrl}
-                  title={file.name}
-                  className="w-full h-[70vh] min-w-[600px] rounded-lg border border-[#3f3f3f] bg-white"
-                />
-              ) : (
-                <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-                  <FileText className="w-16 h-16 mb-4 opacity-50" />
-                  <p>PDF-Daten nicht verfügbar für Inline-Vorschau</p>
-                </div>
-              )}
-              <p className="text-sm text-gray-400">
-                PDF wird nicht angezeigt? 
-                <button 
-                  onClick={openInNewTab}
-                  className="ml-2 text-blue-400 hover:underline"
-                >
-                  In neuem Tab öffnen
-                </button>
-              </p>
+          ) : isPdf && pdfDataUrl ? (
+            <div className="flex flex-col items-center w-full">
+              <iframe
+                src={pdfDataUrl}
+                title={file.name}
+                className="w-full h-[70vh] min-w-[600px] rounded-lg border border-[#3f3f3f] bg-white"
+              />
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-12 text-gray-400">
