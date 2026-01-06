@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Copy, Check, FileText, Image as ImageIcon, Mic, X, ZoomIn, ExternalLink } from 'lucide-react';
+import { Copy, Check, FileText, Image as ImageIcon, Mic, X, ZoomIn } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuth } from '../context/AuthContext';
 import { useChatContext } from '../context/ChatContext';
