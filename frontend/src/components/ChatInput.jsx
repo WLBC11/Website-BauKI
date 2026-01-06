@@ -113,18 +113,6 @@ const FilePreviewModal = ({ file, previewUrl, isOpen, onClose }) => {
             <span className="text-sm text-gray-200 truncate max-w-[300px]">{file.name}</span>
           </div>
           <div className="flex items-center gap-2">
-            {isPdf && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={openInNewTab}
-                className="text-gray-400 hover:text-white hover:bg-[#3f3f3f]"
-                title="In neuem Tab öffnen"
-              >
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Öffnen
-              </Button>
-            )}
             <Button
               variant="ghost"
               size="icon"
@@ -143,18 +131,12 @@ const FilePreviewModal = ({ file, previewUrl, isOpen, onClose }) => {
               className="max-w-full max-h-[80vh] object-contain mx-auto rounded-lg"
             />
           ) : isPdf && pdfObjectUrl ? (
-            <div className="flex flex-col items-center gap-4 w-full">
+            <div className="flex flex-col items-center w-full">
               <iframe
                 src={pdfObjectUrl}
                 title={file.name}
                 className="w-full h-[70vh] min-w-[600px] rounded-lg border border-[#3f3f3f] bg-white"
               />
-              <p className="text-sm text-gray-400">
-                PDF wird nicht angezeigt? 
-                <button onClick={openInNewTab} className="ml-2 text-blue-400 hover:underline">
-                  In neuem Tab öffnen
-                </button>
-              </p>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-12 text-gray-400">
