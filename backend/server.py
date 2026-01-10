@@ -633,8 +633,7 @@ async def send_chat_with_files(
         else:
             ai_instruction = ""
         
-        # Build payload - always include first file as "file" for backwards compatibility
-        # Additional files as file2, file3, etc.
+        # Build payload with files as array for easy looping in N8N
         payload = {
             "message": message,
             "hasMessage": bool(message.strip()),
@@ -643,34 +642,15 @@ async def send_chat_with_files(
             "conversationId": conv_id,
             "bundesland": user_bundesland,
             "fileCount": len(processed_files),
-            # Always include first file as "file"
-            "file": {
-                "name": processed_files[0]["name"],
-                "type": processed_files[0]["type"],
-                "fileType": processed_files[0]["fileType"],
-                "data": processed_files[0]["data"],
-                "size": processed_files[0]["size"]
-            }
-        }
-        
-        # Add additional files as file2, file3, file4, file5
-        for i, f in enumerate(processed_files[1:], start=2):
-            payload[f"file{i}"] = {
+            # All files in a single array for easy iteration in N8N
+            "files": [{
                 "name": f["name"],
                 "type": f["type"],
                 "fileType": f["fileType"],
                 "data": f["data"],
                 "size": f["size"]
-            }
-        
-        # Also include files array for N8N workflows that support it
-        payload["files"] = [{
-            "name": f["name"],
-            "type": f["type"],
-            "fileType": f["fileType"],
-            "data": f["data"],
-            "size": f["size"]
-        } for f in processed_files]
+            } for f in processed_files]
+        }
         
         log_message = message[:50] if message else f"({len(processed_files)} Dateien)"
         logger.info(f"Sending {len(processed_files)} file(s) to N8N webhook: {log_message}...")
