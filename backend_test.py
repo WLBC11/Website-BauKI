@@ -11,7 +11,7 @@ import uuid
 from datetime import datetime
 
 # Get backend URL from frontend .env
-BACKEND_URL = "https://multifile-upload.preview.emergentagent.com"
+BACKEND_URL = "https://rich-media-chat.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 class BackendTester:
