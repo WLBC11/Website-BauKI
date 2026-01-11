@@ -633,39 +633,42 @@ async def send_chat_with_files(
         else:
             ai_instruction = ""
         
-        # Build payload with files as array for easy looping in N8N
-        payload = {
+        # Build multipart/form-data for N8N with binary files
+        # Text fields as form data
+        form_data = {
             "message": message,
-            "hasMessage": bool(message.strip()),
+            "hasMessage": str(bool(message.strip())).lower(),
             "aiInstruction": ai_instruction,
             "sessionId": sess_id,
             "conversationId": conv_id,
-            "bundesland": user_bundesland,
-            "fileCount": len(processed_files),
-            # All files in a single array for easy iteration in N8N
-            "files": [{
-                "name": f["name"],
-                "type": f["type"],
-                "fileType": f["fileType"],
-                "data": f["data"],
-                "size": f["size"]
-            } for f in processed_files]
+            "bundesland": user_bundesland or "",
+            "fileCount": str(len(processed_files))
         }
         
+        # Binary files for N8N $binary access
+        # Format: (filename, content_bytes, content_type)
+        files_for_upload = []
+        for i, f in enumerate(processed_files):
+            file_key = f"file{i+1}" if i > 0 else "file"
+            # Decode base64 back to bytes for binary upload
+            file_bytes = base64.b64decode(f["data"])
+            files_for_upload.append(
+                (file_key, (f["name"], file_bytes, f["type"]))
+            )
+        
         log_message = message[:50] if message else f"({len(processed_files)} Dateien)"
-        logger.info(f"Sending {len(processed_files)} file(s) to N8N webhook: {log_message}...")
+        logger.info(f"Sending {len(processed_files)} file(s) as binary to N8N webhook: {log_message}...")
         for f in processed_files:
             logger.info(f"File: {f['name']}, Type: {f['fileType']}, Size: {f['size']} bytes")
         
-        # Log payload structure (files array with metadata, without base64 data)
-        logger.info(f"Payload keys: {list(payload.keys())}")
-        logger.info(f"Files array contains {len(payload['files'])} items: {[f['name'] for f in payload['files']]}")
+        logger.info(f"Form data keys: {list(form_data.keys())}")
+        logger.info(f"Binary files: {[f[0] for f in files_for_upload]}")
         
-        # Call N8N webhook with longer timeout for file uploads
+        # Call N8N webhook with multipart/form-data (binary files)
         response = await http_client.post(
             N8N_WEBHOOK_URL,
-            json=payload,
-            headers={"Content-Type": "application/json"},
+            data=form_data,
+            files=files_for_upload,
             timeout=180.0  # Extended timeout for multiple file processing
         )
         
