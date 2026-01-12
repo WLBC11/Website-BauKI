@@ -363,6 +363,27 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
     }
   };
 
+  const cancelRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      // Remove the onstop handler to prevent sending
+      mediaRecorderRef.current.onstop = () => {
+        // Just stop the tracks without sending
+        const stream = mediaRecorderRef.current.stream;
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+        }
+      };
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      if (recordingTimerRef.current) {
+        clearInterval(recordingTimerRef.current);
+        recordingTimerRef.current = null;
+      }
+      setRecordingTime(0);
+      audioChunksRef.current = [];
+    }
+  };
+
   const toggleRecording = () => {
     if (isRecording) {
       stopRecording();
