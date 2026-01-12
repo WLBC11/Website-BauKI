@@ -488,7 +488,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="text-green-400 hover:text-green-300 hover:bg-green-500/20"
+                      className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/20"
                       onClick={stopRecording}
                       data-testid="stop-send-recording-btn"
                     >

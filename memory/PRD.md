@@ -1,90 +1,88 @@
-# Chat Application - Product Requirements Document
+# BauKI - Product Requirements Document
 
 ## Original Problem Statement
-Build a full-stack chat application with N8N integration for AI responses, supporting file uploads (images, PDFs, audio), user authentication, and conversation management.
+BauKI ist eine Full-Stack Chat-Anwendung für Baurecht-Beratung mit KI-Unterstützung. Die App ermöglicht Benutzern, Fragen zu Bauvorschriften zu stellen, Dateien (Bilder, PDFs) hochzuladen, und Sprachnachrichten zu senden.
 
-## User Personas
-- **End Users**: German-speaking users seeking AI chat assistance
-- **Administrators**: App owners monitoring usage and feedback
+**Benutzersprache:** Deutsch
 
-## Core Requirements
-1. Real-time chat with AI via N8N webhook
-2. Multi-file upload support (images, PDFs, audio)
-3. User authentication (register, login, password reset)
-4. Conversation history management
-5. Admin dashboard with statistics
+## Core Features (Implemented)
+- [x] Chat-Interface mit KI-Antworten
+- [x] Datei-Upload (Bilder, PDFs) mit Vorschau
+- [x] Multi-File Upload zu N8N Webhook (multipart/form-data)
+- [x] Sprachnachrichten-Aufnahme und Senden
+- [x] PDF-Thumbnail-Generierung
+- [x] Benutzer-Authentifizierung
+- [x] Chat-Verlauf (für angemeldete Benutzer)
+
+## Recent Changes (January 2025)
+
+### 2025-01-12
+- **Bug Fix:** Audio-Aufnahme Abbrechen-Button
+  - Problem: Abbrechen-Button sendete Nachricht statt zu löschen
+  - Lösung: Separate `cancelRecording()` Funktion implementiert
+  - Zwei Buttons im Recording-Indicator: "Abbrechen" und "Senden"
+  - Mikrofon-Button bricht während Aufnahme beim Klicken ab
+
+### Previous Session
+- N8N Multi-File Upload auf `multipart/form-data` umgestellt
+- Status: Verifizierung durch Benutzer ausstehend
 
 ## Architecture
-- **Frontend**: React with Shadcn/UI, pdf.js for PDF thumbnails
-- **Backend**: FastAPI with MongoDB
-- **Integration**: N8N webhook for AI responses
 
-## What's Been Implemented
-
-### December 2024 - January 2025
-- ✅ Core chat functionality with N8N integration
-- ✅ User authentication (JWT-based)
-- ✅ Multi-file upload support
-- ✅ PDF thumbnail generation (client-side with pdf.js)
-- ✅ Clickable file previews in modal
-- ✅ Admin dashboard with statistics
-- ✅ Feedback system
-- ✅ Bundesland selection for users
-
-### January 10, 2025
-- ✅ **File Upload Endpoint Refactored**: Changed from separate keys (`file`, `file2`, `file3`) to single `files` array for easier N8N looping
-
-## Current Payload Structure (N8N)
-```json
-{
-  "message": "...",
-  "hasMessage": true/false,
-  "aiInstruction": "...",
-  "sessionId": "...",
-  "conversationId": "...",
-  "bundesland": "...",
-  "fileCount": 3,
-  "files": [
-    { "name": "...", "type": "...", "fileType": "...", "data": "base64...", "size": 123 }
-  ]
-}
+```
+/app
+├── backend/
+│   └── server.py         # FastAPI Backend (monolithisch)
+└── frontend/
+    └── src/
+        ├── components/
+        │   ├── ChatInput.jsx    # Chat-Eingabe mit Datei-Upload, Sprachaufnahme
+        │   └── ChatMessage.jsx  # Nachrichtenanzeige
+        └── context/
+            └── ChatContext.js   # Chat-State-Management
 ```
 
-## Pending Verification
-- [ ] "Open in new tab" link removal in ChatMessage.jsx modal
+## 3rd Party Integrations
+- **N8N Webhook:** Datei-Verarbeitung (multipart/form-data)
+- **pdf.js:** Client-side PDF-Vorschau
 
-## Prioritized Backlog
+## Pending Issues (P0-P3)
 
 ### P0 - Critical
-- Deployment blockers (unresolved from previous sessions)
+- N8N Binary File Upload Verifizierung (Benutzer-Test ausstehend)
 
-### P1 - High Priority
-- Freemium system with daily message limits
-- Timer countdown when limit reached
-- Stripe integration for subscriptions
-- PayPal integration (optional)
+### P2 - Medium
+- "Open in new tab" Link-Entfernung verifizieren
+- N8N Datenstruktur für Multi-File Uploads optimieren
 
-### P2 - Medium Priority
-- "Stop Generation" button bugs
-- Rename/Delete modal verification
-- Chat persistence in sidebar
+### P3 - Low
+- LaTeX-Implementierung testen
+- Deployment Blocker beheben
+- Rename/Delete Modal Funktionalität
+- "Stop Generation" Feature Bugs
+- Chat-Persistenz/Sidebar-Issue
 
-### P3 - Low Priority
-- PWA conversion
-- Export chat feature
-- Backend refactoring (split server.py)
+## Upcoming Tasks
+
+### P0 - Subscription System
+1. Stripe Integration (Karte/Bank/Apple Pay)
+2. PayPal Subscriptions API
+3. Backend-Logik für tägliche Nutzungslimits
+4. Frontend UI für Limits und Countdown-Timer
+
+### P1 - PWA Conversion
+- App auf Mobilgeräten installierbar machen
+
+### P2 - Export Chat Feature
+- Chat-Verlauf exportieren
+
+### P3 - Backend Refactoring
+- `server.py` aufteilen in Routes, Services, Models
 
 ## Technical Debt
-- Full PDF base64 stored in React state (memory-intensive)
-- ChatMessage.jsx and ChatInput.jsx contain modal logic that could be extracted
-- server.py is large and could be split into modules
-
-## Key Files
-- `/app/backend/server.py` - Main backend
-- `/app/frontend/src/context/ChatContext.js` - Chat state management
-- `/app/frontend/src/components/ChatInput.jsx` - Message input with file upload
-- `/app/frontend/src/components/ChatMessage.jsx` - Message display with file previews
+- `server.py` ist monolithisch (alle Backend-Logik in einer Datei)
+- Memory-intensive Base64 PDF-Speicherung in ChatContext.js
 
 ## Credentials
-- Register new users via UI
-- Admin emails: weiss.jonathan1107@outlook.com, lukas.lust11@gmail.com
+- Stripe Test-Keys: Verfügbar in Pod-Environment
+- PayPal Sandbox: Benötigt Benutzer-Credentials
