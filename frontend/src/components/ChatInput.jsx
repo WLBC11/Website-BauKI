@@ -688,12 +688,13 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                         : 'bg-[#3f3f3f] hover:bg-[#4f4f4f]'
                     }`}
                     type="button"
-                    onClick={toggleRecording}
+                    onClick={isRecording ? cancelRecording : startRecording}
                     disabled={isLoading || selectedFiles.length > 0}
-                    title={isRecording ? "Aufnahme stoppen" : "Sprachnachricht aufnehmen"}
+                    title={isRecording ? "Aufnahme abbrechen" : "Sprachnachricht aufnehmen"}
+                    data-testid="voice-recording-btn"
                   >
                     {isRecording ? (
-                      <MicOff className="h-5 w-5 text-red-400" />
+                      <X className="h-5 w-5 text-red-400" />
                     ) : (
                       <Mic className="h-5 w-5 text-gray-300 transition-all duration-200 opacity-70 hover:opacity-100" />
                     )}
