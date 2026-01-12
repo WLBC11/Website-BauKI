@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChatContext } from '../context/ChatContext';
 import { useAuth } from '../context/AuthContext';
-import { Send, Square, HelpCircle, Paperclip, X, FileText, Image as ImageIcon, Mic, MicOff, ZoomIn } from 'lucide-react';
+import { Send, Square, HelpCircle, Paperclip, X, FileText, Image as ImageIcon, Mic, ZoomIn } from 'lucide-react';
 import { Button } from './ui/button';
 import {
   DropdownMenu,
