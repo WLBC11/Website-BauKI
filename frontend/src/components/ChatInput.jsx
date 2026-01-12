@@ -472,15 +472,30 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                   <span className="text-red-400 text-sm font-medium">
                     Aufnahme läuft... {formatRecordingTime(recordingTime)}
                   </span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="ml-auto text-red-400 hover:text-red-300 hover:bg-red-500/20"
-                    onClick={stopRecording}
-                  >
-                    Stoppen & Senden
-                  </Button>
+                  <div className="ml-auto flex items-center gap-2">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="text-gray-400 hover:text-white hover:bg-[#3f3f3f]"
+                      onClick={cancelRecording}
+                      data-testid="cancel-recording-btn"
+                    >
+                      <X className="h-4 w-4 mr-1" />
+                      Abbrechen
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="text-green-400 hover:text-green-300 hover:bg-green-500/20"
+                      onClick={stopRecording}
+                      data-testid="stop-send-recording-btn"
+                    >
+                      <Send className="h-4 w-4 mr-1" />
+                      Senden
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}
