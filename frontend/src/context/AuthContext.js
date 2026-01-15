@@ -1,7 +1,25 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+// Auto-detect backend URL based on current hostname
+const getBackendUrl = () => {
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    // If on preview domain, use preview backend
+    if (hostname.includes('preview.emergentagent.com')) {
+      return 'https://app-connector-17.preview.emergentagent.com';
+    }
+    // If on localhost, use preview backend
+    if (hostname === 'localhost') {
+      return 'https://app-connector-17.preview.emergentagent.com';
+    }
+    // For production domain, use same domain with https
+    return `https://${hostname}`;
+  }
+  return process.env.REACT_APP_BACKEND_URL || 'https://baumate.emergent.host';
+};
+
+const BACKEND_URL = getBackendUrl();
 const API = `${BACKEND_URL}/api`;
 
 const AuthContext = createContext();
