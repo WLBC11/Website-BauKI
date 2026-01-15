@@ -19,10 +19,10 @@ const getBackendUrl = () => {
     if (hostname === 'localhost') {
       return 'https://app-connector-17.preview.emergentagent.com';
     }
-    // For production domain (baumate.emergent.host), use same domain with https
+    // For production domain bauki.eu, use https://bauki.eu
     return `https://${hostname}`;
   }
-  return process.env.REACT_APP_BACKEND_URL || 'https://baumate.emergent.host';
+  return process.env.REACT_APP_BACKEND_URL || 'https://bauki.eu';
 };
 
 const BACKEND_URL = getBackendUrl();
