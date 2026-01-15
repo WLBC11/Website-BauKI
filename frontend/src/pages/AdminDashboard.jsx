@@ -9,9 +9,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { subDays, startOfDay, endOfDay, format, eachDayOfInterval } from 'date-fns';
 import { de } from 'date-fns/locale';
+import { BACKEND_URL, API_URL } from '../utils/backendUrl';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API = API_URL;
 
 // Admin email list
 const ADMIN_EMAILS = [
