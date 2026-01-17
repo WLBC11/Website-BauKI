@@ -328,3 +328,75 @@ The extended JSON parsing feature is **FULLY IMPLEMENTED AND WORKING CORRECTLY**
 Die Bildbearbeitungsfunktion ist **VOLLSTÄNDIG IMPLEMENTIERT UND FUNKTIONIERT KORREKT**. Alle Test-Szenarien wurden erfolgreich bestanden. Das Toggle-Button Verhalten, die Validierung und die Backend-Integration arbeiten wie spezifiziert.
 
 **RECOMMENDATION**: Feature ist produktionsreif und erfordert keine weiteren Änderungen.
+
+---
+
+## Action Field Behavior Testing - COMPLETED ❌
+
+### Test Scenario
+- **Objective**: Test updated action field behavior for image editing functionality
+- **Expected**: FormData should contain correct action values based on toggle state
+- **Test Requirements**: Verify action = "analyze_image" (toggle OFF) vs action = "edit_image" (toggle ON)
+
+### Test Results Summary
+❌ **Critical Issue: Backend Action Field Not Implemented**
+- Frontend toggle functionality: ✅ WORKING (toggle changes visual state)
+- Frontend action field logic: ✅ WORKING (code correctly determines action value)
+- **Backend action field processing**: ❌ NOT IMPLEMENTED (action field ignored)
+- Network request monitoring: ✅ WORKING (requests captured successfully)
+
+### Detailed Test Results
+1. ✅ **Frontend Toggle Behavior** - Toggle button changes visual state correctly
+2. ✅ **Frontend Code Analysis** - ChatInput.jsx correctly determines action value:
+   - Lines 431-433: `const actionMode = hasImageFiles ? (isImageEditMode ? 'edit_image' : 'analyze_image') : undefined;`
+   - Line 456: Action passed to `sendMessageWithFiles(messageToSend, filesToSend, actionMode)`
+3. ✅ **Frontend FormData Logic** - ChatContext.js correctly appends action to FormData:
+   - Lines 574-577: `if (action) { formData.append('action', action); }`
+4. ❌ **Backend Processing** - server.py does NOT handle action field in `/api/chat/upload` endpoint
+5. ❌ **N8N Integration** - Action field not forwarded to N8N webhook
+
+### Code Analysis Results
+**Frontend Implementation** ✅ **CORRECTLY IMPLEMENTED**
+- **ChatInput.jsx (lines 431-433)**: Action determination logic is correct
+- **ChatContext.js (lines 574-577)**: FormData append logic is correct
+- Toggle state management works as expected
+
+**Backend Implementation** ❌ **MISSING ACTION FIELD HANDLING**
+- **server.py (lines 544-550)**: `/api/chat/upload` endpoint parameters:
+  - ✅ message: str = Form("")
+  - ✅ conversation_id: Optional[str] = Form(None)
+  - ✅ session_id: Optional[str] = Form(None)
+  - ✅ files: List[UploadFile] = File(...)
+  - ❌ **MISSING**: action: Optional[str] = Form(None)
+- **server.py (lines 636-646)**: Form data sent to N8N does not include action field
+- Backend logs show no action field processing
+
+### Root Cause Analysis
+**Missing Backend Implementation:**
+- The `/api/chat/upload` endpoint needs to accept an `action` parameter
+- The action field needs to be included in the form data sent to N8N webhook
+- N8N workflow needs to handle the action field to differentiate between image analysis and editing
+
+### Testing Status
+- [x] **Frontend Toggle Functionality** - **WORKING**
+- [x] **Frontend Action Logic** - **WORKING**
+- [x] **Frontend FormData Creation** - **WORKING**
+- [ ] **Backend Action Parameter** - **NOT IMPLEMENTED**
+- [ ] **Backend Action Processing** - **NOT IMPLEMENTED**
+- [ ] **N8N Action Integration** - **NOT IMPLEMENTED**
+
+### Code Quality Assessment
+**✅ FRONTEND IMPLEMENTATION IS COMPLETE AND CORRECT**
+- All frontend logic for action field behavior is properly implemented
+- Toggle state management works correctly
+- FormData creation includes action field when appropriate
+
+**❌ BACKEND IMPLEMENTATION IS INCOMPLETE**
+- Action field parameter missing from endpoint definition
+- Action field not forwarded to N8N webhook
+- No differentiation between image analysis and editing modes
+
+### Conclusion
+The action field behavior is **CORRECTLY IMPLEMENTED IN FRONTEND** but **NOT IMPLEMENTED IN BACKEND**. The frontend correctly determines and sends the action field based on toggle state, but the backend ignores this field completely. The feature cannot work as intended until the backend is updated to handle the action parameter.
+
+**RECOMMENDATION**: Update backend `/api/chat/upload` endpoint to accept and process the action field before the feature can be considered complete.
