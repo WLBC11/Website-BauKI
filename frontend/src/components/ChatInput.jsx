@@ -427,7 +427,10 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
     // Store values before clearing
     const messageToSend = message.trim();
     const filesToSend = [...selectedFiles];
-    const actionMode = isImageEditMode && hasImageFiles ? 'edit_image' : undefined;
+    // Bestimme action basierend auf Toggle-Status und ob Bilder vorhanden sind
+    const actionMode = hasImageFiles 
+      ? (isImageEditMode ? 'edit_image' : 'analyze_image')
+      : undefined;
 
     // Clear input state IMMEDIATELY before sending
     setMessage('');
