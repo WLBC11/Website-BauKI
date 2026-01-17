@@ -646,6 +646,10 @@ async def send_chat_with_files(
             "fileCount": str(len(processed_files))
         }
         
+        # Add action field if provided (for image editing)
+        if action:
+            form_data["action"] = action
+        
         # Binary files for N8N $binary access
         # Format: (filename, content_bytes, content_type)
         files_for_upload = []
