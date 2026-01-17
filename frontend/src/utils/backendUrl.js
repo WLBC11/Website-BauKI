@@ -4,11 +4,11 @@ export const getBackendUrl = () => {
     const hostname = window.location.hostname;
     // If on preview domain, use preview backend
     if (hostname.includes('preview.emergentagent.com')) {
-      return 'https://app-connector-17.preview.emergentagent.com';
+      return 'https://bauki-updates.preview.emergentagent.com';
     }
     // If on localhost, use preview backend
     if (hostname === 'localhost') {
-      return 'https://app-connector-17.preview.emergentagent.com';
+      return 'https://bauki-updates.preview.emergentagent.com';
     }
     // For production domain bauki.eu, use https://bauki.eu
     return `https://${hostname}`;
