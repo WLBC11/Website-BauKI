@@ -54,17 +54,35 @@ formData.append('message', 'Mach das Bild heller');
 formData.append('files', imageFile);
 formData.append('conversation_id', conversationId);
 formData.append('session_id', sessionId);
-formData.append('action', 'edit_image'); // NUR wenn Toggle aktiv
+formData.append('action', 'edit_image');     // Toggle AN
+// ODER
+formData.append('action', 'analyze_image');  // Toggle AUS
 ```
 
 ### Backend-Verhalten
 ```python
+# Backend empfängt action Parameter und leitet an N8N weiter
 if action == "edit_image":
-    # Bildbearbeitungs-KI wird verwendet
+    # Bildbearbeitungs-KI wird in N8N verwendet
     # Nutzer-Text wird als Anweisung interpretiert
-else:
-    # Standard-Bildanalyse
+elif action == "analyze_image":
+    # Standard-Bildanalyse in N8N
     # Bild wird beschrieben
+else:
+    # Kein action Feld (z.B. bei PDFs)
+    # Standard-Verarbeitung
+```
+
+### N8N Integration
+Das `action` Feld ist in N8N verfügbar unter:
+```javascript
+// N8N Expression
+{{ $json.body.action }}
+
+// Mögliche Werte:
+// - "analyze_image" (Bildanalyse)
+// - "edit_image" (Bildbearbeitung)
+// - undefined (kein Bild oder PDF)
 ```
 
 ## Implementierung
