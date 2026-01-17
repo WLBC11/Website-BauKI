@@ -190,3 +190,75 @@
 The modal-based rename and delete functionality is **PROPERLY IMPLEMENTED** in the codebase, but **CANNOT BE TESTED** due to a critical issue with chat persistence in the sidebar. The underlying modal components are correctly built and would function as expected once the chat sidebar display issue is resolved.
 
 **RECOMMENDATION**: Fix the chat persistence/sidebar display issue before re-testing modal functionality.
+
+---
+
+## Extended JSON Parsing Feature Testing - COMPLETED ✅
+
+### Feature Description
+- Enhanced JSON parsing for bot messages supporting multiple formats
+- `safeParseN8n()` function in `/app/frontend/src/context/ChatContext.js` (lines 147-165)
+- Supports standard JSON, Python-style dicts, text responses, and fallback handling
+- ChatMessage.jsx renders images with download buttons and text with markdown support
+
+### Test Scenarios Verified
+1. **Standard JSON Format (Double-Quotes):** `{"type": "image", "imageUrl": "url"}` ✅
+2. **Python-Style Dict Format (Single-Quotes):** `{'type': 'image', 'imageUrl': 'url'}` ✅
+3. **Text Response with Type:** `{"type": "text", "text": "message"}` ✅
+4. **Text Response without Type:** `{"text": "message"}` ✅
+5. **Plain Text (no JSON):** `"Simple text"` ✅
+6. **Invalid Format:** `{broken json` ✅
+
+### Test Results Summary
+✅ **All JSON Parsing Scenarios Working Correctly**
+- safeParseN8n function: ✅ WORKING (all 6 test cases pass)
+- Standard JSON parsing: ✅ WORKING (proper JSON.parse)
+- Python-style dict conversion: ✅ WORKING (single quotes → double quotes)
+- Text message rendering: ✅ WORKING (markdown support, typing animation)
+- Image message rendering: ✅ WORKING (img tag with download button)
+- Fallback handling: ✅ WORKING (invalid JSON → plain text)
+
+### Detailed Test Results
+1. ✅ **Standard JSON Format** - Correctly parsed and rendered
+2. ✅ **Python-Style Dict Format** - Successfully converted single quotes to double quotes
+3. ✅ **Text with Type Field** - Properly rendered as text with markdown support
+4. ✅ **Text without Type Field** - Fallback to text rendering works correctly
+5. ✅ **Plain Text Response** - Rendered as normal text without JSON parsing
+6. ✅ **Invalid JSON Format** - Gracefully falls back to plain text rendering
+
+### Implementation Analysis
+**safeParseN8n Function (ChatContext.js:147-165):**
+- ✅ Line 148: Returns object if already parsed
+- ✅ Line 150: Converts non-strings to text objects  
+- ✅ Line 153: Tries standard JSON.parse first
+- ✅ Lines 156-163: Converts Python-style single quotes to double quotes
+- ✅ Line 165: Fallback to plain text object
+
+**ChatMessage Component (ChatMessage.jsx):**
+- ✅ Lines 426-452: Image rendering with `<img>` tag and download button
+- ✅ Lines 455-484: Text rendering with ReactMarkdown support
+- ✅ Line 380: Typing animation only for text messages (not images)
+- ✅ Lines 356-371: Proper message type detection and content extraction
+
+### Code Quality Assessment
+**✅ IMPLEMENTATION IS ROBUST AND COMPLETE**
+- All required JSON formats are supported
+- Proper error handling and fallback mechanisms
+- Clean separation of concerns between parsing and rendering
+- No console errors or JavaScript issues detected
+- Follows React best practices for state management
+
+### Testing Status
+- [x] **safeParseN8n Function Testing** - **WORKING** (all 6 scenarios pass)
+- [x] **Standard JSON Format** - **WORKING**
+- [x] **Python-Style Dict Format** - **WORKING** 
+- [x] **Text Response Formats** - **WORKING**
+- [x] **Plain Text Handling** - **WORKING**
+- [x] **Invalid JSON Fallback** - **WORKING**
+- [x] **Image Rendering** - **WORKING** (img tag with download button)
+- [x] **Text Rendering** - **WORKING** (markdown support, typing animation)
+
+### Conclusion
+The extended JSON parsing feature is **FULLY IMPLEMENTED AND WORKING CORRECTLY**. All test scenarios pass, and the implementation handles edge cases gracefully. The `safeParseN8n()` function successfully converts various JSON formats, and the ChatMessage component properly renders both images and text based on the parsed message type.
+
+**RECOMMENDATION**: Feature is production-ready and requires no further changes.
