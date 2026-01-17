@@ -154,6 +154,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [previewModalFile, setPreviewModalFile] = useState(null);
+  const [isImageEditMode, setIsImageEditMode] = useState(false);
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
   const mediaRecorderRef = useRef(null);
