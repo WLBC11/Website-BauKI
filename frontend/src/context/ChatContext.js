@@ -570,6 +570,11 @@ export const ChatProvider = ({ children }) => {
         formData.append('conversation_id', conversationId);
       }
       formData.append('session_id', conversationId);
+      
+      // Add action field for image editing
+      if (action) {
+        formData.append('action', action);
+      }
 
       const response = await axios.post(`${API}/chat/upload`, formData, {
         headers: {
