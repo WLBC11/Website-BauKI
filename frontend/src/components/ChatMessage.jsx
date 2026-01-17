@@ -424,11 +424,12 @@ const ChatMessage = ({ message, isLast }) => {
                 <>
                   {/* Show image if message type is image */}
                   {message.type === 'image' && message.imageUrl && (
-                    <div className="mb-4">
+                    <div className="mb-4 group relative inline-block">
                       <img 
                         src={message.imageUrl} 
                         alt="KI generiertes Bild" 
                         className="max-w-full h-auto rounded-lg shadow-lg cursor-pointer hover:opacity-90 transition-opacity"
+                        style={{ maxWidth: '512px' }}
                         onClick={() => setPreviewFile({ 
                           name: 'Generiertes Bild', 
                           type: 'image/png', 
@@ -436,6 +437,17 @@ const ChatMessage = ({ message, isLast }) => {
                           preview: message.imageUrl 
                         })}
                       />
+                      {/* Download Button */}
+                      <a
+                        href={message.imageUrl}
+                        download="ki-generiertes-bild.png"
+                        className="absolute top-2 right-2 p-2 bg-black/60 hover:bg-black/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        title="Bild herunterladen"
+                      >
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                      </a>
                     </div>
                   )}
                   
