@@ -346,28 +346,28 @@ export const ChatProvider = ({ children }) => {
         signal: abortControllerRef.current.signal
       });
 
-      // Parse N8N response - es kann JSON sein
-      let responseData = response.data.response;
+      // Parse N8N response using safe parser
+      const parsed = safeParseN8n(response.data.response);
+      
       let messageType = 'text';
-      let messageContent = responseData;
+      let messageContent = '';
       let imageUrl = null;
 
-      // Prüfe ob die Antwort ein JSON-String ist
-      if (typeof responseData === 'string' && responseData.trim().startsWith('{')) {
-        try {
-          const parsed = JSON.parse(responseData);
-          if (parsed.type === 'image' && parsed.imageUrl) {
-            messageType = 'image';
-            imageUrl = parsed.imageUrl;
-            messageContent = ''; // Kein Text, nur Bild
-          } else if (parsed.type === 'text' && parsed.text) {
-            messageType = 'text';
-            messageContent = parsed.text;
-          }
-        } catch (e) {
-          // Kein gültiges JSON, zeige als normalen Text
-          console.log('Response ist kein JSON, zeige als Text');
-        }
+      if (parsed.type === 'image' && parsed.imageUrl) {
+        messageType = 'image';
+        imageUrl = parsed.imageUrl;
+        messageContent = ''; // Kein Text, nur Bild
+      } else if (parsed.type === 'text' && parsed.text) {
+        messageType = 'text';
+        messageContent = parsed.text;
+      } else if (parsed.text) {
+        // Fallback: nur text property ohne type
+        messageType = 'text';
+        messageContent = parsed.text;
+      } else {
+        // Fallback: zeige als normalen Text
+        messageType = 'text';
+        messageContent = String(response.data.response);
       }
 
       const aiMessage = {
@@ -580,28 +580,28 @@ export const ChatProvider = ({ children }) => {
         timeout: 180000 // 3 minute timeout for multiple file uploads
       });
 
-      // Parse N8N response - es kann JSON sein
-      let responseData = response.data.response;
+      // Parse N8N response using safe parser
+      const parsed = safeParseN8n(response.data.response);
+      
       let messageType = 'text';
-      let messageContent = responseData;
+      let messageContent = '';
       let imageUrl = null;
 
-      // Prüfe ob die Antwort ein JSON-String ist
-      if (typeof responseData === 'string' && responseData.trim().startsWith('{')) {
-        try {
-          const parsed = JSON.parse(responseData);
-          if (parsed.type === 'image' && parsed.imageUrl) {
-            messageType = 'image';
-            imageUrl = parsed.imageUrl;
-            messageContent = ''; // Kein Text, nur Bild
-          } else if (parsed.type === 'text' && parsed.text) {
-            messageType = 'text';
-            messageContent = parsed.text;
-          }
-        } catch (e) {
-          // Kein gültiges JSON, zeige als normalen Text
-          console.log('Response ist kein JSON, zeige als Text');
-        }
+      if (parsed.type === 'image' && parsed.imageUrl) {
+        messageType = 'image';
+        imageUrl = parsed.imageUrl;
+        messageContent = ''; // Kein Text, nur Bild
+      } else if (parsed.type === 'text' && parsed.text) {
+        messageType = 'text';
+        messageContent = parsed.text;
+      } else if (parsed.text) {
+        // Fallback: nur text property ohne type
+        messageType = 'text';
+        messageContent = parsed.text;
+      } else {
+        // Fallback: zeige als normalen Text
+        messageType = 'text';
+        messageContent = String(response.data.response);
       }
 
       const aiMessage = {
