@@ -143,6 +143,28 @@ const compressImage = (file) => {
   });
 };
 
+// Safe N8N response parser - handles JSON, Python-style dicts, and plain text
+function safeParseN8n(payload) {
+  if (payload && typeof payload === "object") return payload;
+
+  if (typeof payload !== "string") return { type: "text", text: String(payload ?? "") };
+
+  // try proper JSON
+  try { return JSON.parse(payload); } catch {}
+
+  // try python-style dict -> json
+  try {
+    const fixed = payload
+      .replace(/\\n/g, "\\n")
+      .replace(/\\'/g, "__SQUOTE__")
+      .replace(/'/g, '"')
+      .replace(/__SQUOTE__/g, "'");
+    return JSON.parse(fixed);
+  } catch {}
+
+  return { type: "text", text: payload };
+}
+
 const ChatContext = createContext();
 
 export const useChatContext = () => {
