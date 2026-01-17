@@ -129,16 +129,19 @@ await sendMessageWithFiles(messageToSend, filesToSend, actionMode);
 
 ### Test-Szenarien
 1. ✅ Toggle-Button wechselt zwischen grau und grün
-2. ✅ Standardmodus: Bild ohne Text sendbar
-3. ✅ Bildbearbeitung: Fehlermeldung bei fehlendem Text
-4. ✅ Bildbearbeitung: Erfolgreicher Versand mit Text
-5. ✅ Backend erhält `action="edit_image"` korrekt
-6. ✅ Tooltip zeigt korrekten Status
+2. ✅ Bildanalyse-Modus: `action = "analyze_image"` wird gesendet
+3. ✅ Bildbearbeitung-Modus: `action = "edit_image"` wird gesendet
+4. ✅ Validierung: Fehlermeldung bei fehlendem Text im Edit-Modus
+5. ✅ Backend empfängt `action` Parameter korrekt
+6. ✅ Backend leitet `action` an N8N weiter
+7. ✅ Tooltip zeigt korrekten Status
+8. ✅ Keine Regression bei Text-only oder PDF-Uploads
 
 ### Getestet am
 - Datum: 2025-01-17
-- Status: ✅ Alle Tests bestanden
-- Test-Report: `/app/test_result.md` (Zeile 268-330)
+- Status: ✅ Alle Tests bestanden (End-to-End)
+- Test-Report: `/app/test_result.md` (Zeile 334-408)
+- Backend-Logs bestätigen: `Action field added to form_data: analyze_image` und `edit_image`
 
 ## Nutzer-Workflow
 
