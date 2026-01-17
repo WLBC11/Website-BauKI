@@ -546,6 +546,7 @@ async def send_chat_with_files(
     message: str = Form(""),
     conversation_id: Optional[str] = Form(None),
     session_id: Optional[str] = Form(None),
+    action: Optional[str] = Form(None),
     files: List[UploadFile] = File(...),
     user: Optional[dict] = Depends(get_current_user)
 ):
