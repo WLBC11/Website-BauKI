@@ -460,7 +460,7 @@ export const ChatProvider = ({ children }) => {
   }, [activeConversationId, currentGuestConversation, isAuthenticated]);
 
   // Send message with files (images or PDFs) - supports multiple files
-  const sendMessageWithFiles = useCallback(async (content, files) => {
+  const sendMessageWithFiles = useCallback(async (content, files, action) => {
     if (!files || files.length === 0) return;
 
     // Process all files (compress images if needed)
