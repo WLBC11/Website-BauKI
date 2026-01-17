@@ -621,7 +621,10 @@ export const ChatProvider = ({ children }) => {
         shouldAnimate: messageType === 'text' // Nur Text animieren, nicht Bilder
       };
 
-      setIsTyping(true);
+      // Set typing state for animation - NUR bei Text-Nachrichten
+      if (messageType === 'text') {
+        setIsTyping(true);
+      }
 
       const realConversationId = response.data.conversation_id;
       const realTitle = response.data.title;
