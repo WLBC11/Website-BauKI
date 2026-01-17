@@ -399,6 +399,11 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const toggleImageEditMode = () => {
+    setIsImageEditMode(prev => !prev);
+    setFileError(null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -409,12 +414,20 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
 
     const hasMessage = message.trim();
     const hasFiles = selectedFiles.length > 0;
+    const hasImageFiles = selectedFiles.some(f => f.type?.startsWith('image/'));
 
     if (!hasMessage && !hasFiles) return;
+
+    // Validierung: Wenn Bildbearbeitung aktiviert ist, MUSS Text vorhanden sein
+    if (isImageEditMode && hasImageFiles && !hasMessage) {
+      setFileError('Bitte beschreiben Sie, wie das Bild bearbeitet werden soll');
+      return;
+    }
 
     // Store values before clearing
     const messageToSend = message.trim();
     const filesToSend = [...selectedFiles];
+    const actionMode = isImageEditMode && hasImageFiles ? 'edit_image' : undefined;
 
     // Clear input state IMMEDIATELY before sending
     setMessage('');
@@ -437,7 +450,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
 
     // Now send the message with the stored values
     if (filesToSend.length > 0) {
-      await sendMessageWithFiles(messageToSend, filesToSend);
+      await sendMessageWithFiles(messageToSend, filesToSend, actionMode);
     } else {
       sendMessage(messageToSend);
     }
