@@ -558,12 +558,38 @@ export const ChatProvider = ({ children }) => {
         timeout: 180000 // 3 minute timeout for multiple file uploads
       });
 
+      // Parse N8N response - es kann JSON sein
+      let responseData = response.data.response;
+      let messageType = 'text';
+      let messageContent = responseData;
+      let imageUrl = null;
+
+      // Prüfe ob die Antwort ein JSON-String ist
+      if (typeof responseData === 'string' && responseData.trim().startsWith('{')) {
+        try {
+          const parsed = JSON.parse(responseData);
+          if (parsed.type === 'image' && parsed.imageUrl) {
+            messageType = 'image';
+            imageUrl = parsed.imageUrl;
+            messageContent = ''; // Kein Text, nur Bild
+          } else if (parsed.type === 'text' && parsed.text) {
+            messageType = 'text';
+            messageContent = parsed.text;
+          }
+        } catch (e) {
+          // Kein gültiges JSON, zeige als normalen Text
+          console.log('Response ist kein JSON, zeige als Text');
+        }
+      }
+
       const aiMessage = {
         id: response.data.message_id,
         role: 'assistant',
-        content: response.data.response,
+        content: messageContent,
+        type: messageType,
+        imageUrl: imageUrl,
         timestamp: new Date(),
-        shouldAnimate: true
+        shouldAnimate: messageType === 'text' // Nur Text animieren, nicht Bilder
       };
 
       setIsTyping(true);
