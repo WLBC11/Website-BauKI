@@ -285,7 +285,7 @@ export const ChatProvider = ({ children }) => {
     }
   }, [isLoading, isTyping]);
 
-  const sendMessage = useCallback(async (content) => {
+  const sendMessage = useCallback(async (content, action) => {
     if (!content.trim()) return;
 
     const userMessage = {
