@@ -1093,7 +1093,7 @@ async def image_proxy(url: str):
     try:
         # Fetch image from external URL
         logger.info(f"Fetching image from URL: {url}")
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with httpx.AsyncClient(timeout=30.0, follow_redirects=True) as client:
             response = await client.get(url)
             response.raise_for_status()
             
