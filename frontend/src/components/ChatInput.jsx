@@ -513,10 +513,22 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
     // Store values before clearing
     const messageToSend = message.trim();
     const filesToSend = [...selectedFiles];
-    // Bestimme action basierend auf Toggle-Status und ob Bilder vorhanden sind
-    const actionMode = hasImageFiles 
-      ? (isImageEditMode ? 'edit_image' : 'analyze_image')
-      : undefined;
+    
+    // Bestimme action basierend auf Toggle-Status und ob Bilder/Dateien vorhanden sind
+    let actionMode;
+    if (hasFiles) {
+      // Mit Datei-Upload
+      actionMode = hasImageFiles 
+        ? (isImageEditMode ? 'edit_image' : 'analyze_image')
+        : undefined;
+    } else {
+      // Nur Text (kein Upload)
+      if (isTextToImageMode) {
+        actionMode = 'text_to_image';
+      } else {
+        actionMode = 'text';
+      }
+    }
 
     // Clear input state IMMEDIATELY before sending
     setMessage('');
