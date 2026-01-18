@@ -629,8 +629,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                       Bildbearbeitung aktiviert
                     </p>
                     <p className="text-green-300/80 text-xs leading-relaxed">
-                      Sie können jetzt ein <strong>Bild hochladen</strong> und beschreiben, wie es bearbeitet werden soll (z.B. "Mach das Bild heller", "Entferne den Hintergrund"). 
-                      Oder Sie können ein <strong>neues Bild erstellen lassen</strong>, indem Sie beschreiben, was generiert werden soll.
+                      Sie können jetzt ein <strong>Bild hochladen</strong> und beschreiben, wie es bearbeitet werden soll (z.B. "Mach das Bild heller", "Entferne den Hintergrund").
                     </p>
                   </div>
                   <Button
