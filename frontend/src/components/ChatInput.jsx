@@ -553,7 +553,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
     if (filesToSend.length > 0) {
       await sendMessageWithFiles(messageToSend, filesToSend, actionMode);
     } else {
-      sendMessage(messageToSend);
+      sendMessage(messageToSend, actionMode);
     }
   };
 
