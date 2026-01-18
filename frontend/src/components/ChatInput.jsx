@@ -402,8 +402,34 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
   };
 
   const toggleImageEditMode = () => {
-    setIsImageEditMode(prev => !prev);
+    const newMode = !isImageEditMode;
+    setIsImageEditMode(newMode);
     setFileError(null);
+    
+    // Zeige Info-Banner wenn Bildbearbeitung aktiviert wird
+    if (newMode) {
+      setShowEditModeInfo(true);
+      
+      // Auto-hide nach 8 Sekunden
+      if (infoTimeoutRef.current) {
+        clearTimeout(infoTimeoutRef.current);
+      }
+      infoTimeoutRef.current = setTimeout(() => {
+        setShowEditModeInfo(false);
+      }, 8000);
+    } else {
+      setShowEditModeInfo(false);
+      if (infoTimeoutRef.current) {
+        clearTimeout(infoTimeoutRef.current);
+      }
+    }
+  };
+
+  const closeInfoBanner = () => {
+    setShowEditModeInfo(false);
+    if (infoTimeoutRef.current) {
+      clearTimeout(infoTimeoutRef.current);
+    }
   };
 
   const handleSubmit = async (e) => {
