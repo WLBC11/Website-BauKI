@@ -821,6 +821,27 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                     }`} />
                   </Button>
 
+                  {/* Text-to-Image Mode Toggle */}
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className={`h-8 w-8 rounded-full flex-shrink-0 transition-all duration-200 ${
+                      isTextToImageMode 
+                        ? 'bg-blue-500/30 hover:bg-blue-500/40' 
+                        : 'bg-[#3f3f3f] hover:bg-[#4f4f4f]'
+                    }`}
+                    type="button"
+                    onClick={toggleTextToImageMode}
+                    disabled={isLoading || isRecording}
+                    title={isTextToImageMode ? "Bild generieren aktiv - Text wird zu Bild" : "Bild generieren aktivieren"}
+                  >
+                    <Sparkles className={`h-5 w-5 transition-all duration-200 ${
+                      isTextToImageMode 
+                        ? 'text-blue-400 opacity-100' 
+                        : 'text-gray-300 opacity-70 hover:opacity-100'
+                    }`} />
+                  </Button>
+
                   {/* Database Info Button */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
