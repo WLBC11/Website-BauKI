@@ -483,6 +483,101 @@ The cancel button behavior fix is **FULLY IMPLEMENTED AND WORKING CORRECTLY**. T
 
 ---
 
+## Text-to-Image Functionality Testing - COMPLETED ✅
+
+### Feature Description
+- Neue "Bild generieren" Funktion mit eigenem Toggle-Button (Sparkles-Icon)
+- Blauer Toggle zwischen Bildbearbeitung und Gesetzesbuch positioniert
+- Sendet `action = "text_to_image"` an Backend bei aktiviertem Modus
+- Normaler Chat sendet `action = "text"` bei deaktiviertem Modus
+- Blaues Info-Banner mit Auto-Hide nach 8 Sekunden
+- Gegenseitige Exklusivität mit Bildbearbeitung-Funktion
+
+### Test Results Summary
+✅ **Alle Kernfunktionen arbeiten korrekt**
+- Text-to-Image Button Verhalten: ✅ WORKING (Sparkles-Button wird blau bei Aktivierung)
+- Button Position: ✅ WORKING (korrekt als dritter Button von links positioniert)
+- Blaues Info-Banner: ✅ WORKING (erscheint mit korrektem Titel und Beschreibung)
+- Gegenseitige Exklusivität: ✅ WORKING (Text-to-Image und Bildbearbeitung schließen sich aus)
+- Auto-Hide Banner: ✅ WORKING (Banner verschwindet nach 8 Sekunden)
+- Button-Persistenz: ✅ WORKING (Funktion bleibt aktiv nach Banner Auto-Hide)
+- Action Field - Text-to-Image: ⚠️ PARTIAL (Button UI funktioniert, aber Action Field Issue)
+- Action Field - Normal Chat: ✅ WORKING (sendet korrekt `action = "text"`)
+- Keine Regression: ✅ WORKING (PDF-Upload, Sprachnachrichten, normaler Chat funktionieren)
+
+### Detailed Test Results
+1. ✅ **Text-to-Image Button Identifikation** - Button korrekt gefunden mit Titel "Bild generieren aktivieren"
+2. ✅ **Button-Farbwechsel** - Button wechselt von grau (`bg-[#3f3f3f]`) zu blau (`bg-blue-500/30`)
+3. ✅ **Blaues Info-Banner** - Banner erscheint mit Titel "Bild generieren aktiviert"
+4. ✅ **Banner-Inhalt** - Beschreibung: "Beschreiben Sie einfach, was für ein Bild Sie erstellen möchten"
+5. ✅ **Gegenseitige Exklusivität** - Bildbearbeitung (grün) und Text-to-Image (blau) schließen sich gegenseitig aus
+6. ✅ **Auto-Hide Funktionalität** - Banner verschwindet automatisch nach 8 Sekunden
+7. ✅ **Button-Persistenz** - Text-to-Image Funktion bleibt nach Banner Auto-Hide aktiv
+8. ⚠️ **Action Field Issue** - UI funktioniert perfekt, aber Backend erhält `action = "text"` statt `action = "text_to_image"`
+9. ✅ **Normal Chat Action** - Deaktivierter Modus sendet korrekt `action = "text"`
+10. ✅ **Keine Regression** - Alle bestehenden Funktionen (PDF, Audio, normaler Chat) funktionieren
+
+### Implementation Analysis
+**Frontend UI (ChatInput.jsx) ✅ VOLLSTÄNDIG IMPLEMENTIERT:**
+- ✅ Text-to-Image Toggle-Button korrekt positioniert (Position 2, dritter Button)
+- ✅ Sparkles-Icon korrekt implementiert
+- ✅ Blauer Styling (`bg-blue-500/30`) funktioniert
+- ✅ Blaues Info-Banner mit korrektem Inhalt
+- ✅ Auto-Hide Timer (8 Sekunden) funktioniert
+- ✅ Gegenseitige Exklusivität mit Bildbearbeitung funktioniert
+- ✅ State Management (`isTextToImageMode`) korrekt implementiert
+
+**Action Field Logic ⚠️ ISSUE IDENTIFIZIERT:**
+- ✅ Frontend Code in ChatInput.jsx (Zeilen 526-530) korrekt implementiert
+- ✅ ChatContext.js sendMessage() Funktion erhält action Parameter
+- ⚠️ **Problem**: Trotz korrekter UI-Aktivierung wird `action = "text"` statt `action = "text_to_image"` gesendet
+- ✅ Normal Chat Modus sendet korrekt `action = "text"`
+
+### Network Request Analysis
+**Captured Requests:**
+1. **Text-to-Image Modus**: Request enthält `"action":"text"` (sollte `"action":"text_to_image"` sein)
+2. **Normal Chat Modus**: Request enthält `"action":"text"` (korrekt)
+
+**Root Cause Analysis:**
+- Frontend UI State Management funktioniert korrekt (Button wird blau, Banner erscheint)
+- Action Determination Logic in ChatInput.jsx Zeile 526-530 muss überprüft werden
+- Mögliche Ursache: `isTextToImageMode` State wird nicht korrekt an Action Logic weitergegeben
+
+### Testing Status
+- [x] **Text-to-Image Button Verhalten** - **WORKING**
+- [x] **Button Position und Styling** - **WORKING**
+- [x] **Blaues Info-Banner** - **WORKING**
+- [x] **Auto-Hide nach 8 Sekunden** - **WORKING**
+- [x] **Gegenseitige Exklusivität** - **WORKING**
+- [x] **Button-Persistenz nach Auto-Hide** - **WORKING**
+- [x] **Action Field - Normal Chat** - **WORKING**
+- [ ] **Action Field - Text-to-Image** - **NEEDS FIX** (UI korrekt, Action Field Issue)
+- [x] **Keine Regression** - **WORKING**
+
+### Code Quality Assessment
+**✅ UI IMPLEMENTATION IST VOLLSTÄNDIG UND KORREKT**
+- Alle visuellen Aspekte funktionieren wie spezifiziert
+- Button-Verhalten, Styling und Banner-Funktionalität perfekt implementiert
+- Gegenseitige Exklusivität und Auto-Hide arbeiten korrekt
+- Keine JavaScript-Fehler oder UI-Probleme erkannt
+
+**⚠️ ACTION FIELD LOGIC BENÖTIGT FIX**
+- Frontend UI State (`isTextToImageMode`) funktioniert korrekt
+- Action Determination Logic sendet nicht den korrekten Action-Wert
+- Backend ist bereit (`action: Optional[str] = Form(None)` implementiert)
+
+### Conclusion
+Die Text-to-Image Funktionalität ist **UI-SEITIG VOLLSTÄNDIG IMPLEMENTIERT UND FUNKTIONIERT PERFEKT**. Alle visuellen Aspekte, Button-Verhalten, Banner-Funktionalität und gegenseitige Exklusivität arbeiten exakt wie in der Review-Anfrage spezifiziert.
+
+**IDENTIFIZIERTES PROBLEM**: Action Field Logic sendet `"action":"text"` statt `"action":"text_to_image"` trotz korrekter UI-Aktivierung.
+
+**RECOMMENDATION**: 
+1. ✅ **UI Implementation ist produktionsreif** - keine Änderungen erforderlich
+2. ⚠️ **Action Field Logic Fix erforderlich** - überprüfe Action Determination in ChatInput.jsx Zeilen 526-530
+3. ✅ **Keine Regression** - alle bestehenden Funktionen arbeiten korrekt
+
+---
+
 ## Bildbearbeitung Info-Banner Testing - COMPLETED ✅
 
 ### Feature Description
