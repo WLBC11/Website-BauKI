@@ -156,12 +156,15 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
   const [previewModalFile, setPreviewModalFile] = useState(null);
   const [isImageEditMode, setIsImageEditMode] = useState(false);
   const [showEditModeInfo, setShowEditModeInfo] = useState(false);
+  const [isTextToImageMode, setIsTextToImageMode] = useState(false);
+  const [showTextToImageInfo, setShowTextToImageInfo] = useState(false);
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const recordingTimerRef = useRef(null);
   const infoTimeoutRef = useRef(null);
+  const textToImageTimeoutRef = useRef(null);
   const { sendMessage, sendMessageWithFiles, sendVoiceMessage, isLoading, stopGeneration, isTyping } = useChatContext();
   const { isAuthenticated } = useAuth();
 
