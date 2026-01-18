@@ -236,6 +236,9 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
       if (infoTimeoutRef.current) {
         clearTimeout(infoTimeoutRef.current);
       }
+      if (textToImageTimeoutRef.current) {
+        clearTimeout(textToImageTimeoutRef.current);
+      }
     };
   }, [filePreviews]);
 
