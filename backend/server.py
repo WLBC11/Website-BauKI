@@ -409,6 +409,10 @@ async def send_chat_message(request: ChatRequest, user: Optional[dict] = Depends
             "bundesland": user_bundesland
         }
         
+        # Add action field if provided
+        if request.action:
+            payload["action"] = request.action
+        
         logger.info(f"Sending message to N8N webhook: {request.message[:50]}...")
         
         # Call N8N webhook
