@@ -646,6 +646,35 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
               </div>
             )}
 
+            {/* Text-to-Image Info-Banner */}
+            {showTextToImageInfo && isTextToImageMode && !isRecording && (
+              <div className="px-3 md:px-4 pt-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                <div className="flex items-start gap-3 p-3 bg-blue-500/20 border border-blue-500/30 rounded-lg">
+                  <div className="flex-shrink-0 mt-0.5">
+                    <Sparkles className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-blue-400 text-sm font-medium mb-1">
+                      Bild generieren aktiviert
+                    </p>
+                    <p className="text-blue-300/80 text-xs leading-relaxed">
+                      Beschreiben Sie einfach, was für ein Bild Sie erstellen möchten (z.B. "Ein modernes Haus mit Garten", "Ein Sonnenuntergang am Strand"). 
+                      Die KI wird dann ein passendes Bild für Sie generieren.
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 flex-shrink-0 text-blue-400 hover:text-blue-300 hover:bg-blue-500/20"
+                    onClick={closeTextToImageBanner}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+
             {/* File Preview Area */}
             {selectedFiles.length > 0 && !isRecording && (
               <div className="px-3 md:px-4 pt-3">
