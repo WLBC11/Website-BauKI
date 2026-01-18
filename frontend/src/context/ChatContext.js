@@ -338,11 +338,18 @@ export const ChatProvider = ({ children }) => {
     abortControllerRef.current = new AbortController();
     
     try {
-      const response = await axios.post(`${API}/chat`, {
+      const requestData = {
         message: content.trim(),
         conversation_id: isNewConversation ? null : conversationId,
         session_id: conversationId
-      }, {
+      };
+      
+      // Add action field if provided
+      if (action) {
+        requestData.action = action;
+      }
+      
+      const response = await axios.post(`${API}/chat`, requestData, {
         signal: abortControllerRef.current.signal
       });
 
