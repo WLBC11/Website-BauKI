@@ -429,7 +429,7 @@ const ChatMessage = ({ message, isLast }) => {
                         src={message.imageUrl} 
                         alt="KI generiertes Bild" 
                         className="max-w-full h-auto rounded-lg shadow-lg cursor-pointer hover:opacity-90 transition-opacity"
-                        style={{ maxWidth: '512px' }}
+                        style={{ maxWidth: '100%', borderRadius: '8px' }}
                         onClick={() => setPreviewFile({ 
                           name: 'Generiertes Bild', 
                           type: 'image/png', 
@@ -451,8 +451,8 @@ const ChatMessage = ({ message, isLast }) => {
                     </div>
                   )}
                   
-                  {/* Show text content */}
-                  {displayedContent && (
+                  {/* Show text content - NUR wenn kein Bild oder wenn message.content existiert */}
+                  {message.type !== 'image' && displayedContent && (
                     <div className="markdown-body prose prose-invert prose-base max-w-none 
                       prose-headings:text-white prose-headings:font-semibold prose-headings:mt-6 prose-headings:mb-3
                       prose-p:text-gray-200 prose-p:my-3 prose-p:leading-7
