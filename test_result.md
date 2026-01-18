@@ -663,6 +663,114 @@ The Text-to-Image functionality has a **critical disconnect between UI state and
 
 ---
 
+## JSON-Rendering der Bot-Nachrichten im Chat Testing - COMPLETED ✅
+
+### Test Scenario
+- **Objective**: Test JSON rendering of bot messages in chat according to German review request
+- **Test Requirements**: Verify image messages (type: "image"), text messages (type: "text"), fallback for non-JSON, and action mode buttons
+- **Expected Behavior**: Images render as `<img>` tags with download buttons, text renders with markdown, no JSON visible in chat
+
+### Test Results Summary
+✅ **All Core JSON Rendering Functionality Working Correctly**
+- Action mode buttons: ✅ WORKING (Paperclip, Wand2, Sparkles all functional)
+- Image message rendering: ✅ WORKING (proper `<img>` tag rendering with styling)
+- Text message rendering: ✅ WORKING (markdown support, no JSON visible)
+- JSON parsing (safeParseN8n): ✅ WORKING (no console errors, proper parsing)
+- Fallback for non-JSON: ✅ WORKING (plain text displays correctly)
+- Download buttons on images: ✅ WORKING (appear on hover)
+- Action mode toggle behavior: ✅ WORKING (green for edit, blue for generate)
+
+### Detailed Test Results
+1. ✅ **Action Mode Buttons** - All three toggle buttons found and functional:
+   - Paperclip (Bild analysieren): ✅ VISIBLE and clickable
+   - Wand2 (Bildbearbeitung): ✅ VISIBLE, turns green when active, shows green info banner
+   - Sparkles (Bild generieren): ✅ VISIBLE, turns blue when active, shows blue info banner
+
+2. ✅ **JSON Parsing Verification** - safeParseN8n function working correctly:
+   - No JSON text visible in chat messages (properly parsed)
+   - No console parsing errors detected
+   - Handles both standard JSON and Python-style dict formats
+
+3. ✅ **Image Message Rendering** - When bot responds with `{"type": "image", "imageUrl": "url"}`:
+   - Images render as proper `<img>` tags with correct styling
+   - `max-width: 100%` and `border-radius: 8px` applied correctly
+   - Download buttons appear on hover as expected
+   - No JSON string visible in chat
+
+4. ✅ **Text Message Rendering** - When bot responds with `{"type": "text", "text": "content"}`:
+   - Text displays normally with markdown support
+   - No JSON string visible in chat
+   - Proper message structure maintained
+
+5. ✅ **Fallback Behavior** - For non-JSON responses:
+   - Plain text responses display correctly as normal text
+   - No parsing errors or display issues
+
+6. ✅ **Message Structure** - Chat interface properly structured:
+   - User messages show "Du" label
+   - AI messages show BauKI avatar
+   - Copy buttons available on AI messages
+   - Proper message containers and styling
+
+### Implementation Analysis
+**✅ SAFEPARSEN8N FUNCTION (ChatContext.js:147-165) WORKING CORRECTLY**
+- Line 148: Returns object if already parsed ✅
+- Line 150: Converts non-strings to text objects ✅
+- Line 153: Tries standard JSON.parse first ✅
+- Lines 156-163: Converts Python-style single quotes to double quotes ✅
+- Line 165: Fallback to plain text object ✅
+
+**✅ CHATMESSAGE COMPONENT (ChatMessage.jsx) WORKING CORRECTLY**
+- Lines 426-452: Image rendering with `<img>` tag and download button ✅
+- Lines 455-484: Text rendering with ReactMarkdown support ✅
+- Line 380: Typing animation only for text messages (not images) ✅
+- Lines 356-371: Proper message type detection and content extraction ✅
+
+### Testing Status
+- [x] **safeParseN8n Function Testing** - **WORKING** (all scenarios pass)
+- [x] **Image Message Rendering** - **WORKING** (proper img tags with download buttons)
+- [x] **Text Message Rendering** - **WORKING** (markdown support, no JSON visible)
+- [x] **Action Mode Buttons** - **WORKING** (all three buttons functional)
+- [x] **JSON Visibility Check** - **WORKING** (no JSON strings visible in chat)
+- [x] **Fallback for Non-JSON** - **WORKING** (plain text displays correctly)
+- [x] **Console Error Check** - **WORKING** (no parsing errors detected)
+
+### Code Quality Assessment
+**✅ IMPLEMENTATION IS ROBUST AND PRODUCTION-READY**
+- All test scenarios from German review request successfully passed
+- safeParseN8n function handles all required JSON formats correctly
+- ChatMessage component properly renders both images and text based on message type
+- No console errors or JavaScript issues detected
+- Action mode buttons work as specified with proper visual feedback
+- Clean separation of concerns between parsing and rendering
+
+### Browser Testing Evidence
+**Test Environment:**
+- Browser: Chromium (Playwright)
+- Viewport: 1920x1080 (Desktop)
+- URL: https://ai-text2img-chat.preview.emergentagent.com
+- User: Guest mode testing
+
+**Screenshots Captured:**
+- Action buttons functionality verification
+- JSON parsing behavior analysis
+- Message structure validation
+- Final chat state with multiple message types
+
+### Conclusion
+Das JSON-Rendering der Bot-Nachrichten im Chat ist **VOLLSTÄNDIG IMPLEMENTIERT UND FUNKTIONIERT PERFEKT**. Alle Test-Szenarien aus der deutschen Review-Anfrage wurden erfolgreich bestanden:
+
+- ✅ **Bild-Nachrichten (type: "image")**: Rendern als `<img>` Tags mit Download-Buttons, kein JSON sichtbar
+- ✅ **Text-Nachrichten (type: "text")**: Rendern als normaler Text mit Markdown-Unterstützung, kein JSON sichtbar  
+- ✅ **Fallback für nicht-JSON**: Zeigt einfachen Text korrekt an
+- ✅ **Action-Modus-Buttons**: Alle drei Toggle-Buttons (Paperclip, Wand2, Sparkles) funktionieren korrekt
+- ✅ **safeParseN8n Funktion**: Parst alle JSON-Formate korrekt ohne Fehler
+- ✅ **Download-Buttons**: Erscheinen beim Hover über Bilder wie spezifiziert
+
+**RECOMMENDATION**: Feature ist produktionsreif und entspricht exakt den Anforderungen der Review-Anfrage. Keine weiteren Änderungen erforderlich.
+
+---
+
 ## Bildbearbeitung Info-Banner Testing - COMPLETED ✅
 
 ### Feature Description
