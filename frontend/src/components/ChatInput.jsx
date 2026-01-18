@@ -548,6 +548,37 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
               </div>
             )}
 
+            {/* Bildbearbeitung Info-Banner */}
+            {showEditModeInfo && isImageEditMode && !isRecording && (
+              <div className="px-3 md:px-4 pt-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                <div className="flex items-start gap-3 p-3 bg-green-500/20 border border-green-500/30 rounded-lg">
+                  <div className="flex-shrink-0 mt-0.5">
+                    <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-green-400 text-sm font-medium mb-1">
+                      Bildbearbeitung aktiviert
+                    </p>
+                    <p className="text-green-300/80 text-xs leading-relaxed">
+                      Sie können jetzt ein <strong>Bild hochladen</strong> und beschreiben, wie es bearbeitet werden soll (z.B. "Mach das Bild heller", "Entferne den Hintergrund"). 
+                      Oder Sie können ein <strong>neues Bild erstellen lassen</strong>, indem Sie beschreiben, was generiert werden soll.
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 flex-shrink-0 text-green-400 hover:text-green-300 hover:bg-green-500/20"
+                    onClick={closeInfoBanner}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+
             {/* File Preview Area */}
             {selectedFiles.length > 0 && !isRecording && (
               <div className="px-3 md:px-4 pt-3">
