@@ -362,7 +362,8 @@ export const ChatProvider = ({ children }) => {
 
       if (parsed.type === 'image' && parsed.imageUrl) {
         messageType = 'image';
-        imageUrl = parsed.imageUrl;
+        // Route external image URLs through backend proxy to avoid CORS issues
+        imageUrl = `${API}/image-proxy?url=${encodeURIComponent(parsed.imageUrl)}`;
         messageContent = ''; // Kein Text, nur Bild
       } else if (parsed.type === 'text' && parsed.text) {
         messageType = 'text';
@@ -603,7 +604,8 @@ export const ChatProvider = ({ children }) => {
 
       if (parsed.type === 'image' && parsed.imageUrl) {
         messageType = 'image';
-        imageUrl = parsed.imageUrl;
+        // Route external image URLs through backend proxy to avoid CORS issues
+        imageUrl = `${API}/image-proxy?url=${encodeURIComponent(parsed.imageUrl)}`;
         messageContent = ''; // Kein Text, nur Bild
       } else if (parsed.type === 'text' && parsed.text) {
         messageType = 'text';
