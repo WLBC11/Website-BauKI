@@ -230,6 +230,9 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
       if (recordingTimerRef.current) {
         clearInterval(recordingTimerRef.current);
       }
+      if (infoTimeoutRef.current) {
+        clearTimeout(infoTimeoutRef.current);
+      }
     };
   }, [filePreviews]);
 
