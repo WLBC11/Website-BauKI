@@ -578,6 +578,91 @@ Die Text-to-Image Funktionalität ist **UI-SEITIG VOLLSTÄNDIG IMPLEMENTIERT UND
 
 ---
 
+## Text-to-Image Action Field Console Log Monitoring Testing - COMPLETED ⚠️
+
+### Test Scenario
+- **Objective**: Test Text-to-Image Action Field functionality with console log monitoring
+- **Debug Logging**: Console.log added in handleSubmit (line 533) outputting isTextToImageMode, isImageEditMode, hasFiles, actionMode
+- **Test Requirements**: Verify Text-to-Image mode activation, normal chat mode, state persistence, and console debug output
+
+### Test Results Summary
+⚠️ **Critical Issue Identified: Action Field Logic Problem**
+- Text-to-Image Button UI: ✅ WORKING (button toggles correctly, turns blue, title changes)
+- Blue Info Banner: ✅ WORKING (appears with correct content, auto-hides after 8 seconds)
+- Button State Persistence: ✅ WORKING (remains active after banner auto-hide)
+- **Console Debug Output**: ❌ FAILING (shows isTextToImageMode: false even when button is active)
+- **Action Field Logic**: ❌ FAILING (always sends actionMode: "text" instead of "text_to_image")
+- Normal Chat Mode: ✅ WORKING (correctly sends actionMode: "text")
+
+### Detailed Test Results
+1. ✅ **Button Identification** - Found correct "Bild generieren aktivieren" button (Button 8 in input area)
+2. ✅ **Button Toggle Behavior** - Title changes from "Bild generieren aktivieren" to "Bild generieren aktiv - Text wird zu Bild"
+3. ✅ **Visual State Changes** - Button turns blue (bg-blue-500/30) when activated
+4. ✅ **Blue Info Banner** - Appears with title "Bild generieren aktiviert" and correct description
+5. ✅ **Banner Auto-Hide** - Disappears after 8 seconds as expected
+6. ✅ **State Persistence** - Button remains blue and title stays active after banner disappears
+7. ❌ **Console Debug Output Issue** - Debug log shows: `isTextToImageMode: false isImageEditMode: false hasFiles: false actionMode: text`
+8. ❌ **Network Request Issue** - API request contains `"action":"text"` instead of `"action":"text_to_image"`
+9. ✅ **Normal Chat Mode** - Correctly sends `"action":"text"` when Text-to-Image is deactivated
+
+### Root Cause Analysis
+**UI vs Logic Disconnect:**
+- ✅ **Frontend UI State Management**: Button visual state, title changes, and banner functionality work perfectly
+- ❌ **Action Determination Logic**: The `isTextToImageMode` state is not being properly set or read in handleSubmit function
+- ❌ **State Synchronization**: Visual button state (blue, active title) does not match internal React state
+
+**Code Analysis:**
+- **ChatInput.jsx Lines 826-845**: Text-to-Image button UI implementation is correct
+- **ChatInput.jsx Lines 446-477**: `toggleTextToImageMode()` function appears to set state correctly
+- **ChatInput.jsx Lines 526-530**: Action determination logic may not be reading the correct state
+- **Console Debug (Line 533)**: Shows `isTextToImageMode: false` even when button appears active
+
+### Console Log Evidence
+```
+[DEBUG] handleSubmit - isTextToImageMode: false isImageEditMode: false hasFiles: false actionMode: text
+```
+**Expected Output:**
+```
+[DEBUG] handleSubmit - isTextToImageMode: true isImageEditMode: false hasFiles: false actionMode: text_to_image
+```
+
+### Network Request Evidence
+- **Actual**: `{"action":"text","message":"Ein Sonnenuntergang"}`
+- **Expected**: `{"action":"text_to_image","message":"Ein Sonnenuntergang"}`
+
+### Testing Status
+- [x] **Text-to-Image Button UI** - **WORKING**
+- [x] **Button Visual State Changes** - **WORKING**
+- [x] **Blue Info Banner** - **WORKING**
+- [x] **Banner Auto-Hide** - **WORKING**
+- [x] **State Persistence (Visual)** - **WORKING**
+- [ ] **Console Debug Output** - **FAILING** (isTextToImageMode always false)
+- [ ] **Action Field Logic** - **FAILING** (always sends "text" instead of "text_to_image")
+- [x] **Normal Chat Mode** - **WORKING**
+
+### Code Quality Assessment
+**✅ UI IMPLEMENTATION IS PERFECT**
+- All visual aspects work exactly as specified
+- Button behavior, styling, banner functionality, and auto-hide work flawlessly
+- User experience is smooth and intuitive
+
+**❌ STATE MANAGEMENT ISSUE IDENTIFIED**
+- Visual state (button blue, title active) does not synchronize with React state (`isTextToImageMode`)
+- Action determination logic reads incorrect state value
+- Possible causes: state update timing, component re-render issues, or state variable scope
+
+### Conclusion
+The Text-to-Image functionality has a **critical disconnect between UI state and internal React state**. While all visual aspects work perfectly (button turns blue, banner appears, auto-hide functions), the underlying `isTextToImageMode` state variable is not being properly set or read, causing the action field to always send "text" instead of "text_to_image".
+
+**IDENTIFIED PROBLEM**: State synchronization issue between visual button state and React state variable in handleSubmit function.
+
+**RECOMMENDATION**: 
+1. ✅ **UI Implementation is production-ready** - no visual changes needed
+2. ❌ **Critical Fix Required**: Debug state management in `toggleTextToImageMode()` and `handleSubmit()` functions
+3. 🔍 **Investigation Needed**: Check React state updates, component re-renders, and state variable scope in ChatInput.jsx
+
+---
+
 ## Bildbearbeitung Info-Banner Testing - COMPLETED ✅
 
 ### Feature Description
