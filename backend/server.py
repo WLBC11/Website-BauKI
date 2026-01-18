@@ -1134,56 +1134,6 @@ logger = logging.getLogger(__name__)
 
 http_client = None
 
-# Image proxy cache: {url: (image_bytes, content_type, timestamp)}
-image_cache = {}
-CACHE_TTL_SECONDS = 300  # 5 minutes cache
-
-@api_router.get("/image-proxy")
-async def image_proxy(url: str):
-    """
-    Proxy endpoint to fetch external images and serve them directly.
-    This bypasses CORS issues with tempfile.aiquickdraw.com URLs.
-    Includes a 5-minute in-memory cache to reduce redundant requests.
-    """
-    if not url:
-        raise HTTPException(status_code=400, detail="URL parameter is required")
-    
-    # Check cache first
-    current_time = datetime.now(timezone.utc).timestamp()
-    if url in image_cache:
-        cached_data, content_type, timestamp = image_cache[url]
-        # Check if cache is still valid
-        if current_time - timestamp < CACHE_TTL_SECONDS:
-            logger.info(f"Serving cached image for URL: {url}")
-            return Response(content=cached_data, media_type=content_type)
-        else:
-            # Remove expired cache entry
-            del image_cache[url]
-    
-    try:
-        # Fetch image from external URL
-        logger.info(f"Fetching image from URL: {url}")
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            response = await client.get(url)
-            response.raise_for_status()
-            
-            # Get content type, default to image/png if not specified
-            content_type = response.headers.get("content-type", "image/png")
-            image_bytes = response.content
-            
-            # Cache the image
-            image_cache[url] = (image_bytes, content_type, current_time)
-            logger.info(f"Cached image for URL: {url}")
-            
-            return Response(content=image_bytes, media_type=content_type)
-    
-    except httpx.HTTPError as e:
-        logger.error(f"Failed to fetch image from {url}: {e}")
-        raise HTTPException(status_code=502, detail=f"Failed to fetch image: {str(e)}")
-    except Exception as e:
-        logger.error(f"Unexpected error fetching image from {url}: {e}")
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
-
 @app.on_event("startup")
 async def startup_event():
     global http_client
