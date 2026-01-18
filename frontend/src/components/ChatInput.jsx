@@ -412,6 +412,15 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
     setIsImageEditMode(newMode);
     setFileError(null);
     
+    // Deaktiviere Text-to-Image wenn Bildbearbeitung aktiviert wird
+    if (newMode && isTextToImageMode) {
+      setIsTextToImageMode(false);
+      setShowTextToImageInfo(false);
+      if (textToImageTimeoutRef.current) {
+        clearTimeout(textToImageTimeoutRef.current);
+      }
+    }
+    
     // Zeige Info-Banner wenn Bildbearbeitung aktiviert wird
     if (newMode) {
       setShowEditModeInfo(true);
@@ -431,10 +440,50 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
     }
   };
 
+  const toggleTextToImageMode = () => {
+    const newMode = !isTextToImageMode;
+    setIsTextToImageMode(newMode);
+    setFileError(null);
+    
+    // Deaktiviere Bildbearbeitung wenn Text-to-Image aktiviert wird
+    if (newMode && isImageEditMode) {
+      setIsImageEditMode(false);
+      setShowEditModeInfo(false);
+      if (infoTimeoutRef.current) {
+        clearTimeout(infoTimeoutRef.current);
+      }
+    }
+    
+    // Zeige Info-Banner wenn Text-to-Image aktiviert wird
+    if (newMode) {
+      setShowTextToImageInfo(true);
+      
+      // Auto-hide nach 8 Sekunden
+      if (textToImageTimeoutRef.current) {
+        clearTimeout(textToImageTimeoutRef.current);
+      }
+      textToImageTimeoutRef.current = setTimeout(() => {
+        setShowTextToImageInfo(false);
+      }, 8000);
+    } else {
+      setShowTextToImageInfo(false);
+      if (textToImageTimeoutRef.current) {
+        clearTimeout(textToImageTimeoutRef.current);
+      }
+    }
+  };
+
   const closeInfoBanner = () => {
     setShowEditModeInfo(false);
     if (infoTimeoutRef.current) {
       clearTimeout(infoTimeoutRef.current);
+    }
+  };
+
+  const closeTextToImageBanner = () => {
+    setShowTextToImageInfo(false);
+    if (textToImageTimeoutRef.current) {
+      clearTimeout(textToImageTimeoutRef.current);
     }
   };
 
