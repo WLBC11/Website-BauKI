@@ -740,7 +740,7 @@ The Text-to-Image functionality has a **critical disconnect between UI state and
 **Test Environment:**
 - Browser: Chromium (Playwright)
 - Viewport: 1920x1080 (Desktop)
-- URL: https://bauki-updates.preview.emergentagent.com
+- URL: https://ai-text2img-chat.preview.emergentagent.com
 - User: Registered test user
 
 **Screenshots Captured:**
