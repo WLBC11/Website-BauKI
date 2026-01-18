@@ -529,8 +529,6 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
         actionMode = 'text';
       }
     }
-    
-    console.log('[DEBUG] handleSubmit - isTextToImageMode:', isTextToImageMode, 'isImageEditMode:', isImageEditMode, 'hasFiles:', hasFiles, 'actionMode:', actionMode);
 
     // Clear input state IMMEDIATELY before sending
     setMessage('');
