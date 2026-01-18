@@ -167,6 +167,7 @@ class ChatRequest(BaseModel):
     message: str
     conversation_id: Optional[str] = None
     session_id: Optional[str] = None
+    action: Optional[str] = None
 
 class ChatResponse(BaseModel):
     response: str
