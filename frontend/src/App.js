@@ -9,6 +9,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import GlobalDropZone from './components/GlobalDropZone';
 import './App.css';
 import './components/mobile-optimizations.css';
+import './theme.css';
 
 // Wrapper component to access ChatContext for file drop
 const ChatWithDropZone = () => {
