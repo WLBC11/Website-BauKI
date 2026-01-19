@@ -49,21 +49,23 @@ const ChatWithDropZone = () => {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          {/* Admin Dashboard Route */}
-          <Route path="/admin" element={<AdminDashboard />} />
-          
-          {/* Main Chat Route */}
-          <Route path="*" element={
-            <ChatProvider>
-              <ChatWithDropZone />
-            </ChatProvider>
-          } />
-        </Routes>
-      </Router>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            {/* Admin Dashboard Route */}
+            <Route path="/admin" element={<AdminDashboard />} />
+            
+            {/* Main Chat Route */}
+            <Route path="*" element={
+              <ChatProvider>
+                <ChatWithDropZone />
+              </ChatProvider>
+            } />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
