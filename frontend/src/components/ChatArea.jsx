@@ -39,7 +39,7 @@ const ChatArea = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
   // Empty state - new conversation
   if (!activeConversation) {
     return (
-      <div className="flex flex-col h-full bg-[#212121]">
+      <div className="flex flex-col h-full bg-gray-50 dark:bg-[#212121]">
         {/* Header with menu button when sidebar closed */}
         {!sidebarOpen && (
           <div className="absolute top-0 left-0 z-0 p-3">
@@ -47,7 +47,7 @@ const ChatArea = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
               variant="ghost"
               size="icon"
               onClick={toggleSidebar}
-              className="text-gray-400 hover:text-white hover:bg-[#2f2f2f] rounded-lg flex items-center justify-center"
+              className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2f2f2f] rounded-lg flex items-center justify-center"
             >
               <Menu className="h-5 w-5 mx-auto" />
             </Button>
