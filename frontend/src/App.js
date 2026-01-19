@@ -33,7 +33,7 @@ const ChatWithDropZone = () => {
 
   return (
     <GlobalDropZone onFileDrop={handleFileDrop}>
-      <div className="flex h-screen bg-[#212121] overflow-hidden">
+      <div className="flex h-screen overflow-hidden bg-[#212121] dark:bg-[#212121] light:bg-gray-50">
         <Sidebar />
         <main className="flex-1 relative">
           <ChatArea 
