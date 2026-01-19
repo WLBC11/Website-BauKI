@@ -302,7 +302,7 @@ const Sidebar = () => {
                   <div
                     key={conv.id}
                     className={`group relative mx-2 rounded-lg cursor-pointer transition-colors duration-150
-                      ${isActive ? 'bg-[#2f2f2f]' : 'hover:bg-[#2f2f2f]/50'}`}
+                      ${isActive ? 'bg-gray-200 dark:bg-[#2f2f2f] text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#2f2f2f]/50'}`}
                     onClick={() => selectConversation(conv.id)}
                     title={conv.title}
                   >
