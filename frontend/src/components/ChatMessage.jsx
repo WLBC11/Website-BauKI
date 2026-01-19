@@ -390,9 +390,9 @@ const ChatMessage = ({ message, isLast }) => {
           {/* Message Content */}
           <div className="flex-1 min-w-0 overflow-hidden">
             {isUser && (
-              <div className="font-semibold text-gray-200 mb-1">Du</div>
+              <div className="font-semibold text-gray-900 dark:text-gray-200 mb-1">Du</div>
             )}
-            <div className={`text-gray-200 leading-relaxed ${!isUser ? 'mt-1' : ''}`}>
+            <div className={`text-gray-900 dark:text-gray-200 leading-relaxed ${!isUser ? 'mt-1' : ''}`}>
               {isUser ? (
                 <>
                   {/* Show file attachments if present (support both single file and multiple files) */}
