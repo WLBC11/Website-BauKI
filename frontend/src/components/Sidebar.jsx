@@ -372,13 +372,13 @@ const Sidebar = () => {
         )}
 
         {/* User Section */}
-        <div className="border-t border-[#2f2f2f] p-3">
+        <div className="border-t border-gray-200 dark:border-[#2f2f2f] p-3">
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="w-full justify-start gap-3 text-gray-200 hover:bg-[#2f2f2f] py-3"
+                  className="w-full justify-start gap-3 text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#2f2f2f] py-3"
                 >
                   <div className="h-8 w-8 rounded-full bg-[#3b82f6] flex items-center justify-center text-white text-sm font-medium">
                     {user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
