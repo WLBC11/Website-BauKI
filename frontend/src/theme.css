@@ -1,118 +1,137 @@
-/* Theme-specific colors */
-:root.light {
-  /* Main backgrounds */
-  --bg-primary: #f9fafb;
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #f3f4f6;
-  --bg-hover: #e5e7eb;
-  
-  /* Sidebar */
-  --sidebar-bg: #ffffff;
-  --sidebar-border: #e5e7eb;
-  --sidebar-item-hover: #f3f4f6;
-  --sidebar-item-active: #eff6ff;
-  
-  /* Text colors */
-  --text-primary: #111827;
-  --text-secondary: #6b7280;
-  --text-tertiary: #9ca3af;
-  
-  /* Input/textarea */
-  --input-bg: #f9fafb;
-  --input-border: #d1d5db;
-  --input-text: #111827;
-  --input-placeholder: #9ca3af;
-  
-  /* Chat message */
-  --message-bg: #f9fafb;
-  --message-user-bg: #eff6ff;
-  --message-ai-bg: #ffffff;
-  
-  /* Borders */
-  --border-primary: #e5e7eb;
-  --border-secondary: #d1d5db;
-  
-  /* Buttons */
-  --button-bg: #f3f4f6;
-  --button-hover: #e5e7eb;
-  --button-text: #374151;
+/* Theme-specific colors using Tailwind classes */
+.light {
+  color-scheme: light;
 }
 
-:root.dark {
-  /* Main backgrounds */
-  --bg-primary: #212121;
-  --bg-secondary: #1a1a1a;
-  --bg-tertiary: #2f2f2f;
-  --bg-hover: #3f3f3f;
-  
-  /* Sidebar */
-  --sidebar-bg: #1a1a1a;
-  --sidebar-border: #2f2f2f;
-  --sidebar-item-hover: #2f2f2f;
-  --sidebar-item-active: #2f2f2f;
-  
-  /* Text colors */
-  --text-primary: #ffffff;
-  --text-secondary: #9ca3af;
-  --text-tertiary: #6b7280;
-  
-  /* Input/textarea */
-  --input-bg: #2f2f2f;
-  --input-border: #3f3f3f;
-  --input-text: #ffffff;
-  --input-placeholder: #6b7280;
-  
-  /* Chat message */
-  --message-bg: transparent;
-  --message-user-bg: transparent;
-  --message-ai-bg: transparent;
-  
-  /* Borders */
-  --border-primary: #2f2f2f;
-  --border-secondary: #3f3f3f;
-  
-  /* Buttons */
-  --button-bg: #3f3f3f;
-  --button-hover: #4f4f4f;
-  --button-text: #e5e7eb;
+.dark {
+  color-scheme: dark;
 }
 
-/* Apply theme classes to components */
-.sidebar-container {
-  background-color: var(--sidebar-bg);
-  border-color: var(--sidebar-border);
+/* Sidebar theming */
+.light .sidebar-bg {
+  @apply bg-white border-gray-200;
 }
 
-.sidebar-item {
-  color: var(--text-secondary);
+.dark .sidebar-bg {
+  @apply bg-[#171717] border-[#2f2f2f];
 }
 
-.sidebar-item:hover {
-  background-color: var(--sidebar-item-hover);
-  color: var(--text-primary);
+/* Button theming */
+.light .btn-ghost-theme {
+  @apply text-gray-600 hover:text-gray-900 hover:bg-gray-100;
 }
 
-.sidebar-item-active {
-  background-color: var(--sidebar-item-active);
-  color: var(--text-primary);
+.dark .btn-ghost-theme {
+  @apply text-gray-400 hover:text-white hover:bg-[#2f2f2f];
 }
 
-.chat-input {
-  background-color: var(--input-bg);
-  border-color: var(--input-border);
-  color: var(--input-text);
+/* Text theming */
+.light .text-primary-theme {
+  @apply text-gray-900;
 }
 
-.chat-input::placeholder {
-  color: var(--input-placeholder);
+.dark .text-primary-theme {
+  @apply text-white;
 }
 
-.chat-message-ai {
-  background-color: var(--message-ai-bg);
-  color: var(--text-primary);
+.light .text-secondary-theme {
+  @apply text-gray-600;
 }
 
-.chat-message-user {
-  background-color: var(--message-user-bg);
-  color: var(--text-primary);
+.dark .text-secondary-theme {
+  @apply text-gray-400;
+}
+
+.light .text-tertiary-theme {
+  @apply text-gray-500;
+}
+
+.dark .text-tertiary-theme {
+  @apply text-gray-500;
+}
+
+/* Background theming */
+.light .bg-primary-theme {
+  @apply bg-gray-50;
+}
+
+.dark .bg-primary-theme {
+  @apply bg-[#212121];
+}
+
+.light .bg-secondary-theme {
+  @apply bg-white;
+}
+
+.dark .bg-secondary-theme {
+  @apply bg-[#1a1a1a];
+}
+
+.light .bg-tertiary-theme {
+  @apply bg-gray-100;
+}
+
+.dark .bg-tertiary-theme {
+  @apply bg-[#2f2f2f];
+}
+
+.light .bg-hover-theme {
+  @apply hover:bg-gray-100;
+}
+
+.dark .bg-hover-theme {
+  @apply hover:bg-[#3f3f3f];
+}
+
+/* Input theming */
+.light .input-theme {
+  @apply bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500;
+}
+
+.dark .input-theme {
+  @apply bg-[#2f2f2f] border-[#3f3f3f] text-white placeholder-gray-500;
+}
+
+/* Chat message theming */
+.light .chat-bg-theme {
+  @apply bg-white;
+}
+
+.dark .chat-bg-theme {
+  @apply bg-transparent;
+}
+
+/* Border theming */
+.light .border-theme {
+  @apply border-gray-200;
+}
+
+.dark .border-theme {
+  @apply border-[#2f2f2f];
+}
+
+.light .border-secondary-theme {
+  @apply border-gray-300;
+}
+
+.dark .border-secondary-theme {
+  @apply border-[#3f3f3f];
+}
+
+/* Dropdown theming */
+.light .dropdown-theme {
+  @apply bg-white border-gray-200 text-gray-900;
+}
+
+.dark .dropdown-theme {
+  @apply bg-[#2f2f2f] border-[#3f3f3f] text-gray-200;
+}
+
+/* Card/Panel theming */
+.light .panel-theme {
+  @apply bg-white border-gray-200;
+}
+
+.dark .panel-theme {
+  @apply bg-[#2f2f2f] border-[#3f3f3f];
 }
