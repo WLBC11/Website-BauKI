@@ -60,6 +60,7 @@ const Sidebar = () => {
   } = useChatContext();
 
   const { user, isAuthenticated, logout, updateBundesland } = useAuth();
+  const { theme, toggleTheme, isDark } = useTheme();
 
   // Check if user is admin
   const isAdmin = isAuthenticated && user && ADMIN_EMAILS.includes(user.email.toLowerCase());
