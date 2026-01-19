@@ -386,45 +386,45 @@ const Sidebar = () => {
                   <span className="text-sm truncate">{user?.name || user?.email}</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[230px] bg-[#2f2f2f] border-[#3f3f3f]" align="start" side="top">
-                <DropdownMenuItem className="text-gray-400 text-xs cursor-default hover:bg-transparent">
+              <DropdownMenuContent className="w-[230px] bg-white dark:bg-[#2f2f2f] border-gray-200 dark:border-[#3f3f3f]" align="start" side="top">
+                <DropdownMenuItem className="text-gray-500 dark:text-gray-400 text-xs cursor-default hover:bg-transparent">
                   {user?.email}
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-[#3f3f3f]" />
-                <DropdownMenuLabel className="text-gray-400 text-xs font-normal">Einstellungen</DropdownMenuLabel>
-                <DropdownMenuItem onClick={toggleTheme} className="text-gray-200 cursor-pointer">
+                <DropdownMenuSeparator className="bg-gray-200 dark:bg-[#3f3f3f]" />
+                <DropdownMenuLabel className="text-gray-500 dark:text-gray-400 text-xs font-normal">Einstellungen</DropdownMenuLabel>
+                <DropdownMenuItem onClick={toggleTheme} className="text-gray-900 dark:text-gray-200 cursor-pointer">
                   {isDark ? <Sun className="h-4 w-4 mr-2" /> : <Moon className="h-4 w-4 mr-2" />}
                   {isDark ? 'Heller Modus' : 'Dunkler Modus'}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setChangePasswordOpen(true)} className="text-gray-200 cursor-pointer">
+                <DropdownMenuItem onClick={() => setChangePasswordOpen(true)} className="text-gray-900 dark:text-gray-200 cursor-pointer">
                   <Key className="h-4 w-4 mr-2" />
                   Passwort ändern
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setDeleteAccountOpen(true)} className="text-gray-200 cursor-pointer">
+                <DropdownMenuItem onClick={() => setDeleteAccountOpen(true)} className="text-gray-900 dark:text-gray-200 cursor-pointer">
                   <UserX className="h-4 w-4 mr-2" />
                   Konto löschen
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLegalOpen(true)} className="text-gray-200 cursor-pointer">
+                <DropdownMenuItem onClick={() => setLegalOpen(true)} className="text-gray-900 dark:text-gray-200 cursor-pointer">
                   <FileText className="h-4 w-4 mr-2" />
                   Rechtliches
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFeedbackOpen(true)} className="text-gray-200 cursor-pointer">
+                <DropdownMenuItem onClick={() => setFeedbackOpen(true)} className="text-gray-900 dark:text-gray-200 cursor-pointer">
                   <HelpCircle className="h-4 w-4 mr-2" />
                   Feedback senden
                 </DropdownMenuItem>
                 {isAdmin && (
                   <>
-                    <DropdownMenuSeparator className="bg-[#3f3f3f]" />
+                    <DropdownMenuSeparator className="bg-gray-200 dark:bg-[#3f3f3f]" />
                     <DropdownMenuItem asChild>
-                      <a href="/admin" className="text-gray-200 cursor-pointer flex items-center">
+                      <a href="/admin" className="text-gray-900 dark:text-gray-200 cursor-pointer flex items-center">
                         <BarChart3 className="h-4 w-4 mr-2" />
                         Admin Dashboard
                       </a>
                     </DropdownMenuItem>
                   </>
                 )}
-                <DropdownMenuSeparator className="bg-[#3f3f3f]" />
-                <DropdownMenuItem onClick={logout} className="text-gray-200 cursor-pointer">
+                <DropdownMenuSeparator className="bg-gray-200 dark:bg-[#3f3f3f]" />
+                <DropdownMenuItem onClick={logout} className="text-gray-900 dark:text-gray-200 cursor-pointer">
                   <LogOut className="h-4 w-4 mr-2" />
                   Abmelden
                 </DropdownMenuItem>
