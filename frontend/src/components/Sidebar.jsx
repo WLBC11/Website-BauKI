@@ -247,8 +247,8 @@ const Sidebar = () => {
         {/* Auth Info for Guests */}
         {!isAuthenticated && (
           <div className="px-3 pb-3">
-            <div className="bg-[#2f2f2f] rounded-lg p-3 text-sm">
-              <p className="text-gray-400 mb-2">
+            <div className="bg-gray-100 dark:bg-[#2f2f2f] rounded-lg p-3 text-sm">
+              <p className="text-gray-600 dark:text-gray-400 mb-2">
                 Melde dich an, um deine Chats zu speichern.
               </p>
               <div className="flex gap-2">
@@ -256,14 +256,14 @@ const Sidebar = () => {
                   onClick={() => openAuthModal('login')}
                   variant="ghost"
                   size="sm"
-                  className="flex-1 text-white hover:bg-[#3f3f3f]"
+                  className="flex-1 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-[#3f3f3f]"
                 >
                   Anmelden
                 </Button>
                 <Button
                   onClick={() => openAuthModal('register')}
                   size="sm"
-                  className="flex-1 bg-white text-black hover:bg-gray-200"
+                  className="flex-1 bg-gray-900 dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200"
                 >
                   Registrieren
                 </Button>
