@@ -217,7 +217,7 @@ const Sidebar = () => {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full justify-between bg-[#2f2f2f] border-[#3f3f3f] text-gray-200 hover:bg-[#3f3f3f] hover:text-white"
+                  className="w-full justify-between bg-gray-100 dark:bg-[#2f2f2f] border-gray-300 dark:border-[#3f3f3f] text-gray-900 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-[#3f3f3f] hover:text-gray-900 dark:hover:text-white"
                 >
                   <span className="text-sm truncate">
                     {user?.bundesland || "Bundesland wählen"}
@@ -225,15 +225,15 @@ const Sidebar = () => {
                   <ChevronDown className="h-4 w-4 ml-2 flex-shrink-0" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[230px] bg-[#2f2f2f] border-[#3f3f3f] text-gray-200 max-h-[300px] overflow-y-auto">
+              <DropdownMenuContent className="w-[230px] bg-white dark:bg-[#2f2f2f] border-gray-200 dark:border-[#3f3f3f] text-gray-900 dark:text-gray-200 max-h-[300px] overflow-y-auto">
                 <DropdownMenuLabel>Landesbauordnung</DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-[#3f3f3f]" />
+                <DropdownMenuSeparator className="bg-gray-200 dark:bg-[#3f3f3f]" />
                 <DropdownMenuRadioGroup value={user?.bundesland || ""} onValueChange={updateBundesland}>
                   {BUNDESLAENDER.map(land => (
                     <DropdownMenuRadioItem
                       key={land}
                       value={land}
-                      className="focus:bg-[#3f3f3f] focus:text-white cursor-pointer"
+                      className="focus:bg-gray-100 dark:focus:bg-[#3f3f3f] focus:text-gray-900 dark:focus:text-white cursor-pointer"
                     >
                       {land}
                     </DropdownMenuRadioItem>
