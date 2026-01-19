@@ -392,6 +392,10 @@ const Sidebar = () => {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-[#3f3f3f]" />
                 <DropdownMenuLabel className="text-gray-400 text-xs font-normal">Einstellungen</DropdownMenuLabel>
+                <DropdownMenuItem onClick={toggleTheme} className="text-gray-200 cursor-pointer">
+                  {isDark ? <Sun className="h-4 w-4 mr-2" /> : <Moon className="h-4 w-4 mr-2" />}
+                  {isDark ? 'Heller Modus' : 'Dunkler Modus'}
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setChangePasswordOpen(true)} className="text-gray-200 cursor-pointer">
                   <Key className="h-4 w-4 mr-2" />
                   Passwort ändern
