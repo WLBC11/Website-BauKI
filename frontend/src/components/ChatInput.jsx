@@ -578,7 +578,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
     <div className="px-3 md:px-4 pb-3 md:pb-4 pt-2">
       <div className="max-w-3xl mx-auto">
         <form onSubmit={handleSubmit}>
-          <div className="relative bg-[#2f2f2f] rounded-2xl border border-[#3f3f3f] focus-within:border-[#5f5f5f] transition-colors">
+          <div className="relative bg-gray-100 dark:bg-[#2f2f2f] rounded-2xl border border-gray-300 dark:border-[#3f3f3f] focus-within:border-gray-400 dark:focus-within:border-[#5f5f5f] transition-colors">
             {/* Recording Indicator */}
             {isRecording && (
               <div className="px-3 md:px-4 pt-3">
