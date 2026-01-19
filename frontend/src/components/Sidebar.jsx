@@ -162,18 +162,18 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div className={`
-        flex flex-col h-full w-[260px] bg-[#171717] border-r border-[#2f2f2f]
+        flex flex-col h-full w-[260px] bg-white dark:bg-[#171717] border-r border-gray-200 dark:border-[#2f2f2f]
         fixed md:relative inset-y-0 left-0 z-40
         transform transition-transform duration-300 ease-in-out
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
         {/* Header */}
-        <div className="flex items-center justify-between p-3 border-b border-[#2f2f2f]">
+        <div className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-[#2f2f2f]">
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleSidebar}
-            className="text-gray-400 hover:text-white hover:bg-[#2f2f2f] rounded-lg"
+            className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2f2f2f] rounded-lg"
           >
             <PanelLeftClose className="h-5 w-5" />
           </Button>
@@ -182,11 +182,11 @@ const Sidebar = () => {
               variant="ghost"
               size="icon"
               onClick={createNewConversation}
-              className="text-gray-400 hover:text-white hover:bg-[#2f2f2f] rounded-lg"
+              className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2f2f2f] rounded-lg"
             >
               <Plus className="h-5 w-5" />
             </Button>
-            <div className="absolute right-0 top-full mt-1 px-2 py-1 bg-[#3f3f3f] text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50">
+            <div className="absolute right-0 top-full mt-1 px-2 py-1 bg-gray-800 dark:bg-[#3f3f3f] text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50">
               Neuer Chat
             </div>
           </div>
@@ -195,9 +195,9 @@ const Sidebar = () => {
         {/* App Name */}
         <div className="p-3">
           <div className="flex items-center justify-between">
-            <div className="text-white font-semibold">
+            <div className="text-gray-900 dark:text-white font-semibold">
               <span className="text-lg">BauKI</span>
-              <span className="text-xs text-gray-400 ml-1">by WLBC</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">by WLBC</span>
             </div>
             <div className="h-7 w-7 rounded-full bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1">
               <img 
