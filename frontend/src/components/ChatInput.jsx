@@ -769,7 +769,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                   onKeyDown={handleKeyDown}
                   placeholder={isRecording ? "Aufnahme läuft..." : selectedFiles.length > 0 ? "Nachricht zu den Dateien hinzufügen..." : "Nachricht eingeben..."}
                   rows={1}
-                  className="flex-1 bg-transparent text-white text-sm md:text-base resize-none outline-none placeholder-gray-500 max-h-[200px] overflow-y-auto py-1"
+                  className="flex-1 bg-transparent text-gray-900 dark:text-white text-sm md:text-base resize-none outline-none placeholder-gray-500 dark:placeholder-gray-500 max-h-[200px] overflow-y-auto py-1"
                   style={{ lineHeight: '1.5' }}
                   disabled={isLoading || isRecording}
                 />
