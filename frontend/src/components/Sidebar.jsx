@@ -162,7 +162,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div className={`
-        flex flex-col h-full w-[260px] bg-white dark:bg-[#171717] border-r border-gray-200 dark:border-[#2f2f2f]
+        flex flex-col h-full w-[280px] bg-white dark:bg-[#171717] border-r border-gray-200 dark:border-[#2f2f2f]
         fixed md:relative inset-y-0 left-0 z-40
         transform transition-transform duration-300 ease-in-out
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
