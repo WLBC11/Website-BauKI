@@ -130,8 +130,8 @@ const ChatArea = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
         </div>
       </ScrollArea>
 
-      {/* Input area - fixed at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 z-10">
+      {/* Input area - fixed at bottom with gradient fade */}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-50 dark:from-[#212121] via-gray-50 dark:via-[#212121] to-transparent pt-6 z-10">
         <ChatInput 
           droppedFile={droppedFile}
           dropError={dropError}
