@@ -81,7 +81,7 @@ const ChatArea = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
             variant="ghost"
             size="icon"
             onClick={toggleSidebar}
-            className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2f2f2f] rounded-lg flex items-center justify-center"
+            className="text-gray-900 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2f2f2f] rounded-lg flex items-center justify-center"
           >
             <Menu className="h-5 w-5 mx-auto" />
           </Button>
