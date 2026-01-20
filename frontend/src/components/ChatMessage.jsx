@@ -454,19 +454,20 @@ const ChatMessage = ({ message, isLast }) => {
                   {/* Show text content - NUR wenn kein Bild oder wenn message.content existiert */}
                   {message.type !== 'image' && displayedContent && (
                     <div className="markdown-body prose prose-invert prose-base max-w-none 
-                      prose-headings:text-white prose-headings:font-semibold prose-headings:mt-6 prose-headings:mb-3
-                      prose-p:text-gray-200 prose-p:my-3 prose-p:leading-7
-                      prose-strong:text-white prose-strong:font-semibold
+                      prose-headings:text-gray-900 dark:prose-headings:text-white prose-headings:font-semibold prose-headings:mt-6 prose-headings:mb-3
+                      prose-p:text-gray-900 dark:prose-p:text-gray-200 prose-p:my-3 prose-p:leading-7
+                      prose-strong:text-gray-900 dark:prose-strong:text-white prose-strong:font-semibold
                       prose-h1:text-xl prose-h1:mb-4
                       prose-h2:text-lg prose-h2:mb-3
                       prose-h3:text-base prose-h3:mb-2
                       prose-h4:text-base prose-h4:mb-2
                       prose-ul:my-3 prose-ul:list-disc prose-ul:pl-5 prose-ul:space-y-1
                       prose-ol:my-3 prose-ol:list-decimal prose-ol:pl-5 prose-ol:space-y-1
-                      prose-li:text-gray-200 prose-li:my-1 prose-li:leading-7
-                      prose-blockquote:border-l-4 prose-blockquote:border-gray-500 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-300 prose-blockquote:my-4
+                      prose-li:text-gray-900 dark:prose-li:text-gray-200 prose-li:my-1 prose-li:leading-7
+                      prose-blockquote:border-l-4 prose-blockquote:border-gray-500 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300 prose-blockquote:my-4
                       prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
-                      ">
+                      "
+                      style={{color: 'inherit'}}>
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm, remarkMath]}
                         rehypePlugins={[rehypeKatex]}
