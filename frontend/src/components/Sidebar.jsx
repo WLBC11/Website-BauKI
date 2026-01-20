@@ -350,7 +350,7 @@ const Sidebar = () => {
 
                       {/* Chat Title */}
                       <div className="flex-1 overflow-hidden min-w-0">
-                        <span className="block truncate text-sm text-gray-200">
+                        <span className="block truncate text-sm text-gray-900 dark:text-gray-200">
                           {conv.title}
                         </span>
                       </div>
