@@ -173,7 +173,7 @@ const Sidebar = () => {
             variant="ghost"
             size="icon"
             onClick={toggleSidebar}
-            className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2f2f2f] rounded-lg"
+            className="text-gray-900 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2f2f2f] rounded-lg"
           >
             <PanelLeftClose className="h-5 w-5" />
           </Button>
@@ -182,7 +182,7 @@ const Sidebar = () => {
               variant="ghost"
               size="icon"
               onClick={createNewConversation}
-              className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2f2f2f] rounded-lg"
+              className="text-gray-900 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2f2f2f] rounded-lg"
             >
               <Plus className="h-5 w-5" />
             </Button>
