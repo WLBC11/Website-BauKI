@@ -352,7 +352,7 @@ const ChatMessage = ({ message, isLast }) => {
   return (
     <div className={`py-4 md:py-6 ${isUser ? '' : 'bg-transparent'}`}>
       <div className="max-w-4xl mx-auto px-3 md:px-4">
-        <div className="flex gap-3 md:gap-4">
+        <div className="flex gap-3 md:gap-4 items-start">
           {/* Avatar */}
           <div className="flex-shrink-0">
             {isUser ? (
