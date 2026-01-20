@@ -779,13 +779,13 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="h-8 w-8 rounded-full flex-shrink-0 transition-colors bg-[#3f3f3f] hover:bg-[#4f4f4f]"
+                    className="h-8 w-8 rounded-full flex-shrink-0 transition-colors bg-gray-200 dark:bg-[#3f3f3f] hover:bg-gray-300 dark:hover:bg-[#4f4f4f]"
                     type="button"
                     onClick={openFileDialog}
                     disabled={isLoading || isRecording || selectedFiles.length >= MAX_FILES}
                     title={selectedFiles.length >= MAX_FILES ? `Maximal ${MAX_FILES} Dateien` : "Bilder oder PDFs anhängen (max. 5)"}
                   >
-                    <Paperclip className="h-5 w-5 text-gray-300 transition-all duration-200 opacity-70 hover:opacity-100" />
+                    <Paperclip className="h-5 w-5 text-gray-700 dark:text-gray-300 transition-all duration-200 opacity-70 hover:opacity-100" />
                   </Button>
 
                   {/* Image Edit Mode Toggle */}
