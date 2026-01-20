@@ -375,7 +375,7 @@ const ChatMessage = ({ message, isLast }) => {
             {isUser && (
               <div className="font-semibold text-gray-900 dark:text-gray-200 mb-1">Du</div>
             )}
-            <div className={`text-gray-900 dark:text-gray-200 leading-relaxed ${!isUser ? 'mt-1' : ''}`}>
+            <div className="text-gray-900 dark:text-gray-200 leading-relaxed">
               {isUser ? (
                 <>
                   {/* Show file attachments if present (support both single file and multiple files) */}
