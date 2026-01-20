@@ -250,43 +250,27 @@ const FileAttachment = ({ file, compact = false, onClick }) => {
     <div className={compact ? '' : 'mt-2 mb-3'}>
       <button
         onClick={canPreview ? onClick : undefined}
-        className={`inline-flex items-center gap-2 p-2 bg-[#3f3f3f] rounded-lg transition-all duration-200 text-left
-          ${compact ? 'max-w-[150px]' : 'max-w-sm gap-3 p-3'}
-          ${canPreview ? 'hover:bg-[#4f4f4f] hover:scale-[1.02] cursor-pointer group' : ''}`}
-        title={canPreview ? 'Klicken zum Anzeigen' : file.name}
+        className={`inline-block rounded-lg transition-all duration-200
+          ${compact ? '' : ''}
+          ${canPreview ? 'hover:opacity-80 hover:scale-[1.02] cursor-pointer' : ''}`}
+        title={file.name}
       >
-        {/* Preview or Icon */}
-        <div className="relative">
-          {previewImage ? (
-            <img 
-              src={previewImage} 
-              alt={file.name} 
-              className={`${compact ? 'w-10 h-10' : 'w-16 h-16'} object-cover rounded-md bg-white`}
-            />
-          ) : (
-            <div className={`${compact ? 'w-8 h-8' : 'w-12 h-12'} bg-[#4f4f4f] rounded-md flex items-center justify-center flex-shrink-0`}>
-              {isImage ? (
-                <ImageIcon className={`${compact ? 'w-4 h-4' : 'w-6 h-6'} text-blue-400`} />
-              ) : (
-                <FileText className={`${compact ? 'w-4 h-4' : 'w-6 h-6'} text-red-400`} />
-              )}
-            </div>
-          )}
-          {/* Zoom icon overlay on hover */}
-          {canPreview && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
-              <ZoomIn className={`${compact ? 'w-4 h-4' : 'w-6 h-6'} text-white`} />
-            </div>
-          )}
-        </div>
-        
-        {/* File Info */}
-        <div className="min-w-0">
-          <p className={`${compact ? 'text-xs' : 'text-sm'} text-gray-200 truncate ${compact ? 'max-w-[80px]' : 'max-w-[200px]'}`}>{file.name}</p>
-          <p className="text-xs text-gray-500">
-            {isImage ? 'Bild' : 'PDF'} • {formatFileSize(file.size)}
-          </p>
-        </div>
+        {/* Show only Preview Image without file info */}
+        {previewImage ? (
+          <img 
+            src={previewImage} 
+            alt={file.name} 
+            className={`${compact ? 'w-20 h-20' : 'w-32 h-32'} object-cover rounded-lg shadow-md`}
+          />
+        ) : (
+          <div className={`${compact ? 'w-20 h-20' : 'w-32 h-32'} bg-gray-200 dark:bg-[#4f4f4f] rounded-lg flex items-center justify-center`}>
+            {isImage ? (
+              <ImageIcon className={`${compact ? 'w-8 h-8' : 'w-12 h-12'} text-blue-400`} />
+            ) : (
+              <FileText className={`${compact ? 'w-8 h-8' : 'w-12 h-12'} text-red-400`} />
+            )}
+          </div>
+        )}
       </button>
     </div>
   );
