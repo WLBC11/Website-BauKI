@@ -311,14 +311,14 @@ const Sidebar = () => {
                       {/* Icon Container - Swaps between MessageSquare and MoreHorizontal on hover */}
                       <div className="relative w-4 h-4 mr-3 flex-shrink-0">
                         {/* Speech Bubble - visible by default, hidden on hover */}
-                        <MessageSquare className="h-4 w-4 text-gray-400 absolute inset-0 group-hover:opacity-0 transition-opacity" />
+                        <MessageSquare className="h-4 w-4 text-gray-900 dark:text-gray-400 absolute inset-0 group-hover:opacity-0 transition-opacity" />
                         
                         {/* Three-Dot Menu Trigger - hidden by default, visible on hover */}
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <button
                               onClick={(e) => e.stopPropagation()}
-                              className="absolute inset-0 flex items-center justify-center text-gray-400 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="absolute inset-0 flex items-center justify-center text-gray-900 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
                             >
                               <MoreHorizontal className="h-4 w-4" />
                             </button>
