@@ -795,7 +795,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                     className={`h-8 w-8 rounded-full flex-shrink-0 transition-all duration-200 ${
                       isImageEditMode 
                         ? 'bg-green-500/30 hover:bg-green-500/40' 
-                        : 'bg-[#3f3f3f] hover:bg-[#4f4f4f]'
+                        : 'bg-gray-200 dark:bg-[#3f3f3f] hover:bg-gray-300 dark:hover:bg-[#4f4f4f]'
                     }`}
                     type="button"
                     onClick={toggleImageEditMode}
@@ -805,7 +805,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                     <Wand2 className={`h-5 w-5 transition-all duration-200 ${
                       isImageEditMode 
                         ? 'text-green-400 opacity-100' 
-                        : 'text-gray-300 opacity-70 hover:opacity-100'
+                        : 'text-gray-700 dark:text-gray-300 opacity-70 hover:opacity-100'
                     }`} />
                   </Button>
 
@@ -816,7 +816,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                     className={`h-8 w-8 rounded-full flex-shrink-0 transition-all duration-200 ${
                       isTextToImageMode 
                         ? 'bg-blue-500/30 hover:bg-blue-500/40' 
-                        : 'bg-[#3f3f3f] hover:bg-[#4f4f4f]'
+                        : 'bg-gray-200 dark:bg-[#3f3f3f] hover:bg-gray-300 dark:hover:bg-[#4f4f4f]'
                     }`}
                     type="button"
                     onClick={toggleTextToImageMode}
@@ -826,7 +826,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                     <Sparkles className={`h-5 w-5 transition-all duration-200 ${
                       isTextToImageMode 
                         ? 'text-blue-400 opacity-100' 
-                        : 'text-gray-300 opacity-70 hover:opacity-100'
+                        : 'text-gray-700 dark:text-gray-300 opacity-70 hover:opacity-100'
                     }`} />
                   </Button>
 
@@ -836,31 +836,31 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="h-8 w-8 rounded-full flex-shrink-0 transition-colors bg-[#3f3f3f] hover:bg-[#4f4f4f]"
+                        className="h-8 w-8 rounded-full flex-shrink-0 transition-colors bg-gray-200 dark:bg-[#3f3f3f] hover:bg-gray-300 dark:hover:bg-[#4f4f4f]"
                         type="button"
                       >
                         <img 
                           src="/law-book.png" 
                           alt="Integrierte Datenbanken" 
-                          className="h-5 w-5 object-contain transition-all duration-200 opacity-70 hover:opacity-100 invert mix-blend-screen"
+                          className="h-5 w-5 object-contain transition-all duration-200 opacity-70 hover:opacity-100 dark:invert mix-blend-normal dark:mix-blend-screen"
                         />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-[500px] bg-[#2f2f2f] border-[#3f3f3f] text-gray-200">
+                    <DropdownMenuContent align="start" className="w-[500px] bg-white dark:bg-[#2f2f2f] border-gray-200 dark:border-[#3f3f3f] text-gray-900 dark:text-gray-200">
                       <DropdownMenuLabel className="text-sm font-semibold">Integrierte Datenbanken</DropdownMenuLabel>
-                      <DropdownMenuSeparator className="bg-[#3f3f3f]" />
+                      <DropdownMenuSeparator className="bg-gray-200 dark:bg-[#3f3f3f]" />
                       <div className="px-2 py-2 space-y-1 max-h-[400px] overflow-y-auto">
                         {AVAILABLE_DATABASES.map((db, index) => (
                           <div 
                             key={index} 
-                            className="px-2 py-2 rounded-md text-sm text-gray-300 hover:bg-[#3f3f3f] transition-colors"
+                            className="px-2 py-2 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#3f3f3f] transition-colors"
                           >
                             {db}
                           </div>
                         ))}
                       </div>
-                      <DropdownMenuSeparator className="bg-[#3f3f3f]" />
-                      <div className="px-3 py-2 text-xs text-gray-500">
+                      <DropdownMenuSeparator className="bg-gray-200 dark:bg-[#3f3f3f]" />
+                      <div className="px-3 py-2 text-xs text-gray-500 dark:text-gray-500">
                         Die KI hat automatisch Zugriff auf alle Themen
                       </div>
                     </DropdownMenuContent>
@@ -871,12 +871,12 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="h-8 w-8 rounded-full flex-shrink-0 transition-colors bg-[#3f3f3f] hover:bg-[#4f4f4f]"
+                      className="h-8 w-8 rounded-full flex-shrink-0 transition-colors bg-gray-200 dark:bg-[#3f3f3f] hover:bg-gray-300 dark:hover:bg-[#4f4f4f]"
                       type="button"
                       onClick={() => setFeedbackOpen(true)}
                       title="Feedback senden"
                     >
-                      <HelpCircle className="h-5 w-5 text-gray-300 transition-all duration-200 opacity-70 hover:opacity-100" />
+                      <HelpCircle className="h-5 w-5 text-gray-700 dark:text-gray-300 transition-all duration-200 opacity-70 hover:opacity-100" />
                     </Button>
                   )}
                 </div>
@@ -890,7 +890,7 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                     className={`h-8 w-8 rounded-full flex-shrink-0 transition-colors ${
                       isRecording 
                         ? 'bg-red-500/30 hover:bg-red-500/40' 
-                        : 'bg-[#3f3f3f] hover:bg-[#4f4f4f]'
+                        : 'bg-gray-200 dark:bg-[#3f3f3f] hover:bg-gray-300 dark:hover:bg-[#4f4f4f]'
                     }`}
                     type="button"
                     onClick={isRecording ? cancelRecording : startRecording}
@@ -901,26 +901,26 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                     {isRecording ? (
                       <X className="h-5 w-5 text-red-400" />
                     ) : (
-                      <Mic className="h-5 w-5 text-gray-300 transition-all duration-200 opacity-70 hover:opacity-100" />
+                      <Mic className="h-5 w-5 text-gray-700 dark:text-gray-300 transition-all duration-200 opacity-70 hover:opacity-100" />
                     )}
                   </Button>
 
-                  {/* Send Button */}
+                  {/* Send Button - Elevated/Floating Style */}
                   <Button
                     type="submit"
                     disabled={(!message.trim() && selectedFiles.length === 0 && !isLoading && !isTyping) || isRecording}
-                    className={`h-8 w-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0
+                    className={`h-10 w-10 rounded-full flex items-center justify-center transition-all duration-200 flex-shrink-0 shadow-lg hover:shadow-xl
                       ${isLoading || isTyping 
-                        ? 'bg-white text-black hover:bg-gray-200' 
+                        ? 'bg-gray-900 dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200' 
                         : (message.trim() || selectedFiles.length > 0)
-                            ? 'bg-white text-black hover:bg-gray-200'
-                            : 'bg-[#3f3f3f] text-gray-500 cursor-not-allowed'
+                            ? 'bg-gray-900 dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 hover:scale-105'
+                            : 'bg-gray-300 dark:bg-[#3f3f3f] text-gray-500 dark:text-gray-500 cursor-not-allowed shadow-none'
                       }`}
                   >
                     {isLoading || isTyping ? (
-                        <Square className="h-4 w-4 fill-black" />
+                        <Square className="h-5 w-5 fill-current" />
                     ) : (
-                        <Send className="h-4 w-4" />
+                        <Send className="h-5 w-5" />
                     )}
                   </Button>
                 </div>
