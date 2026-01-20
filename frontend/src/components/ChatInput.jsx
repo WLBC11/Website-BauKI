@@ -700,51 +700,40 @@ const ChatInput = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
                     const canPreview = isImage || isPdf;
                     
                     return (
-                      <div key={fileKey} className="flex items-center gap-2 p-2 bg-[#3f3f3f] rounded-lg max-w-[200px] group">
-                        {/* Clickable preview area */}
+                      <div key={fileKey} className="relative group">
+                        {/* Image Preview with X button on hover */}
                         <button
                           type="button"
                           onClick={canPreview ? () => setPreviewModalFile({ file, previewUrl: preview }) : undefined}
-                          className={`flex-shrink-0 relative ${canPreview ? 'cursor-pointer' : ''}`}
-                          title={canPreview ? 'Klicken zum Anzeigen' : undefined}
+                          className={`relative block ${canPreview ? 'cursor-pointer' : ''}`}
+                          title={file.name}
                         >
                           {preview ? (
                             <img 
                               src={preview} 
-                              alt="Preview" 
-                              className="w-10 h-10 object-cover rounded-md"
+                              alt={file.name}
+                              className="w-16 h-16 object-cover rounded-lg border-2 border-gray-300 dark:border-[#3f3f3f]"
                             />
                           ) : (
-                            <div className="w-10 h-10 bg-[#4f4f4f] rounded-md flex items-center justify-center">
+                            <div className="w-16 h-16 bg-gray-200 dark:bg-[#4f4f4f] rounded-lg flex items-center justify-center border-2 border-gray-300 dark:border-[#3f3f3f]">
                               {isPdf ? (
-                                <FileText className="w-5 h-5 text-red-400" />
+                                <FileText className="w-6 h-6 text-red-400" />
                               ) : (
-                                <ImageIcon className="w-5 h-5 text-blue-400" />
+                                <ImageIcon className="w-6 h-6 text-blue-400" />
                               )}
-                            </div>
-                          )}
-                          {/* Zoom overlay on hover */}
-                          {canPreview && (
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
-                              <ZoomIn className="w-4 h-4 text-white" />
                             </div>
                           )}
                         </button>
                         
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs text-gray-200 truncate">{file.name}</p>
-                          <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
-                        </div>
-                        
-                        <Button
+                        {/* X button - shows on hover */}
+                        <button
                           type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="h-6 w-6 flex-shrink-0 text-gray-400 hover:text-white hover:bg-[#5f5f5f]"
                           onClick={() => handleRemoveFile(index)}
+                          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                          title="Entfernen"
                         >
-                          <X className="h-3 w-3" />
-                        </Button>
+                          <X className="h-4 w-4 text-white" />
+                        </button>
                       </div>
                     );
                   })}
