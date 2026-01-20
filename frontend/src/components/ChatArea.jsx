@@ -101,24 +101,23 @@ const ChatArea = ({ droppedFile, dropError, onDroppedFileProcessed }) => {
 
           {/* Loading indicator */}
           {isLoading && (
-            <div className="py-6">
-              <div className="max-w-3xl mx-auto px-4">
-                <div className="flex gap-4">
+            <div className="py-4 md:py-6">
+              <div className="max-w-4xl mx-auto px-3 md:px-4">
+                <div className="flex gap-3 md:gap-4 items-start">
                   <div className="flex-shrink-0">
-                    <div className="h-10 w-10 rounded-full bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1.5">
+                    <div className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-gray-200 dark:bg-[#3a3a3a] flex items-center justify-center overflow-hidden p-1.5">
                       <img 
-                        src="/baumate-logo.png" 
+                        src="/baumate-logo.png?v=2" 
                         alt="BauKI" 
-                        className="h-full w-full object-contain"
-                        style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
+                        className="h-full w-full object-contain dark:invert"
                       />
                     </div>
                   </div>
-                  <div className="flex-1 mt-2">
+                  <div className="flex-1">
                     <div className="flex items-center gap-1">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      <div className="w-2 h-2 bg-gray-400 dark:bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <div className="w-2 h-2 bg-gray-400 dark:bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <div className="w-2 h-2 bg-gray-400 dark:bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
                   </div>
                 </div>
